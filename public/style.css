@@ -10,3 +10,15 @@
   text-align: center;
   padding: 50px;
 }
+
+#bodycontent {
+  display: flex;
+}
+
+#leftcolumn {
+  flex: 3;
+}
+
+#rightcolumn {
+  flex: 1;
+}
