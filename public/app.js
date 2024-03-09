@@ -1,3 +1,7 @@
+function r_e(id) {
+  return document.querySelector(`#${id}`);
+}
+
 let s1 = document.querySelector("#Signup");
 
 s1.addEventListener("click", () => {
@@ -38,7 +42,7 @@ r_e("submit").addEventListener("click", () => {
   let email = r_e("email").value;
   let pass = r_e("pass").value;
 
-  // 2. send the email/passwrod to firestore
+  // 2. send the email/password to firestore
 
   auth.createUserWithEmailAndPassword(email, pass).then(() => {
     // console.log("New user created");
