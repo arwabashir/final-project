@@ -1,0 +1,43 @@
+#logo {
+  max-width: 150px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#header {
+  background-color: #fffef2;
+  text-align: center;
+  padding: 50px;
+}
+
+#bodycontent {
+  display: flex;
+}
+
+#leftcolumn {
+  flex: 3;
+}
+
+#rightcolumn {
+  flex: 1;
+}
+
+#footercontent {
+  background-color: #8bca84;
+  display: flex;
+}
+#leftfooter {
+  padding: 0.5rem;
+  margin: 1rem auto;
+  text-align: center;
+  flex: 1;
+}
+
+#rightfooter {
+  padding: 0.5rem;
+  margin: 1rem auto;
+  text-align: center;
+  flex: 1;
+  /* margin-left: 100px; */
+}
