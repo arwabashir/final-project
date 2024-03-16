@@ -82,11 +82,8 @@ r_e("submit2").addEventListener("click", () => {
 
 
 
-
 r_e("aboutuspage").addEventListener("click", () => {
-  r_e("mainpage").classList.add("is-hidden");
-  r_e("aboutus").classList.remove("is-hidden");
-  r_e("booking").classList.add("is-hidden");
-  r_e("leaveareview").classList.add("is-hidden");
-  r_e("ourservices").classList.add("is-hidden");
-  });
+  console.log("About Us page clicked");
+  r_e("aboutus").classList.remove("is-hidden"); // Show the About Us page section
+  // Add code to hide other page sections 
+});
