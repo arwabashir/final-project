@@ -41,3 +41,14 @@
   flex: 1;
   /* margin-left: 100px; */
 }
+
+.hero {
+  background-image: url("Caretaker3.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
