@@ -80,12 +80,13 @@ r_e("submit2").addEventListener("click", () => {
   });
 });
 
-// click event for aboutus page
+
+
+
 r_e("aboutuspage").addEventListener("click", () => {
-  mywebsite.classList.add("is-hidden");
-  r_e("homepage").classList.add("is-hidden");
+  r_e("mainpage").classList.add("is-hidden");
   r_e("aboutus").classList.remove("is-hidden");
-  r_e("ourservicespage").classList.add("is-hidden");
-  r_e("bookingpage").classList.add("is-hidden");
-  r_e("leaveareviewpage").classList.add("is-hidden");
-});
+  r_e("booking").classList.add("is-hidden");
+  r_e("leaveareview").classList.add("is-hidden");
+  r_e("ourservices").classList.add("is-hidden");
+  });
