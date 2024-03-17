@@ -17,6 +17,7 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
   </head>
+
   <body>
     <div class="column is-full has-background-success-light">
       <div class="has-text-right has-text-weight-bold is-size-6">
@@ -26,6 +27,8 @@
         <a href="mailto: peace0mind15@yahoo.com">Email Us</a>
       </div>
     </div>
+
+    <!-- nav bar-->
     <nav class="navbar">
       <div class="navbar-brand ml-5">
         <img
@@ -34,92 +37,157 @@
           width="140"
           height="140"
         />
-        <div class="navbar-item mx-4">
-          <a href="#" id="homepage">Home</a>
-        </div>
-        <div class="navbar-item mx-4">
-          <a href="#" id="aboutuspage">About Us</a>
-        </div>
-        <div class="navbar-item mx-4">
-          <a href="#" id = "ourservicespage">Our Services</a>
-        </div>
-        <div class="navbar-item mx-4">
-          <a href="#" id = "bookingpage">Booking</a>
-        </div>
-        <div class="navbar-item mx-4">
-          <a href="#" id = "leaveareviewpage">Leave a Review</a>
-      </nav>
+      </div>
 
-      <div id = "homepage">
-    <section class="hero is-fullheight">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <div class="navbar-item mx-4">
+            <a href="#" id="homepage">Home</a>
+          </div>
+          <div class="navbar-item mx-4">
+            <a href="#" id="aboutuspage">About Us</a>
+          </div>
+          <div class="navbar-item mx-4">
+            <a href="#" id="ourservicespage">Our Services</a>
+          </div>
+          <div class="navbar-item mx-4">
+            <a href="#" id="bookingpage">Booking</a>
+          </div>
+          <div class="navbar-item mx-4">
+            <a href="#" id="leaveareviewpage">Leave a Review</a>
+          </div>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item signedin">
+            <span id="currentuser" class="has-text-danger"></span>
+          </div>
+          <div class="navbar-item signedout">
+            <a id="signupbtn">Sign Up</a>
+          </div>
+          <div class="navbar-item signedout">
+            <a id="signinbtn">Sign In</a>
+          </div>
+          <div class="navbar-item signedin">
+            <a id="signoutbtn">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!--main page-->
+    <div id="mainpage">
+      <section class="hero is-fullheight">
         <div class="hero-body">
-            <div class="container">
-                <h1 class="title">Proudly Serving the Green Bay Area</h1>
-                <p class="subtitle">Content will go here</p>
-                <div class ="buttons is-flex is-justify-content-center">
-                    <a class="button is-primary" href="#">Button 1</a>
-                    <a class="button is-secondary" href="#">Button 2</a>
-                </div>
-            </div>
-        </div>
-    </section>
-  </div>
-
-      <!-- testing out about us page -->
-    <div class="section is-hidden" id="aboutus">
-      <section class="section is-medium">
-        <h1 class="title is-1 has-text-centered">About fleur</h1>
-          <p class="lightlilac p-6">Our team, snowlily, wanted to create fleur because of the increasing popularity of Asian makeup on social media. We noticed that there weren’t a lot of blog-like websites that covered all the realms of Asian beauty that weren’t heavily sponsored. Oftentimes, there would be blogs for Korean beauty, however we couldn’t find sites that showcased trends in Chinese and Japanese beauty. As enthusiastic makeup lovers, snowlily saw this as an opportunity to showcase our artistic skills, and passion for beauty in this informative website. We wanted to bring attention to these beauty trends and create a “one-stop” site to access information on how to recreate these looks, hoping to make it a little more convenient for novice Asian beauty fans to start their makeup journey.</p>
-      </section>
-      <section class="section is-small">
-      <h1 class="title is-1 has-text-centered">Meet the snowlily team</h1>
-      </section>
-      <!-- Kiana Info-->
-          <div class="section">
           <div class="container">
-            <div class="columns lightlilac">
-              <div class="column is-4">
-                <!--card-->
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img
-                        src="images/Caretaker3.jpg"
-                      />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div class="column is-8">
-                <!--image-->
-                <h1 class="title">Kiana Chang</h1>
-                <p>Hello, I'm Kiana! As a young girl, I always sneaked into my mother's room to play with her makeup which later increased my interest in beauty. As I grew older, I wanted to learn beauty techniques that would suit my Asian features. I learned different looks that enhanced how I looked like rather than try to change my asian features. Fleur's purpose is to bring more exposure about Asian beauty techniques to everyone, so I hope you all can learn something new!</p>
-              </div>
+            <h1 class="title">Proudly Serving the Green Bay Area</h1>
+            <p class="subtitle">Content will go here</p>
+            <div class="buttons is-flex is-justify-content-center">
+              <a class="button is-primary" href="#">Learn More</a>
+              <a class="button is-secondary" href="#">Our services</a>
             </div>
           </div>
         </div>
+      </section>
     </div>
-    <footer class="footer has-background-success-light">
-        <div class="container">
-            <div class="footer-columns">
-                <div class="footer-column">
-                    <h2 class="has-text-weight-bold">Contact Info</h2>
-                    <ul>
-                        <li>Email: peace0mind15@yahoo.com </li>
-                        <li>Phone: 920-489-2413 </li>
-                        <li>840 Willard Dr, Green Bay, WI 54304</li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h2 class="has-text-weight-bold">Business Hours</h2>
-                    <ul>
-                        <li>Monday - Friday: 9am-5pm </li>
-                        <li>Saturday & Closed: Closed</li>
-                    </ul>              
-                </div>
-            </div>
-        </div>
 
+    <!--about us page-->
+    <div class="section is-hidden" id="aboutus">
+      <section class="section is-medium">
+        <h1 class="title is-1 has-text-centered">
+          Currently under Construction!
+        </h1>
+      </section>
+    </div>
+
+    <!--our services page-->
+    <div class="section is-hidden" id="ourservices">
+      <section class="section is-medium">
+        <h1 class="title is-1 has-text-centered">
+          Currently under Construction!
+        </h1>
+      </section>
+    </div>
+
+    <!--bookingpage-->
+    <div class="section is-hidden" id="booking">
+      <section class="section is-medium">
+        <h1 class="title is-1 has-text-centered">
+          Currently under Construction!
+        </h1>
+      </section>
+    </div>
+
+    <!--leave a review-->
+    <div class="section is-hidden" id="leaveareview">
+      <section class="section is-medium">
+        <h1 class="title is-1 has-text-centered">
+          Currently under Construction!
+        </h1>
+      </section>
+    </div>
+
+    <!--footer-->
+    <footer class="footer has-background-success-light">
+      <div class="container">
+        <div class="footer-columns">
+          <div class="footer-column">
+            <h2 class="has-text-weight-bold">Contact Info</h2>
+            <ul>
+              <li>Email: peace0mind15@yahoo.com</li>
+              <li>Phone: 920-489-2413</li>
+              <li>
+                <a
+                  href="https://www.google.com/maps/place/840+Willard+Dr,+Green+Bay,+WI+54304/@44.4869276,-88.0671884,17z/data=!3m1!4b1!4m6!3m5!1s0x8802fbb0a1102f37:0x16009e1f82e582e8!8m2!3d44.4869276!4d-88.0646135!16s%2Fg%2F11bytp0637?entry=ttu"
+                  >840 Willard Dr, Green Bay, WI 54304</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h2 class="has-text-weight-bold">Business Hours</h2>
+            <ul>
+              <li>Monday - Friday: 9am-5pm</li>
+              <li>Saturday & Sunday: Closed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </footer>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script>
+      // TODO
+      // Copy **only** your firebaseConfig from Google Firebae and add it below
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCqgk-JrXvi_lGZaerozh_w-Ul-1EtzZuk",
+        authDomain: "is424-final-project.firebaseapp.com",
+        projectId: "is424-final-project",
+        storageBucket: "is424-final-project.appspot.com",
+        messagingSenderId: "956394414991",
+        appId: "1:956394414991:web:99175b0564568eec0ee1fa",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
+    </script>
+
+    <script src="app.js"></script>
   </body>
 </html>
