@@ -57,8 +57,9 @@
 
 .footer-columns {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: flex-start;
+  text-align: center;
 }
 
 .footer-column {

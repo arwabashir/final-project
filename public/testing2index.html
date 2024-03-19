@@ -21,9 +21,11 @@
   <body>
     <div class="column is-full has-background-success-light">
       <div class="has-text-right has-text-weight-bold is-size-6">
+        <i class="fa-sharp fa-solid fa-phone"></i>
         <a href="tel: 920-489-2413">Call Us: 920-489-2413</a>
       </div>
       <div class="has-text-right has-text-weight-bold is-size-6">
+        <i class="fa-sharp fa-solid fa-envelope"></i>
         <a href="mailto: peace0mind15@yahoo.com">Email Us</a>
       </div>
     </div>
@@ -63,13 +65,16 @@
             <span id="currentuser" class="has-text-danger"></span>
           </div>
           <div class="navbar-item signedout">
-            <a id="signupbtn">Sign Up</a>
+            <button class="button is-outlined is-success is-light">
+            <a id="signupbtn">Sign Up</a></button>
           </div>
           <div class="navbar-item signedout">
+            <button class="button is-outlined is-success is-light">
             <a id="signinbtn">Sign In</a>
+          </button>
           </div>
           <div class="navbar-item signedin">
-            <a id="signoutbtn">Sign Out</a>
+            <a class="is-hidden" id="signoutbtn">Sign Out</a>
           </div>
         </div>
       </div>
@@ -237,6 +242,75 @@
         </div>
       </div>
     </footer>
+
+    <div class="modal" id="myModal">
+      <div class="modal-background"></div>
+      <div class="modal-content p-6 has-background-white">
+        <h1 class="is-size-3 title">Sign Up</h1>
+
+        <!-- Email -->
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control">
+            <input type="email" id="email" />
+          </div>
+        </div>
+        <!-- Password -->
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input type="password" id="pass" />
+          </div>
+        </div>
+
+        <!-- submit -->
+        <div class="field">
+          <div class="control">
+            <button id="submit" class="m-3 button is-link">Submit</button>
+          </div>
+        </div>
+        <div class="control">
+          <button id="Cancel" class="button is-link is-light">Cancel</button>
+        </div>
+
+        <!-- div error -->
+        <div class="error has-text-danger"></div>
+      </div>
+    </div>
+
+    <div class="modal" id="myModal2">
+      <div class="modal-background"></div>
+      <div class="modal-content p-6 has-background-white">
+        <h1 class="is-size-3 title">Sign In</h1>
+
+        <!-- Email -->
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control">
+            <input type="email" id="email2" />
+          </div>
+        </div>
+        <!-- Password -->
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input type="password" id="pass2" />
+          </div>
+        </div>
+
+        <!-- submit -->
+        <div class="field">
+          <div class="control">
+          <button id="submit2" class="m-3 button is-link">Submit</button>
+        </div>
+        <div class="control">
+          <button id="Cancel2" class="button is-link is-light">Cancel</button>
+        </div>
+
+        <!-- div error -->
+        <div class="error has-text-danger"></div>
+      </div>
+    </div>
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
