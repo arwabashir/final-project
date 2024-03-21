@@ -122,3 +122,32 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("booking").classList.add("is-hidden");
   r_e("leaveareview").classList.remove("is-hidden");
 });
+
+//testing out review page
+r_e("leaveareviewpage").addEventListener("click", () => {
+  r_e("content").classList.add("is-hidden");
+  r_e("rating_form").classList.remove("is-hidden");
+  hide_search();
+});
+
+// pulling content from reviews collection in firebase
+let review_content = r_e("content");
+r_e("review_page").addEventListener("click", () => {
+  r_e("search_feature").classList.remove("is-hidden");
+  show_content();
+  show_reviews();
+});
+
+// FIX THIS CODE
+r_e("search_btn").addEventListener("click", () => {
+  // find the search term entered by user
+  let term = r_e("search_name").value;
+  // find all reviews with a course title matching the term
+  search_courses("user_name", term);
+  r_e("search_name").value = "";
+});
+
+r_e("allreviews").addEventListener("click", () => {
+  review_content.innerHTML = "";
+  show_reviews();
+});
