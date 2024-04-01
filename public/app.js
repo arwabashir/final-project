@@ -131,23 +131,92 @@ r_e("leaveareviewpage").addEventListener("click", () => {
 });
 
 // pulling content from reviews collection in firebase
-let review_content = r_e("content");
-r_e("review_page").addEventListener("click", () => {
-  r_e("search_feature").classList.remove("is-hidden");
-  show_content();
-  show_reviews();
-});
+// let review_content = r_e("content");
+// r_e("review_page").addEventListener("click", () => {
+//   r_e("search_feature").classList.remove("is-hidden");
+//   show_content();
+//   show_reviews();
+// });
 
-// FIX THIS CODE
-r_e("search_btn").addEventListener("click", () => {
-  // find the search term entered by user
-  let term = r_e("search_name").value;
-  // find all reviews with a course title matching the term
-  search_courses("user_name", term);
-  r_e("search_name").value = "";
-});
+// // FIX THIS CODE
+// r_e("search_btn").addEventListener("click", () => {
+//   // find the search term entered by user
+//   let term = r_e("search_name").value;
+//   // find all reviews with a course title matching the term
+//   search_courses("user_name", term);
+//   r_e("search_name").value = "";
+// });
 
-r_e("allreviews").addEventListener("click", () => {
-  review_content.innerHTML = "";
-  show_reviews();
-});
+// r_e("allreviews").addEventListener("click", () => {
+//   review_content.innerHTML = "";
+//   show_reviews();
+// });
+
+// Function to render the calendar
+function renderCalendar() {
+  const calendarContainer = document.getElementById('calendar-container');
+
+  // Get today's date
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+
+  // Get the number of days in the current month
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  // Initialize the calendar HTML
+  let calendarHTML = `
+    <h2 class="title is-3 has-text-left">Available Dates</h2>
+    <div id="calendar">
+      <div class="columns is-multiline">
+  `;
+
+  // Loop through each day of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    // Generate a unique ID for each date
+    const dateId = `${currentYear}-${currentMonth + 1}-${day}`;
+
+    // Add a card for the date
+    calendarHTML += `
+      <div class="column is-one-third">
+        <div class="card" id="${dateId}">
+          <div class="card-content">
+            <p class="title is-4">${monthNames[currentMonth]} ${day}, ${currentYear}</p>
+            <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Close the calendar HTML
+  calendarHTML += `
+      </div>
+    </div>
+  `;
+
+  // Render the calendar HTML
+  calendarContainer.innerHTML = calendarHTML;
+
+  // Add event listeners to the buttons
+  const bookButtons = document.querySelectorAll('.book-btn');
+  bookButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const card = button.closest('.card');
+      const date = card.id;
+      // Remove the card from the DOM
+      card.remove();
+      // Open the form or perform any other action here
+      console.log('Book appointment for', date);
+    });
+  });
+}
+
+// Array to store month names
+const monthNames = [
+  "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"
+];
+
+// Call the renderCalendar function when the booking page is clicked
+r_e('bookingpage').addEventListener('click', renderCalendar);
