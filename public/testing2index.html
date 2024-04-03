@@ -240,7 +240,32 @@
         <div id="calendar-container" class="has-text-centered"></div>
       </section>
 
-
+      <div id="bookingModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Book Appointment</p>
+            <button class="delete" aria-label="close" onclick="closeModal()"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Form content here -->
+            <form id="bookingForm">
+              <div class="field">
+                <label class="label">Time</label>
+                <div class="control">
+                  <input class="input" type="text" id="bookingDate">
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+      
     </div>
 
     <!--leave a review-->

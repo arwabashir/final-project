@@ -153,8 +153,15 @@ r_e("leaveareviewpage").addEventListener("click", () => {
 // });
 
 // Function to render the calendar
+function showModal() {
+  document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
+}
+
+function closeModal() {
+  document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
+}
 function renderCalendar() {
-  const calendarContainer = document.getElementById('calendar-container');
+  const calendarContainer = document.getElementById("calendar-container");
 
   // Get today's date
   const today = new Date();
@@ -199,24 +206,41 @@ function renderCalendar() {
   calendarContainer.innerHTML = calendarHTML;
 
   // Add event listeners to the buttons
-  const bookButtons = document.querySelectorAll('.book-btn');
-  bookButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const card = button.closest('.card');
+  const bookButtons = document.querySelectorAll(".book-btn");
+  bookButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".card");
       const date = card.id;
-      // Remove the card from the DOM
-      card.remove();
-      // Open the form or perform any other action here
-      console.log('Book appointment for', date);
+      showModal();
     });
   });
+  // Handling the form submission
+  document
+    .getElementById("bookingForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // Perform the booking operation here, using the information from the form // For example, you could send this information to a server
+      alert(
+        "Appointment booked for " + document.getElementById("bookingDate").value
+      );
+      closeModal(); // Close the modal after submission
+    });
 }
 
 // Array to store month names
 const monthNames = [
-  "January", "February", "March", "April", "May", "June", "July",
-  "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 // Call the renderCalendar function when the booking page is clicked
-r_e('bookingpage').addEventListener('click', renderCalendar);
+r_e("bookingpage").addEventListener("click", renderCalendar);
