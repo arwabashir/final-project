@@ -45,7 +45,6 @@ r_e("submit").addEventListener("click", () => {
   // 2. send the email/password to firestore
 
   auth.createUserWithEmailAndPassword(email, pass).then(() => {
-    // console.log("New user created");
     // clear the input fields
     r_e("email").value = "";
     r_e("pass").value = "";
@@ -160,39 +159,32 @@ function showModal() {
 function closeModal() {
   document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
 }
-function renderCalendar() {
+function renderCalendar(year, month) {
+  console.log(year, month);
+  // const today = new Date();
+  // const currentMonth = today.getMonth();
+  // const currentYear = today.getFullYear();
+  // document.getElementById("monthSelector").value = currentMonth.toString();
   const calendarContainer = document.getElementById("calendar-container");
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Get today's date
-  const today = new Date();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-
-  // Get the number of days in the current month
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  // Initialize the calendar HTML
   let calendarHTML = `
-    <h2 class="title is-3 has-text-left">Available Dates</h2>
-    <div id="calendar">
-      <div class="columns is-multiline">
-  `;
+  <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
+  <div id="calendar">
+  <div class="columns is-multiline">
+`;
 
-  // Loop through each day of the month
   for (let day = 1; day <= daysInMonth; day++) {
-    // Generate a unique ID for each date
-    const dateId = `${currentYear}-${currentMonth + 1}-${day}`;
-
-    // Add a card for the date
+    const dateId = `${year}-${month + 1}-${day}`;
     calendarHTML += `
-      <div class="column is-one-third">
-        <div class="card" id="${dateId}">
-          <div class="card-content">
-            <p class="title is-4">${monthNames[currentMonth]} ${day}, ${currentYear}</p>
-            <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
-          </div>
-        </div>
-      </div>
+    <div class="column is-one-third">
+    <div class="card" id="${dateId}">
+    <div class="card-content">
+    <p class="title is-4">${monthNames[month]} ${day}, ${year}</p>
+    <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
+    </div>
+    </div>
+    </div>
     `;
   }
 
@@ -204,27 +196,56 @@ function renderCalendar() {
 
   // Render the calendar HTML
   calendarContainer.innerHTML = calendarHTML;
+  attachBookingListeners();
+}
 
-  // Add event listeners to the buttons
+// Add event listeners to the buttons
+// const bookButtons = document.querySelectorAll(".book-btn");
+// bookButtons.forEach((button) => {
+//   button.addEventListener("click", () => {
+//     const card = button.closest(".card");
+//     const date = card.id;
+//     showModal();
+//   });
+// });
+// // Handling the form submission
+// document
+//   .getElementById("bookingForm")
+//   .addEventListener("submit", function (event) {
+//     event.preventDefault(); // Perform the booking operation here, using the information from the form // For example, you could send this information to a server
+//     alert(
+//       "Appointment booked for " + document.getElementById("bookingDate").value
+//     );
+//     closeModal(); // Close the modal after submission
+//   });
+
+document
+  .getElementById("monthSelector")
+  .addEventListener("change", function () {
+    const selectedMonth = parseInt(this.value);
+    const year = new Date().getFullYear();
+    renderCalendar(year, selectedMonth);
+  });
+
+// Separate function to attach event listeners to booking buttons
+function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
   bookButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const card = button.closest(".card");
       const date = card.id;
-      showModal();
+      showModal(date);
     });
   });
-  // Handling the form submission
-  document
-    .getElementById("bookingForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault(); // Perform the booking operation here, using the information from the form // For example, you could send this information to a server
-      alert(
-        "Appointment booked for " + document.getElementById("bookingDate").value
-      );
-      closeModal(); // Close the modal after submission
-    });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  document.getElementById("monthSelector").value = currentMonth.toString();
+  renderCalendar(currentYear, currentMonth);
+});
 
 // Array to store month names
 const monthNames = [
