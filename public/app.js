@@ -263,8 +263,14 @@ const monthNames = [
   "December",
 ];
 
-// Call the renderCalendar function when the booking page is clicked
-r_e("bookingpage").addEventListener("click", renderCalendar);
+// Call the renderCalendar function with the current year and month when the booking page is clicked
+r_e("bookingpage").addEventListener("click", () => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  renderCalendar(currentYear, currentMonth);
+});
+
 
 
 
