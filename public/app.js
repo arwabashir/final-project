@@ -268,7 +268,7 @@ r_e("bookingpage").addEventListener("click", renderCalendar);
 
 
 
-// Function to show the booking modal
+// Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
 function showModal(date) {
   const bookingModal = document.getElementById("bookingModal");
   if (bookingModal) {
@@ -276,12 +276,22 @@ function showModal(date) {
     const bookingDateInput = document.getElementById("bookingDate");
     if (bookingDateInput) {
       bookingDateInput.value = date; // Set the selected date in the modal
+      // Add the booked appointment to the "Booked Appointments" column
+      addBookedAppointment(date);
     } else {
       console.error("Input field with ID 'bookingDate' not found.");
     }
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
+}
+
+// Function to add booked appointment to the "Booked Appointments" column
+function addBookedAppointment(date) {
+  const bookedAppointmentsContainer = document.getElementById("booked-appointments");
+  const appointmentElement = document.createElement("div");
+  appointmentElement.textContent = date;
+  bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
 // Function to close the modal
@@ -301,3 +311,14 @@ if (closeButton) {
 } else {
   console.error("Close button for modal not found.");
 }
+
+// Add event listener to the form submission button
+const submitButton = document.querySelector("#bookAppointmentButton");
+if (submitButton) {
+  submitButton.addEventListener("click", () => {
+    closeModal(); // Close the modal after submitting the form
+  });
+} else {
+  console.error("Submit button for booking form not found.");
+}
+
