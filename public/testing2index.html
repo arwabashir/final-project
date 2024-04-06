@@ -233,59 +233,75 @@
       </section>
     </div>
 
-    <!--bookingpage-->
-    <div class="section is-hidden" id="booking">
-      <section>
-        <h1 class="title is-1 has-text-centered">Book an Appointment</h1>
-        <p>If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
-             <!--dropdown for months-->
-             <br>
-      <select id="monthSelector">
-          <option value="0">January</option>
-          <option value="1">February</option>
-          <option value="2">March</option>
-          <option value="3">April</option>
-          <option value="4">May</option>
-          <option value="5">June</option>
-          <option value="6">July</option>
-          <option value="7">August</option>
-          <option value="8">September</option>
-          <option value="9">October</option>
-          <option value="10">November</option>
-          <option value="11">December</option>
-        </select>
-        <br>
-        <br>
-        <div id="calendar-container" class="has-text-centered"></div>
-      </section>
+<!--bookingpage-->
+<div class="section is-hidden" id="booking">
+  <section>
+    <h1 class="title is-1 has-text-centered">Book an Appointment</h1>
+    <p>If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
+  </section>
 
-      <div id="bookingModal" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Book Appointment</p>
-            <button class="delete" aria-label="close" onclick="closeModal()"></button>
-          </header>
-          <section class="modal-card-body">
-            <!-- Form content here -->
-            <form id="bookingForm">
-              <div class="field">
-                <label class="label">Time</label>
-                <div class="control">
-                  <input class="input" type="text" id="bookingDate">
-                </div>
-              </div>
-              <div class="field">
-                <div class="control">
-                  <button type="submit" class="button is-primary">Submit</button>
-                </div>
-              </div>
-            </form>
-          </section>
+  <div class="columns">
+    <!-- Left Column: Filtering Dropdown Months Option -->
+    <div class="column">
+      <h2 class="title">Filter by Month</h2>
+      <select id="monthSelector">
+        <option value="0">January</option>
+        <option value="1">February</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">October</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+      </select>
+    </div>
+
+    <!-- Center Column: Calendar -->
+    <div class="column">
+      <h2 class="title">Calendar</h2>
+      <div id="calendar-container" class="has-text-centered"></div>
+    </div>
+
+    <!-- Right Column: Booked Appointments -->
+    <div class="column">
+      <h2 class="title">Booked Appointments</h2>
+      <div id="booked-appointments" class="has-text-centered"></div>
+    </div>
+  </div>
+
+  <!-- Appointment Booking Form -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <!-- Your modal content goes here -->
+      <div class="box">
+        <h1 class="title">Booking Modal</h1>
+        <!-- Example input fields -->
+        <div class="field">
+          <label class="label">Date</label>
+          <div class="control">
+            <input id="bookingDate" class="input" type="text" placeholder="Select date">
+          </div>
+        </div>
+        <!-- Example submit button -->
+        <div class="field">
+          <div class="control">
+            <button id="bookAppointmentButton" class="button is-primary">Book Appointment</button>
+          </div>
         </div>
       </div>
-      
     </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+  
+</div>
+
+
+    
 
     <!--leave a review-->
     <div class="section is-hidden" id="leaveareview">

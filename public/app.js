@@ -265,3 +265,39 @@ const monthNames = [
 
 // Call the renderCalendar function when the booking page is clicked
 r_e("bookingpage").addEventListener("click", renderCalendar);
+
+
+
+// Function to show the booking modal
+function showModal(date) {
+  const bookingModal = document.getElementById("bookingModal");
+  if (bookingModal) {
+    bookingModal.classList.add("is-active"); // Show the modal
+    const bookingDateInput = document.getElementById("bookingDate");
+    if (bookingDateInput) {
+      bookingDateInput.value = date; // Set the selected date in the modal
+    } else {
+      console.error("Input field with ID 'bookingDate' not found.");
+    }
+  } else {
+    console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
+
+// Function to close the modal
+function closeModal() {
+  const bookingModal = document.getElementById("bookingModal");
+  if (bookingModal) {
+    bookingModal.classList.remove("is-active"); // Hide the modal
+  } else {
+    console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
+
+// Add event listener to close button of the modal
+const closeButton = document.querySelector(".modal-close");
+if (closeButton) {
+  closeButton.addEventListener("click", closeModal);
+} else {
+  console.error("Close button for modal not found.");
+}
