@@ -195,7 +195,7 @@ function renderCalendar(year, month) {
     <div class="card" id="${dateId}">
     <div class="card-content">
     <p class="title is-4">${monthNames[month]} ${day}</p>
-    <p class="title is-7">${dayOfWeek}</p>  
+    <p id= "DOW" class="title is-7">${dayOfWeek}</p>  
     <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
     </div>
     </div>
@@ -356,8 +356,27 @@ if (submitButton) {
 }
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
-document.getElementById("daySelector").addEventListener("change", function () {
-  const selectedMonth = parseInt(this.value);
-  const year = new Date().getFullYear();
-  renderCalendar(year, selectedMonth);
+document.addEventListener("DOMContentLoaded", function () {
+  // Add event listener to the day of the week selector
+  document
+    .getElementById("daySelector")
+    .addEventListener("change", function () {
+      // Get the selected day of the week
+      const selectedDay = this.value;
+
+      // Get all calendar cards
+      const calendarCards = document.querySelectorAll(".card");
+
+      // Iterate over each card and toggle visibility based on selected day
+      calendarCards.forEach((card) => {
+        const cardContent = card.querySelector("#DOW").textContent; // Get the card's content
+
+        // Toggle card visibility based on whether the card's content contains the selected day
+        if (cardContent.includes(selectedDay)) {
+          card.style.display = "block"; // Show the card
+        } else {
+          card.style.display = "none"; // Hide the card
+        }
+      });
+    });
 });
