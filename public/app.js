@@ -364,8 +364,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get the selected day of the week
       const selectedDay = this.value;
 
-      // Get all calendar cards
-      const calendarCards = document.querySelectorAll(".card");
+      // Get all calendar cards & their content - this is not working right now
+      const calendarCards = document.querySelectorAll(".card-content");
 
       // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
