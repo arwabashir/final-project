@@ -159,6 +159,18 @@ function showModal() {
 function closeModal() {
   document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
 }
+
+// Array to store days of the week
+const dayNames = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 function renderCalendar(year, month) {
   console.log(year, month);
   // const today = new Date();
@@ -167,6 +179,7 @@ function renderCalendar(year, month) {
   // document.getElementById("monthSelector").value = currentMonth.toString();
   const calendarContainer = document.getElementById("calendar-container");
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
 
   let calendarHTML = `
   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
@@ -176,11 +189,13 @@ function renderCalendar(year, month) {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dateId = `${year}-${month + 1}-${day}`;
+    const dayOfWeek = dayNames[(firstDayOfMonth + day - 1) % 7]; // Calculate the day of the week for the current day
     calendarHTML += `
     <div class="column is-one-third">
     <div class="card" id="${dateId}">
     <div class="card-content">
-    <p class="title is-4">${monthNames[month]} ${day}, ${year}</p>
+    <p class="title is-4">${monthNames[month]} ${day}</p>
+    <p class="title is-7">${dayOfWeek}</p>  
     <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
     </div>
     </div>
@@ -339,3 +354,10 @@ if (submitButton) {
 } else {
   console.error("Submit button for booking form not found.");
 }
+
+// TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
+document.getElementById("daySelector").addEventListener("change", function () {
+  const selectedMonth = parseInt(this.value);
+  const year = new Date().getFullYear();
+  renderCalendar(year, selectedMonth);
+});
