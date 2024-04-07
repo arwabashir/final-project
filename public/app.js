@@ -272,6 +272,18 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
+// Make default drop down option on the daySelector the current day of the week
+document.addEventListener("DOMContentLoaded", function () {
+  const today = new Date();
+  let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+
+  if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
+    currentDayOfWeek = 1;
+  }
+
+  document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
+});
+
 // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
 function showModal(date) {
   const bookingModal = document.getElementById("bookingModal");
