@@ -362,6 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("daySelector")
     .addEventListener("change", function () {
       // Get the selected day of the week
+      // check what the datatype of this.value is - string to string comparison?
       const selectedDay = this.value;
 
       // Get all calendar cards & their content - this is not working right now
