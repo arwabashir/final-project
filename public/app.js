@@ -239,6 +239,7 @@ function attachBookingListeners() {
   });
 }
 
+// Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
   const currentMonth = today.getMonth();
@@ -271,9 +272,6 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
-
-
-
 // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
 function showModal(date) {
   const bookingModal = document.getElementById("bookingModal");
@@ -294,7 +292,9 @@ function showModal(date) {
 
 // Function to add booked appointment to the "Booked Appointments" column
 function addBookedAppointment(date) {
-  const bookedAppointmentsContainer = document.getElementById("booked-appointments");
+  const bookedAppointmentsContainer = document.getElementById(
+    "booked-appointments"
+  );
   const appointmentElement = document.createElement("div");
   appointmentElement.textContent = date;
   bookedAppointmentsContainer.appendChild(appointmentElement);
@@ -327,4 +327,3 @@ if (submitButton) {
 } else {
   console.error("Submit button for booking form not found.");
 }
-
