@@ -172,7 +172,7 @@ const dayNames = [
 ];
 
 function renderCalendar(year, month) {
-  console.log(year, month);
+  // console.log(year, month);
   // const today = new Date();
   // const currentMonth = today.getMonth();
   // const currentYear = today.getFullYear();
@@ -195,7 +195,7 @@ function renderCalendar(year, month) {
     <div class="card" id="${dateId}">
     <div class="card-content">
     <p class="title is-4">${monthNames[month]} ${day}</p>
-    <p id= "DOW" class="title is-7">${dayOfWeek}</p>  
+    <p class= "DOW" class="title is-7">${dayOfWeek}</p>  
     <button class="button is-primary is-fullwidth book-btn">Book Appointment</button>
     </div>
     </div>
@@ -362,15 +362,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("daySelector")
     .addEventListener("change", function () {
       // Get the selected day of the week
-      // check what the datatype of this.value is - string to string comparison?
       const selectedDay = this.value;
 
-      // Get all calendar cards & their content - this is not working right now
-      const calendarCards = document.querySelectorAll(".card-content");
+      // Get all calendar cards
+      const calendarCards = document.querySelectorAll(".card");
 
       // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
-        const cardContent = card.querySelector("#DOW").textContent; // Get the card's content
+        const cardContent = document.querySelector(".DOW").innerText; // Get the card's content
 
         // Toggle card visibility based on whether the card's content contains the selected day
         if (cardContent.includes(selectedDay)) {
