@@ -288,6 +288,7 @@ r_e("bookingpage").addEventListener("click", () => {
 });
 
 // Make default drop down option on the daySelector the current day of the week
+// THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
   let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
