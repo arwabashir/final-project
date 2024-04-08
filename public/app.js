@@ -366,14 +366,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const selectedDay = this.value;
 
       // Get all calendar cards
-      const calendarCards = document.querySelectorAll(".card");
-
-      console.log("Selected day:", selectedDay);
-      console.log("Calendar cards:", calendarCards);
+      const calendarCards = document.querySelectorAll(".card-content");
 
       // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
-        const cardContent = document.querySelector(".DOW").innerText; // Get the card's content
+        const cardContent = card.querySelector(".DOW").innerText; // Get the card's content
 
         // Toggle card visibility based on whether the card's content contains the selected day
         if (cardContent.includes(selectedDay)) {
