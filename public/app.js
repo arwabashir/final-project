@@ -368,16 +368,36 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get all calendar cards
       const calendarCards = document.querySelectorAll(".card-content");
 
+      // tracking cards to display and hide
+      const cardsToDisplay = [];
+      const cardsToHide = [];
+
       // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
         const cardContent = card.querySelector(".DOW").innerText; // Get the card's content
 
-        // Toggle card visibility based on whether the card's content contains the selected day
         if (cardContent.includes(selectedDay)) {
-          card.style.display = "block"; // Show the card
+          cardsToDisplay.push(card); // Add to cards to display
         } else {
-          card.style.display = "none"; // Hide the card
+          cardsToHide.push(card); // Add to cards to hide
         }
       });
+
+      const calendarContainer = document.getElementById("calendar");
+      cardsToDisplay.forEach((card) => {
+        calendarContainer.prepend(card);
+        card.style.display = "block";
+      });
+
+      cardsToHide.forEach((card) => {
+        card.style.display = "none";
+      });
+
+      // Toggle card visibility based on whether the card's content contains the selected day
+      // if (cardContent.includes(selectedDay)) {
+      // card.style.display = "block"; // Show the card
+      // } else {
+      // card.style.display = "none"; // Hide the card
+      // }
     });
 });
