@@ -183,7 +183,7 @@ function renderCalendar(year, month) {
 
   let calendarHTML = `
   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
-  <div id="calendar">
+  <div id="calendar" class="box">
   <div class="columns is-multiline">
 `;
 
