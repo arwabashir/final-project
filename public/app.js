@@ -122,35 +122,6 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("leaveareview").classList.remove("is-hidden");
 });
 
-//testing out review page
-r_e("leaveareviewpage").addEventListener("click", () => {
-  r_e("content").classList.add("is-hidden");
-  r_e("rating_form").classList.remove("is-hidden");
-  hide_search();
-});
-
-// pulling content from reviews collection in firebase
-// let review_content = r_e("content");
-// r_e("review_page").addEventListener("click", () => {
-//   r_e("search_feature").classList.remove("is-hidden");
-//   show_content();
-//   show_reviews();
-// });
-
-// // FIX THIS CODE
-// r_e("search_btn").addEventListener("click", () => {
-//   // find the search term entered by user
-//   let term = r_e("search_name").value;
-//   // find all reviews with a course title matching the term
-//   search_courses("user_name", term);
-//   r_e("search_name").value = "";
-// });
-
-// r_e("allreviews").addEventListener("click", () => {
-//   review_content.innerHTML = "";
-//   show_reviews();
-// });
-
 // Function to render the calendar
 function showModal() {
   document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
@@ -400,4 +371,71 @@ document.addEventListener("DOMContentLoaded", function () {
       // card.style.display = "none"; // Hide the card
       // }
     });
+});
+
+// Get references to the necessary DOM elements
+const nameInput = document.getElementById("name_input");
+const reviewInput = document.getElementById("review_input");
+const submitReview = document.getElementById("course_submission");
+const allReviewsLink = document.getElementById("allreviews");
+const searchButton = document.getElementById("search_btn");
+const searchInput = document.getElementById("search_name");
+const reviewsContainer = document.getElementById("reviews-container");
+
+// Add event listener to the submit button
+submitReview.addEventListener("click", async () => {
+  const name = nameInput.value;
+  const review = reviewInput.value;
+
+  // Save the review to Firestore
+  await db.collection("reviews").add({
+    name,
+    review,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+
+  // Clear the input fields
+  nameInput.value = "";
+  reviewInput.value = "";
+
+  // Display a success message or update the UI
+  alert("Review submitted successfully!");
+});
+
+// Add event listener to the "All Reviews" link
+allReviewsLink.addEventListener("click", async () => {
+  // Fetch all reviews from Firestore
+  const snapshot = await db.collection("reviews").get();
+  reviewsContainer.innerHTML = "";
+
+  // Display the reviews
+  snapshot.forEach((doc) => {
+    const { name, review } = doc.data();
+    const reviewElement = document.createElement("div");
+    reviewElement.textContent = `${name}: ${review}`;
+    reviewsContainer.appendChild(reviewElement);
+  });
+});
+
+// Add event listener to the search button
+searchButton.addEventListener("click", async () => {
+  const searchTerm = searchInput.value;
+
+  // Fetch reviews based on the search term
+  const snapshot = await db
+    .collection("reviews")
+    .where("name", "==", searchTerm)
+    .get();
+  reviewsContainer.innerHTML = "";
+
+  // Display the filtered reviews
+  snapshot.forEach((doc) => {
+    const { name, review } = doc.data();
+    const reviewElement = document.createElement("div");
+    reviewElement.textContent = `${name}: ${review}`;
+    reviewsContainer.appendChild(reviewElement);
+  });
+
+  // Clear the search input field
+  searchInput.value = "";
 });
