@@ -377,6 +377,12 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .getElementById("course_submission")
   .addEventListener("click", async () => {
+    // Check if the user is authenticated
+    if (!firebase.auth().currentUser) {
+      alert("Please sign in before submitting a review.");
+      return;
+    }
+
     const name = document.getElementById("name_input").value;
     const review = document.getElementById("review_input").value;
 
@@ -409,6 +415,27 @@ document.getElementById("allreviews").addEventListener("click", async () => {
   const reviewsContainer = document.getElementById("reviews-container");
   reviewsContainer.innerHTML = ""; // Clear existing reviews
 
+  snapshot.forEach((doc) => {
+    const { name, review } = doc.data();
+    const reviewElement = document.createElement("div");
+    reviewElement.textContent = `${name}: ${review}`;
+    reviewsContainer.appendChild(reviewElement);
+  });
+});
+
+// Event listener for the "Leave a Review" tab
+r_e("leaveareviewpage").addEventListener("click", async () => {
+  // Fetch reviews from Firestore
+  const snapshot = await db
+    .collection("reviews")
+    .orderBy("timestamp", "desc")
+    .get();
+
+  // Clear existing reviews in the review section
+  const reviewsContainer = r_e("leaveareview_reviews-container");
+  reviewsContainer.innerHTML = "";
+
+  // Iterate through each review and display it in the review section
   snapshot.forEach((doc) => {
     const { name, review } = doc.data();
     const reviewElement = document.createElement("div");
