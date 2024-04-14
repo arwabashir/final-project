@@ -291,6 +291,27 @@ function attachAddListeners() {
   });
 }
 
+function showAddModal(date) {
+  const modal = document.getElementById("add-modal");
+  const modalDateField = modal.querySelector("#modal-date");
+  modalDateField.textContent = date;
+  modal.classList.add("is-active");
+  const addForm = modal.querySelector("form");
+  addForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const timeSlot = addForm.elements["time"].value;
+    addTimeSlot(date, timeSlot);
+    modal.classList.remove("is-active");
+  });
+}
+
+function addTimeSlot(date, timeSlot) {
+  const card = document.getElementById(date);
+  const timeSlotElement = document.createElement("p");
+  timeSlotElement.textContent = timeSlot;
+  card.querySelector(".card-content").appendChild(timeSlotElement);
+}
+
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
