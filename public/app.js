@@ -220,12 +220,8 @@ function isAdminUser() {
   return currentUser && currentUser.email === "peace0mind15@yahoo.com";
 }
 
+// updated renderCalendar function with checking for admin user
 function renderCalendar(year, month) {
-  // console.log(year, month);
-  // const today = new Date();
-  // const currentMonth = today.getMonth();
-  // const currentYear = today.getFullYear();
-  // document.getElementById("monthSelector").value = currentMonth.toString();
   const calendarContainer = document.getElementById("calendar-container");
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
@@ -237,19 +233,30 @@ function renderCalendar(year, month) {
 `;
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const dateId = `${year}-${month + 1}-${day}`;
-    const dayOfWeek = dayNames[(firstDayOfMonth + day - 1) % 7]; // Calculate the day of the week for the current day
-    calendarHTML += `
-    <div class="column is-one-third">
-    <div class="card" id="${dateId}">
-    <div class="card-content">
-    <p class="title is-4">${monthNames[month]} ${day}</p>
-    <p class= "DOW" class="title is-7">${dayOfWeek}</p>  
-    <button class="button is-primary is-fullwidth book-btn">Book</button>
-    </div>
-    </div>
-    </div>
+    const currentDate = new Date(year, month, day);
+    const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+    // Check if the current day is a weekday (Monday to Friday)
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      const dateId = `${year}-${month + 1}-${day}`;
+      const isAdmin = isAdminUser();
+
+      // Determine button text and class based on user role
+      const buttonText = isAdmin ? "Add" : "Book";
+      const buttonClass = isAdmin ? "add-btn" : "book-btn";
+
+      calendarHTML += `
+      <div class="column is-one-third">
+        <div class="card" id="${dateId}">
+          <div class="card-content">
+            <p class="title is-4">${monthNames[month]} ${day}</p>
+            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
+            <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
+          </div>
+        </div>
+      </div>
     `;
+    }
   }
 
   // Close the calendar HTML
@@ -260,7 +267,11 @@ function renderCalendar(year, month) {
 
   // Render the calendar HTML
   calendarContainer.innerHTML = calendarHTML;
-  attachBookingListeners();
+  if (isAdminUser()) {
+    attachAddListeners();
+  } else {
+    attachBookingListeners();
+  }
 }
 
 // Add event listeners to the buttons
