@@ -217,7 +217,7 @@ function renderCalendar(year, month) {
           <div class="card-content">
             <p class="title is-4">${monthNames[month]} ${day}</p>
             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
-            <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}">Book</button>
+            <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
           </div>
         </div>
       </div>
