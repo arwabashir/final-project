@@ -280,6 +280,17 @@ function attachBookingListeners() {
   });
 }
 
+function attachAddListeners() {
+  const addButtons = document.querySelectorAll(".add-btn");
+  addButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".card");
+      const date = card.id;
+      showAddModal(date);
+    });
+  });
+}
+
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
