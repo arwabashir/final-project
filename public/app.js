@@ -214,6 +214,12 @@ const dayNames = [
   "Saturday",
 ];
 
+// check if the user is the admin user:
+function isAdminUser() {
+  const currentUser = firebase.auth().currentUser;
+  return currentUser && currentUser.email === "peace0mind15@yahoo.com";
+}
+
 function renderCalendar(year, month) {
   // console.log(year, month);
   // const today = new Date();
