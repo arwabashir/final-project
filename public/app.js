@@ -449,3 +449,14 @@ function updateSlidePosition() {
   const slideWidth = slides.children[0].offsetWidth;
   slides.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
 }
+
+// Check if the user is signed in
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in
+    document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
+  } else {
+    // No user is signed in
+    document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
+  }
+});
