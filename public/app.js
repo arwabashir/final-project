@@ -54,6 +54,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
+    location.reload();
   });
 });
 
