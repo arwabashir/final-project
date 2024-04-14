@@ -44,16 +44,26 @@ r_e("submit").addEventListener("click", () => {
 
   // 2. send the email/password to firestore
 
-  auth.createUserWithEmailAndPassword(email, pass).then(() => {
-    // clear the input fields
-    r_e("email").value = "";
-    r_e("pass").value = "";
+  auth
+    .createUserWithEmailAndPassword(email, pass)
+    .then(() => {
+      // clear the input fields
+      r_e("email").value = "";
+      r_e("pass").value = "";
 
-    document.querySelector("#signoutbtn").classList.add("is-hidden");
-    // close the modal
-    document.getElementById("myModal").classList.remove("is-active");
-    alert("You have signed up!");
-  });
+      document.querySelector("#signoutbtn").classList.add("is-hidden");
+      // close the modal
+      document.getElementById("myModal").classList.remove("is-active");
+      alert("You have signed up!");
+    })
+    .catch((error) => {
+      // Handle errors
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      // Display error message to the user
+      alert(errorMessage);
+    });
 });
 
 r_e("submit2").addEventListener("click", () => {
