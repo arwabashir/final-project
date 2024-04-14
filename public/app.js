@@ -1,3 +1,36 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const learnMoreBtn = document.getElementById("learnMoreBtn");
+  const ourServicesBtn = document.getElementById("ourServicesBtn");
+  const mainPage = document.getElementById("mainpage");
+  const aboutUsPage = document.getElementById("aboutus");
+  const ourServicesPage = document.getElementById("ourservices");
+
+  // Function to show the main page and hide other sections
+  function showMainPage() {
+    mainPage.classList.remove("is-hidden");
+    aboutUsPage.classList.add("is-hidden");
+    ourServicesPage.classList.add("is-hidden");
+  }
+
+  // Function to show the about us page and hide other sections
+  function showAboutUsPage() {
+    mainPage.classList.add("is-hidden");
+    aboutUsPage.classList.remove("is-hidden");
+    ourServicesPage.classList.add("is-hidden");
+  }
+
+  // Function to show the our services page and hide other sections
+  function showOurServicesPage() {
+    mainPage.classList.add("is-hidden");
+    aboutUsPage.classList.add("is-hidden");
+    ourServicesPage.classList.remove("is-hidden");
+  }
+
+  // Add event listeners to buttons
+  learnMoreBtn.addEventListener("click", showAboutUsPage);
+  ourServicesBtn.addEventListener("click", showOurServicesPage);
+});
+
 function r_e(id) {
   return document.querySelector(`#${id}`);
 }
@@ -410,4 +443,57 @@ document.addEventListener("DOMContentLoaded", function () {
       // card.style.display = "none"; // Hide the card
       // }
     });
+});
+
+// JavaScript for burger menu toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const $navbarBurgers = Array.prototype.slice.call(
+    document.querySelectorAll(".navbar-burger"),
+    0
+  );
+  if ($navbarBurgers.length > 0) {
+    $navbarBurgers.forEach((el) => {
+      el.addEventListener("click", () => {
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+        el.classList.toggle("is-active");
+        $target.classList.toggle("is-active");
+      });
+    });
+  }
+});
+
+const slides = document.querySelector(".slides");
+const prevBtn = document.querySelector(".prev");
+const nextBtn = document.querySelector(".next");
+let slideIndex = 0;
+
+// Move slides forward
+nextBtn.addEventListener("click", () => {
+  slideIndex = (slideIndex + 1) % slides.children.length;
+  updateSlidePosition();
+});
+
+// Move slides backward
+prevBtn.addEventListener("click", () => {
+  slideIndex =
+    (slideIndex - 1 + slides.children.length) % slides.children.length;
+  updateSlidePosition();
+});
+
+// Update slide position based on slideIndex
+function updateSlidePosition() {
+  const slideWidth = slides.children[0].offsetWidth;
+  slides.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
+}
+
+// Check if the user is signed in
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in
+    document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
+  } else {
+    // No user is signed in
+    document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
+  }
 });

@@ -30,56 +30,47 @@
       </div>
     </div>
 
-    <!-- nav bar-->
-    <nav class="navbar" style="height: 145px">
-      <div class="navbar-brand ml-5">
-        <img
-          src="TRANSPARENT PCM LOGO.png"
-          alt="Peace of Mind Homecare Logo"
-          width="110"
-          height="110"
-        />
+<!--nav bar-->
+    <nav class="navbar " role="navigation" aria-label="main navigation" >
+      <div class="navbar-brand"> 
+          <img src="TRANSPARENT PCM LOGO.png" alt="Peace of Mind Homecare Logo" style="height: 150px; width: auto;">
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
-
-      <div class="navbar-menu">
+    
+      <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-start">
-          <div class="navbar-item mx-4">
-            <a href="#" id="homepage">Home</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="aboutuspage">About Us</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="ourservicespage">Our Services</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="bookingpage">Booking</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="leaveareviewpage">Leave a Review</a>
-          </div>
+          <a class="navbar-item" href="#" id="homepage">Home</a>
+          <a class="navbar-item" href="#" id="aboutuspage">About Us</a>
+          <a class="navbar-item" href="#" id="ourservicespage">Our Services</a>
+          <a class="navbar-item" href="#" id="bookingpage">Booking</a>
+          <a class="navbar-item" href="#" id="leaveareviewpage">Leave a Review</a>
         </div>
-
+    
         <div class="navbar-end">
-          <div class="navbar-item signedin">
+          <div class="navbar-item">
             <span id="currentuser" class="has-text-danger"></span>
           </div>
-          <div class="navbar-item signedout">
-            <button class="button is-outlined is-success is-light">
-            <a id="signupbtn">Sign Up</a></button>
+          <div class="navbar-item">
+            <button id="signupbtn" class="button is-outlined is-success is-light"> <a id="signupbtn">Sign Up</a> </button>
           </div>
-          <div class="navbar-item signedout">
-            <button class="button is-outlined is-success is-light">
-            <a id="signinbtn">Sign In</a>
-          </button>
+          <div class="navbar-item">
+            <button id="signinbtn" class="button is-outlined is-success is-light">Sign In</button>
           </div>
-          <div class="navbar-item signedin">
-            <a class="is-hidden" id="signoutbtn">Sign Out</a>
+          
+          <div class="navbar-item">
+            <button id="signoutbtn" class="button is-outlined is-success is-light">Sign Out</button>
           </div>
+          
+          
         </div>
       </div>
     </nav>
 
+    
     <!--main page-->
     <div id="mainpage">
       <section class="hero is-fullheight">
@@ -91,8 +82,8 @@
               highest quality of care.
             </p>
             <div class="buttons is-flex is-justify-content-center">
-              <a class="button is-primary" href="#">Learn More</a>
-              <a class="button is-secondary" href="#">Our services</a>
+              <a class="button is-primary" href="#" id="learnMoreBtn">Learn More</a>
+              <a class="button is-secondary" href="#" id="ourServicesBtn">Our services</a>
             </div>
           </div>
         </div>
@@ -177,61 +168,91 @@
       </section>
     </div>
 
-    <!--our services page-->
-    <div class="section is-hidden" id="ourservices">
-      <section>
-        <section>
-          <h1 class="title is-1 has-text-centered">We are Proud to Provide Assistance With:</h1>
-          <div class="columns">
-            <div class="column">
-              <ul>
-                <li>Bathing</li>
-                <li>Dressing</li>
-                <li>Grooming</li>
-                <li>Eating</li>
-                <li>Mobility</li>
-                <li>Toileting</li>
-                <li>Transferring</li>
-              </ul>
-            </div>
-            <div class="column">
-              <p>Medically Oriented Tasks: Glucometer & Nebulizer Supply Set-Up/Reminders</p>
-              <br>
-              <p>Incidental Services: Meal Prep/Serve; Light Housekeeping Duties</p>
-              <br>
-              <p>Accompany to Medical Appointments to Assist with ADL Tasks</p>
-            </div>
-          </div>
-        </section>
-        <br />
-        <br />
-        <br />
-        <div class="container">
-          <div class="columns">
-            <div class="column">
-              <img src="WI_counties.png" alt="Map of Wisconsin" class="img-fluid">
-            </div>
-            <div class="column">
-              <h2 class="title is-3 has-text-left">We Serve the Following Counties in Wisconsin:</h2>
-              <ul>
-                <li>Brown</li>
-                <li>Calumet</li>
-                <li>Fond Du Lac</li>
-                <li>Kewaunee</li>
-                <li>Manitowoc</li>
-                <li>Oconto</li>
-                <li>Outagamie</li>
-                <li>Shawano</li>
-                <li>Sheboygan</li>
-                <li>Waupaca</li>
-                <li>Winnebago</li>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-      </section>
+<!--our services page-->
+<div class="section is-hidden" id="ourservices">
+  <h1 class="title is-1 has-text-centered">Our Services</h1>
+  <section class="carousel">
+    <div class="slides">
+      <div class="slide">
+        <img src="elderly_with_caretaker.jpg" alt="Image 1" style="max-width: 100%; max-height: 500px;">
+      </div>
+      <div class="slide">
+        <img src="doctor-taking-care-senior-woman-home.jpg" alt="Image 1" style="max-width: 100%; max-height: 500px;">
+      </div>
+      <div class="slide">
+        <img src="Caretakerimage.jpg" alt="Image 1" style="max-width: 100%; max-height: 500px;">
+      </div>
+      <div class="slide">
+        <img src="happiness-cheerful-elderly-woman-men-talking-with-female-caregiver-nurse-doctor-having-health-checking-consult-living-areacaretakers-with-senior-couple-sitting-living-room-nursing-home.jpg" alt="Image 1" style="max-width: 100%; max-height: 500px;">
+      </div>        
     </div>
+    <button class="arrow prev">&lt;</button>
+    <button class="arrow next">&gt;</button>
+  </section>
+  <section>
+    <br>
+    <br>
+    <p class="subtitle has-text-centered">At Peace of Mind Homecare, we are committed to providing the highest quality of care to our clients. With a focus on compassion, professionalism, and individualized support, we offer a range of services to meet the unique needs of each individual. From personal care assistance to additional services and support, we strive to enhance the well-being and independence of those we serve.</p>
+    <br>
+    <br>
+    <h1 class="title is-1 has-text-centered">We are Proud to Provide Assistance With:</h1>
+    <br>
+    <br>
+    <br>
+    <div class="columns">
+      <div class="column">
+        <h2 class="title is-3">Personal Care Assistance</h2>
+        <ul>
+          <li>Bathing</li>
+          <li>Dressing</li>
+          <li>Grooming</li>
+          <li>Eating</li>
+          <li>Mobility</li>
+          <li>Toileting</li>
+          <li>Transferring</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h2 class="title is-3">Additional Services</h2>
+        <ul>
+          <li>Glucometer & Nebulizer Supply Set-Up/Reminders</li>
+          <li>Meal Prep/Serve</li>
+          <li>Light Housekeeping Duties</li>
+          <li>Accompany to Medical Appointments to Assist with ADL Tasks</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <br />
+  <br />
+  <br />
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <img src="WI_counties.png" alt="Map of Wisconsin" class="img-fluid">
+      </div>
+      <div class="column">
+        <h2 class="title is-3 has-text-left">We Serve the Following Counties in Wisconsin:</h2>
+        <ul>
+          <li>Brown</li>
+          <li>Calumet</li>
+          <li>Fond Du Lac</li>
+          <li>Kewaunee</li>
+          <li>Manitowoc</li>
+          <li>Oconto</li>
+          <li>Outagamie</li>
+          <li>Shawano</li>
+          <li>Sheboygan</li>
+          <li>Waupaca</li>
+          <li>Winnebago</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <!--bookingpage-->
 <div class="section is-hidden" id="booking">
@@ -316,34 +337,34 @@
     <!--leave a review-->
     <div class="section is-hidden" id="leaveareview">
       <section>
-        <div class = "field ml-6 mr-6 pt-3 pb-3">
-          <div class="has-text-centered mt-3">
-            <input class= "input is-link" type="text" id="search_name" placeholder="Name"/>
-            <button class ="button is-link mt-2 mb-2" value= "Search" id="search_btn"> Search </button>
-            <p class = "mb-3">
-              <a id = "allreviews"> All Reviews</a>
-            </p>
-            </div>
-          <label class = "label">Name:</label>
-          <div class = "control">
-          <input class = "input" id="name_input" type = "text" placeholder = "Enter your name here"></input>
-            
-          <label class = "label pt-3">Review</label>
-          <div class = "control">
-          <input class = "input" id="review_input" type = "text" placeholder = "Type in your review here"></input>
-            
-            
-          <div class = "field mt-3">
-          <button class="button is-primary" id="course_submission">Submit</button>
+        <div class="field ml-6 mr-6 pt-3 pb-3">
+          <label class="label">Name:</label>
+          <div class="control">
+            <input class="input" id="name_input" type="text" placeholder="Enter your name here" />
           </div>
+          <label class="label pt-3">Review</label>
+          <div class="control">
+            <input class="input" id="review_input" type="text" placeholder="Type in your review here" />
           </div>
+          <div class="field mt-3">
+            <button class="button is-primary" id="course_submission">Submit</button>
           </div>
-          </div>
+        </div>
+        <div class="reviews-container ml-6 mr-6 pt-3" id="leaveareview_reviews-container">
+        </div>
+        <div class="has-text-centered mt-3">
+          <input class="input is-link" type="text" id="search_name" placeholder="Name" />
+          <button class="button is-link mt-2 mb-2" value="Search" id="search_btn">Search</button>
+          <p class="mb-3">
+            <a id="allreviews">All Reviews</a>
+          </p>
+        </div>
       </section>
     </div>
+    
+    
 
  
-
     <!--footer-->
     <footer class="footer has-background-success-light">
       <div class="container">
@@ -357,7 +378,9 @@
                 <a href="https://www.google.com/maps/place/840+Willard+Dr,+Green+Bay,+WI+54304/@44.4869276,-88.0671884,17z/data=!3m1!4b1!4m6!3m5!1s0x8802fbb0a1102f37:0x16009e1f82e582e8!8m2!3d44.4869276!4d-88.0646135!16s%2Fg%2F11bytp0637?entry=ttu" target="_blank">
                   840 Willard Dr, Green Bay, WI 54304
                 </a>
+            
               </li>
+              <li>Image by <a href="https://www.freepik.com/free-photo/doctor-taking-care-senior-woman-home_14001731.htm#page=2&query=home%20care&position=13&from_view=keyword&track=ais&uuid=50f9c98f-b842-49c1-855e-02fad4a6b728">Freepik</a></li>
               
             </ul>
           </div>
@@ -372,7 +395,6 @@
       </div>
     </footer>
 
-<!-- Pop Up Form for User Sign Up and Sign In -->
     <div class="modal" id="myModal">
       <div class="modal-background"></div>
       <div class="modal-content p-6 has-background-white">
@@ -468,6 +490,7 @@
         messagingSenderId: "956394414991",
         appId: "1:956394414991:web:99175b0564568eec0ee1fa",
       };
+
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
