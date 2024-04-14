@@ -30,56 +30,46 @@
       </div>
     </div>
 
-    <!-- nav bar-->
-    <nav class="navbar" style="height: 145px">
-      <div class="navbar-brand ml-5">
-        <img
-          src="TRANSPARENT PCM LOGO.png"
-          alt="Peace of Mind Homecare Logo"
-          width="110"
-          height="110"
-        />
+<!--nav bar-->
+    <nav class="navbar " role="navigation" aria-label="main navigation" >
+      <div class="navbar-brand"> 
+          <img src="TRANSPARENT PCM LOGO.png" alt="Peace of Mind Homecare Logo" style="height: 150px; width: auto;">
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
-
-      <div class="navbar-menu">
+    
+      <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-start">
-          <div class="navbar-item mx-4">
-            <a href="#" id="homepage">Home</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="aboutuspage">About Us</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="ourservicespage">Our Services</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="bookingpage">Booking</a>
-          </div>
-          <div class="navbar-item mx-4">
-            <a href="#" id="leaveareviewpage">Leave a Review</a>
-          </div>
+          <a class="navbar-item" href="#" id="homepage">Home</a>
+          <a class="navbar-item" href="#" id="aboutuspage">About Us</a>
+          <a class="navbar-item" href="#" id="ourservicespage">Our Services</a>
+          <a class="navbar-item" href="#" id="bookingpage">Booking</a>
+          <a class="navbar-item" href="#" id="leaveareviewpage">Leave a Review</a>
         </div>
-
+    
         <div class="navbar-end">
-          <div class="navbar-item signedin">
+          <div class="navbar-item">
             <span id="currentuser" class="has-text-danger"></span>
           </div>
-          <div class="navbar-item signedout">
+          <div class="navbar-item">
             <button class="button is-outlined is-success is-light">
-            <a id="signupbtn">Sign Up</a></button>
+              <a id="signupbtn">Sign Up</a>
+            </button>
           </div>
-          <div class="navbar-item signedout">
+          <div class="navbar-item">
             <button class="button is-outlined is-success is-light">
-            <a id="signinbtn">Sign In</a>
-          </button>
+              <a id="signinbtn">Sign In</a>
+            </button>
           </div>
-          <div class="navbar-item signedin">
+          <div class="navbar-item">
             <a class="is-hidden" id="signoutbtn">Sign Out</a>
           </div>
         </div>
       </div>
     </nav>
-
     <!--main page-->
     <div id="mainpage">
       <section class="hero is-fullheight">
