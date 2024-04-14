@@ -198,19 +198,24 @@ function renderCalendar(year, month) {
 `;
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const dateId = `${year}-${month + 1}-${day}`;
-    const dayOfWeek = dayNames[(firstDayOfMonth + day - 1) % 7]; // Calculate the day of the week for the current day
-    calendarHTML += `
-    <div class="column is-one-third">
-    <div class="card" id="${dateId}">
-    <div class="card-content">
-    <p class="title is-4">${monthNames[month]} ${day}</p>
-    <p class= "DOW" class="title is-7">${dayOfWeek}</p>  
-    <button class="button is-primary is-fullwidth book-btn">Book</button>
-    </div>
-    </div>
-    </div>
+    const currentDate = new Date(year, month, day);
+    const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+    // Check if the current day is a weekday (Monday to Friday)
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      const dateId = `${year}-${month + 1}-${day}`;
+      calendarHTML += `
+      <div class="column is-one-third">
+        <div class="card" id="${dateId}">
+          <div class="card-content">
+            <p class="title is-4">${monthNames[month]} ${day}</p>
+            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
+            <button class="button is-primary is-fullwidth book-btn">Book</button>
+          </div>
+        </div>
+      </div>
     `;
+    }
   }
 
   // Close the calendar HTML
