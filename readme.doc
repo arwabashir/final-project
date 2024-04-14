@@ -2,6 +2,74 @@ https://trello.com/invite/b/ETHDJgfp/ATTIfd49e41ff81ca2bcf460ebf84d734fb1412AE0A
 
 https://github.com/arwabashir/final-project.git
 
+SPRINT 2-------------
+User Stories:
+
+Story #3: As a client, I want to book an appointment to look for a job opportunity of being a caretaker. I’d like to meet with a professional and choose a time that works for the both of us to meet. 
+
+Story #4: As a client, I want to leave reviews and be able to search for keywords and delete my own reviews. 
+
+-Task table is an image in sprint 2 delierable folder (STILL NEED TO ADD!!!)
+-Burndown charts are in sprint 2 deliverable folder (STILL NEED TO ADD!!!!)
+
+Daily Scrum Meetings
+#1 April 2
+What did you do yesterday? 
+-Made prototype of booking page to be more fleshed out
+What are you planning to do today?
+-Arwa: Work on styling of of each page/add images, implementing review page, user stories
+-Kiana: Work on booking card system, burndown chart
+-Nikita: Work on booking card system
+-Niha: Work on milestone 2 deliverables, setting up trello tasks, implementing review page
+-Hana: Work on milestone 2 deliverables, implementing review page
+Any problems are you facing?
+-No for everyone so far
+
+#2 April 11
+What did you do yesterday?
+-Everyone worked on parts of the website
+What are you planning to do today?
+-Arwa: work on milestone 3a, 
+-Kiana: work on milestone 3a,3 Column layout of booking page and make the buttons functional and show on the booked appts,
+-Nikita: work on milestone 3a, calendar filtering
+-Niha: work on milestone 3a, calendar filtering
+-Hana: work on milestone 3a
+Any problems are you facing?
+-The current month's calendar card doesn’t show up when you click booking page.
+
+#3 April 12
+What did you do yesterday?
+-All: Work on website
+What are you planning to do today?
+-Arwa: Work on presentation
+-Kiana: Work on presentation, user signed in capabilities, milestone 3b
+-Nikita: user signed in capabilities,milestone 3b
+-Niha: user signed in capabilities,milestone 3b
+-Hana: user signed in capabilities,milestone 3b
+Any problems are you facing?
+-Connecting client user and admin users to db
+
+Sprint Review
+What did you learn from doing our second sprint?
+-We learned how to distribute our tasks effectively and made sure to start early on.
+What did go well? Why?
+-We didn't feel as rushed towards the end like we did for Sprint 1. We felt as if we had enough time to discuss and ask questions if we ever got stuck on something.
+What didn’t go well? Why not?
+-I believe something that went wrong was our approach to website styling. Instead of primarily focusing on functionality and worrying about styling for later, we should have styled the website concurrently. This would have not only saved time in the future but also prevented confusion from referring back to older code. 
+How can you make things better next time?
+-Next time, we will work on functionality and styling at the same time. 
+Are you satisfied with what you already completed?
+-Yes, I believe we are on a good track to achieve our goals. I believe at first we started off slow but we acknowledged our weaknesses early on and made sure to step up and work harder and more often as the second sprint came around.
+Which group was invited? What are your observations/notes? Everybody was present?
+- ANSWER THIS!!!!!!
+
+
+
+
+
+
+
+SPRINT 1-------------
 User Stories:
 
 Story #1: As a client, I need a user-friendly website that communicates information about a potential homecare option for my loved one, in an easy to understand format. 
