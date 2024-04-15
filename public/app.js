@@ -58,6 +58,26 @@ signout.addEventListener("click", () => {
   });
 });
 
+function showSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "block";
+}
+
+// Function to hide the sign-out button
+function hideSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "none";
+}
+
+// Check if a user is signed in or signed out
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in
+    showSignOutButton();
+  } else {
+    // No user is signed in
+    hideSignOutButton();
+  }
+});
+
 let s3 = document.querySelector("#Cancel");
 
 s3.addEventListener("click", () => {
