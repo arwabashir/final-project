@@ -505,6 +505,8 @@ firebase.auth().onAuthStateChanged(function (user) {
     // No user is signed in
     document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
   }
+}); // This closing brace was missing
+
 //leave a review
 document
   .getElementById("course_submission")
