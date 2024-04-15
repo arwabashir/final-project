@@ -58,6 +58,26 @@ signout.addEventListener("click", () => {
   });
 });
 
+function showSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "block";
+}
+
+// Function to hide the sign-out button
+function hideSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "none";
+}
+
+// Check if a user is signed in or signed out
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in
+    showSignOutButton();
+  } else {
+    // No user is signed in
+    hideSignOutButton();
+  }
+});
+
 let s3 = document.querySelector("#Cancel");
 
 s3.addEventListener("click", () => {
@@ -165,35 +185,6 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("booking").classList.add("is-hidden");
   r_e("leaveareview").classList.remove("is-hidden");
 });
-
-//testing out review page
-r_e("leaveareviewpage").addEventListener("click", () => {
-  r_e("content").classList.add("is-hidden");
-  r_e("rating_form").classList.remove("is-hidden");
-  hide_search();
-});
-
-// pulling content from reviews collection in firebase
-// let review_content = r_e("content");
-// r_e("review_page").addEventListener("click", () => {
-//   r_e("search_feature").classList.remove("is-hidden");
-//   show_content();
-//   show_reviews();
-// });
-
-// // FIX THIS CODE
-// r_e("search_btn").addEventListener("click", () => {
-//   // find the search term entered by user
-//   let term = r_e("search_name").value;
-//   // find all reviews with a course title matching the term
-//   search_courses("user_name", term);
-//   r_e("search_name").value = "";
-// });
-
-// r_e("allreviews").addEventListener("click", () => {
-//   review_content.innerHTML = "";
-//   show_reviews();
-// });
 
 // Function to render the calendar
 function showModal() {
@@ -514,4 +505,75 @@ firebase.auth().onAuthStateChanged(function (user) {
     // No user is signed in
     document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
   }
+}); // This closing brace was missing
+
+//leave a review
+document
+  .getElementById("course_submission")
+  .addEventListener("click", async () => {
+    // Check if the user is authenticated
+    if (!firebase.auth().currentUser) {
+      alert("Please sign in before submitting a review.");
+      return;
+    }
+
+    const name = document.getElementById("name_input").value;
+    const review = document.getElementById("review_input").value;
+
+    // Check if the name and review fields are not empty
+    if (name.trim() === "" || review.trim() === "") {
+      alert("Name and review cannot be empty.");
+      return;
+    }
+
+    // Save the review to Firestore
+    await db.collection("reviews").add({
+      name,
+      review,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // Clear the input fields
+    document.getElementById("name_input").value = "";
+    document.getElementById("review_input").value = "";
+
+    // Display a success message or update the UI
+    alert("Review submitted successfully!");
+  });
+
+document.getElementById("allreviews").addEventListener("click", async () => {
+  const snapshot = await db
+    .collection("reviews")
+    .orderBy("timestamp", "desc")
+    .get();
+  const reviewsContainer = document.getElementById("reviews-container");
+  reviewsContainer.innerHTML = ""; // Clear existing reviews
+
+  snapshot.forEach((doc) => {
+    const { name, review } = doc.data();
+    const reviewElement = document.createElement("div");
+    reviewElement.textContent = `${name}: ${review}`;
+    reviewsContainer.appendChild(reviewElement);
+  });
+});
+
+// Event listener for the "Leave a Review" tab
+r_e("leaveareviewpage").addEventListener("click", async () => {
+  // Fetch reviews from Firestore
+  const snapshot = await db
+    .collection("reviews")
+    .orderBy("timestamp", "desc")
+    .get();
+
+  // Clear existing reviews in the review section
+  const reviewsContainer = r_e("leaveareview_reviews-container");
+  reviewsContainer.innerHTML = "";
+
+  // Iterate through each review and display it in the review section
+  snapshot.forEach((doc) => {
+    const { name, review } = doc.data();
+    const reviewElement = document.createElement("div");
+    reviewElement.textContent = `${name}: ${review}`;
+    reviewsContainer.appendChild(reviewElement);
+  });
 });
