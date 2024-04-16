@@ -99,13 +99,14 @@
 
 .next {
   right: 0;
-  /* Style for reviews container */
-  .reviews-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
+}
+/* Style for reviews container */
+.reviews-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
 
 .review-item {
   margin-bottom: 10px;
@@ -122,4 +123,3 @@
 .review-text {
   margin-top: 5px;
 }
-
