@@ -410,49 +410,34 @@ if (submitButton) {
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 document.addEventListener("DOMContentLoaded", function () {
-  // Add event listener to the day of the week selector
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
-      // Get the selected day of the week
       const selectedDay = this.value;
+      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
 
-      // Get all calendar cards
-      const calendarCards = document.querySelectorAll(".card-content");
-
-      // tracking cards to display and hide
-      const cardsToDisplay = [];
-      const cardsToHide = [];
-
-      // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
-        const cardContent = card.querySelector(".DOW").innerText; // Get the card's content
+        const cardContent = card.querySelector(".DOW").innerText;
 
         if (cardContent.includes(selectedDay)) {
-          cardsToDisplay.push(card); // Add to cards to display
+          card.parentElement.style.display = "block"; // Show card // Attach an event listener to each book button in the visible card
+          const bookButton = card.parentElement.querySelector(".book-btn");
+          if (bookButton) {
+            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
+            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          }
         } else {
-          cardsToHide.push(card); // Add to cards to hide
+          card.parentElement.style.display = "none"; // Hide card
         }
       });
-
-      const calendarContainer = document.getElementById("calendar");
-      cardsToDisplay.forEach((card) => {
-        calendarContainer.prepend(card);
-        card.style.display = "block";
-      });
-
-      cardsToHide.forEach((card) => {
-        card.style.display = "none";
-      });
-
-      // Toggle card visibility based on whether the card's content contains the selected day
-      // if (cardContent.includes(selectedDay)) {
-      // card.style.display = "block"; // Show the card
-      // } else {
-      // card.style.display = "none"; // Hide the card
-      // }
     });
 });
+
+function handleBookingClick() {
+  const card = this.closest(".card");
+  const date = card.id;
+  showModal(date);
+}
 
 // JavaScript for burger menu toggle
 document.addEventListener("DOMContentLoaded", () => {
@@ -541,22 +526,6 @@ document
     alert("Review submitted successfully!");
   });
 
-document.getElementById("allreviews").addEventListener("click", async () => {
-  const snapshot = await db
-    .collection("reviews")
-    .orderBy("timestamp", "desc")
-    .get();
-  const reviewsContainer = document.getElementById("reviews-container");
-  reviewsContainer.innerHTML = ""; // Clear existing reviews
-
-  snapshot.forEach((doc) => {
-    const { name, review } = doc.data();
-    const reviewElement = document.createElement("div");
-    reviewElement.textContent = `${name}: ${review}`;
-    reviewsContainer.appendChild(reviewElement);
-  });
-});
-
 // Event listener for the "Leave a Review" tab
 r_e("leaveareviewpage").addEventListener("click", async () => {
   // Fetch reviews from Firestore
@@ -572,8 +541,52 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   // Iterate through each review and display it in the review section
   snapshot.forEach((doc) => {
     const { name, review } = doc.data();
-    const reviewElement = document.createElement("div");
-    reviewElement.textContent = `${name}: ${review}`;
-    reviewsContainer.appendChild(reviewElement);
+
+    // Create a card container
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.style.marginBottom = "20px"; // Add margin between cards
+
+    // Create a card content container
+    const cardContent = document.createElement("div");
+    cardContent.classList.add("card-content");
+
+    // Create a container for name and review
+    const reviewContainer = document.createElement("div");
+    reviewContainer.classList.add("columns");
+
+    // Create column for name
+    const nameColumn = document.createElement("div");
+    nameColumn.classList.add("column");
+
+    // Create column for review
+    const reviewColumn = document.createElement("div");
+    reviewColumn.classList.add("column");
+
+    // Create name element
+    const reviewName = document.createElement("p");
+    reviewName.classList.add("title", "is-4");
+    reviewName.textContent = name;
+
+    // Create review element
+    const reviewText = document.createElement("p");
+    reviewText.textContent = review;
+
+    // Append name and review to respective columns
+    nameColumn.appendChild(reviewName);
+    reviewColumn.appendChild(reviewText);
+
+    // Append columns to the review container
+    reviewContainer.appendChild(nameColumn);
+    reviewContainer.appendChild(reviewColumn);
+
+    // Append the review container to card content
+    cardContent.appendChild(reviewContainer);
+
+    // Append card content to card
+    card.appendChild(cardContent);
+
+    // Append card to reviews container
+    reviewsContainer.appendChild(card);
   });
 });
