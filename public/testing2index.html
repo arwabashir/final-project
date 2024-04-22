@@ -345,30 +345,36 @@
 
 
     
-
-    <!--leave a review-->
-    <div class="section is-hidden" id="leaveareview">
-      <section>
-        <div class="field ml-6 mr-6 pt-3 pb-3">
-          <label class="label">Name:</label>
-          <div class="control">
-            <input class="input" id="name_input" type="text" placeholder="Enter your name here" />
-          </div>
-          <label class="label pt-3">Review</label>
-          <div class="control">
-            <input class="input" id="review_input" type="text" placeholder="Type in your review here" />
-          </div>
-          <div class="field mt-3">
-            <button class="button is-primary" id="course_submission">Submit</button>
-          </div>
+  <!--leave a review-->
+  <div class="section is-hidden" id="leaveareview">
+    <section>
+      <div class="field ml-6 mr-6 pt-3 pb-3">
+        <label class="label">Name:</label>
+        <div class="control">
+          <input class="input" id="name_input" type="text" placeholder="Enter your name here" />
         </div>
-        <div class="reviews-container ml-6 mr-6 pt-3" id="leaveareview_reviews-container">
+        <label class="label pt-3">Review</label>
+        <div class="control">
+          <input class="input" id="review_input" type="text" placeholder="Type in your review here" />
         </div>
-      </section>
-    </div>
-    
-    
-
+        <label class="label pt-3">Rating</label>
+        <div class="select">
+          <select id="rating">
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+        <div class="field mt-3">
+          <button class="button is-primary" id="submission">Submit</button>
+        </div>
+      </div>
+      <div class="reviews-container ml-6 mr-6 pt-3" id="leaveareview_reviews-container">
+      </div>
+    </section>
+  </div>
  
     <!--footer-->
     <footer class="footer has-background-success-light">
