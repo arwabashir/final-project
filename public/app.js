@@ -409,29 +409,36 @@ if (submitButton) {
 }
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
+
 document.addEventListener("DOMContentLoaded", function () {
-  document
-    .getElementById("daySelector")
-    .addEventListener("change", function () {
-      const selectedDay = this.value;
-      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+  document.getElementById("daySelector").addEventListener("change", function () {
+    const selectedDay = this.value;
+    const calendarContainer = document.getElementById("calendar-container");
+    const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
 
-      calendarCards.forEach((card) => {
-        const cardContent = card.querySelector(".DOW").innerText;
+    calendarCards.forEach((card) => {
+      const cardContent = card.querySelector(".DOW").innerText;
 
-        if (cardContent.includes(selectedDay)) {
-          card.parentElement.style.display = "block"; // Show card // Attach an event listener to each book button in the visible card
-          const bookButton = card.parentElement.querySelector(".book-btn");
-          if (bookButton) {
-            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
-            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
-          }
-        } else {
-          card.parentElement.style.display = "none"; // Hide card
+      if (cardContent.includes(selectedDay)) {
+        card.parentElement.style.display = "block"; // Show card
+        const cardParent = card.parentElement;
+
+        // Move the card to the top of the container
+        calendarContainer.insertBefore(cardParent, calendarContainer.firstChild);
+
+        const bookButton = cardParent.querySelector(".book-btn");
+        if (bookButton) {
+          bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
+          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
         }
-      });
+      } else {
+        card.parentElement.style.display = "none"; // Hide card
+      }
     });
+  });
 });
+
+
 
 function handleBookingClick() {
   const card = this.closest(".card");
