@@ -266,26 +266,6 @@ function renderCalendar(year, month) {
   }
 }
 
-// Add event listeners to the buttons
-// const bookButtons = document.querySelectorAll(".book-btn");
-// bookButtons.forEach((button) => {
-//   button.addEventListener("click", () => {
-//     const card = button.closest(".card");
-//     const date = card.id;
-//     showModal();
-//   });
-// });
-// // Handling the form submission
-// document
-//   .getElementById("bookingForm")
-//   .addEventListener("submit", function (event) {
-//     event.preventDefault(); // Perform the booking operation here, using the information from the form // For example, you could send this information to a server
-//     alert(
-//       "Appointment booked for " + document.getElementById("bookingDate").value
-//     );
-//     closeModal(); // Close the modal after submission
-//   });
-
 document
   .getElementById("monthSelector")
   .addEventListener("change", function () {
@@ -505,41 +485,40 @@ firebase.auth().onAuthStateChanged(function (user) {
     // No user is signed in
     document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
   }
-}); // This closing brace was missing
+});
 
 //leave a review
-document
-  .getElementById("course_submission")
-  .addEventListener("click", async () => {
-    // Check if the user is authenticated
-    if (!firebase.auth().currentUser) {
-      alert("Please sign in before submitting a review.");
-      return;
-    }
+document.getElementById("submission").addEventListener("click", async () => {
+  // Check if the user is authenticated
+  if (!firebase.auth().currentUser) {
+    alert("Please sign in before submitting a review.");
+    return;
+  }
 
-    const name = document.getElementById("name_input").value;
-    const review = document.getElementById("review_input").value;
+  const name = document.getElementById("name_input").value;
+  const review = document.getElementById("review_input").value;
+  const rating = document.getElementById("rating").value;
+  const email_review = auth.currentUser.email; // Check if the name and review fields are not empty
 
-    // Check if the name and review fields are not empty
-    if (name.trim() === "" || review.trim() === "") {
-      alert("Name and review cannot be empty.");
-      return;
-    }
+  if (name.trim() === "" || review.trim() === "") {
+    alert("Name and review cannot be empty.");
+    return;
+  } // Save the review to Firestore
 
-    // Save the review to Firestore
-    await db.collection("reviews").add({
-      name,
-      review,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  await db.collection("reviews").add({
+    name,
+    review,
+    rating,
+    email_review,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  }); // Clear the input fields
 
-    // Clear the input fields
-    document.getElementById("name_input").value = "";
-    document.getElementById("review_input").value = "";
+  document.getElementById("name_input").value = "";
+  document.getElementById("review_input").value = ""; // Display a success message or update the UI
 
-    // Display a success message or update the UI
-    alert("Review submitted successfully!");
-  });
+  alert("Review submitted successfully!");
+  show_reviews();
+});
 
 document.getElementById("allreviews").addEventListener("click", async () => {
   const snapshot = await db
@@ -559,21 +538,43 @@ document.getElementById("allreviews").addEventListener("click", async () => {
 
 // Event listener for the "Leave a Review" tab
 r_e("leaveareviewpage").addEventListener("click", async () => {
-  // Fetch reviews from Firestore
-  const snapshot = await db
-    .collection("reviews")
-    .orderBy("timestamp", "desc")
-    .get();
-
-  // Clear existing reviews in the review section
-  const reviewsContainer = r_e("leaveareview_reviews-container");
-  reviewsContainer.innerHTML = "";
-
-  // Iterate through each review and display it in the review section
-  snapshot.forEach((doc) => {
-    const { name, review } = doc.data();
-    const reviewElement = document.createElement("div");
-    reviewElement.textContent = `${name}: ${review}`;
-    reviewsContainer.appendChild(reviewElement);
-  });
+  show_reviews();
 });
+
+function show_reviews() {
+  db.collection("reviews")
+    .get()
+    .then((data) => {
+      let docs = data.docs;
+
+      let html = ""; // loop through the docs array
+      docs.forEach((doc) => {
+        let stars = doc.data().rating;
+        let ids = doc.id; // console.log(doc.id);
+        let num = "";
+        for (i = 0; i < stars; i++) {
+          num += `<a href="">
+      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+    </a>`;
+        }
+
+        if (auth.currentUser.email == doc.data().email_review) {
+          html += `<div class="box"><h1 class="is-size-5">${
+            doc.data().review
+          }</h1>
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; <div><button id="${
+            doc.id
+          }" class="is-white">Delete</button></div>
+          </div>`;
+        } else {
+          html += `<div class="box"><h1 class="is-size-5">${
+            doc.data().review
+          }</h1>
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; </div>`;
+        }
+        r_e("leaveareview_reviews-container").innerHTML = html;
+      });
+    });
+}
