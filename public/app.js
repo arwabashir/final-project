@@ -91,6 +91,7 @@ s4.addEventListener("click", () => {
 });
 
 
+//SIGN UP MODAL INFO
 r_e("submit").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
   let email = r_e("email").value;
@@ -130,7 +131,7 @@ r_e("submit").addEventListener("click", () => {
     });
 });
 
-
+//SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
 
