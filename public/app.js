@@ -340,6 +340,7 @@ function showModal(date) {
     const bookingDateInput = document.getElementById("bookingDate");
     if (bookingDateInput) {
       bookingDateInput.value = date; // Set the selected date in the modal
+      bookingDateInput.setAttribute("readonly", "readonly");
       // Add the booked appointment to the "Booked Appointments" column
       addBookedAppointment(date);
     } else {
@@ -391,34 +392,37 @@ if (submitButton) {
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("daySelector").addEventListener("change", function () {
-    const selectedDay = this.value;
-    const calendarContainer = document.getElementById("calendar-container");
-    const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+  document
+    .getElementById("daySelector")
+    .addEventListener("change", function () {
+      const selectedDay = this.value;
+      const calendarContainer = document.getElementById("calendar-container");
+      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
 
-    calendarCards.forEach((card) => {
-      const cardContent = card.querySelector(".DOW").innerText;
+      calendarCards.forEach((card) => {
+        const cardContent = card.querySelector(".DOW").innerText;
 
-      if (cardContent.includes(selectedDay)) {
-        card.parentElement.style.display = "block"; // Show card
-        const cardParent = card.parentElement;
+        if (cardContent.includes(selectedDay)) {
+          card.parentElement.style.display = "block"; // Show card
+          const cardParent = card.parentElement;
 
-        // Move the card to the top of the container
-        calendarContainer.insertBefore(cardParent, calendarContainer.firstChild);
+          // Move the card to the top of the container
+          calendarContainer.insertBefore(
+            cardParent,
+            calendarContainer.firstChild
+          );
 
-        const bookButton = cardParent.querySelector(".book-btn");
-        if (bookButton) {
-          bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
-          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          const bookButton = cardParent.querySelector(".book-btn");
+          if (bookButton) {
+            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
+            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          }
+        } else {
+          card.parentElement.style.display = "none"; // Hide card
         }
-      } else {
-        card.parentElement.style.display = "none"; // Hide card
-      }
+      });
     });
-  });
 });
-
-
 
 function handleBookingClick() {
   const card = this.closest(".card");
