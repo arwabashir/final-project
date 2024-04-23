@@ -66,6 +66,62 @@
   flex: 0 0 45%;
 }
 
+.carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 
+.slides {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  flex: 0 0 auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+/* Style for reviews container */
+.reviews-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.review-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.review-name {
+  font-weight: bold;
+}
+
+.review-text {
+  margin-top: 5px;
+}
 
 
