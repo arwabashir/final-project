@@ -493,7 +493,7 @@ function updateSlidePosition() {
 // Check if the user is signed in
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    // User is signed in
+    // User is signed in, hide btns
     document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
     document.getElementById("signinbtn").style.display = "none"; // Hide the Sign in button
   } else {
