@@ -90,26 +90,38 @@ s4.addEventListener("click", () => {
   document.getElementById("myModal2").classList.remove("is-active");
 });
 
+
+//SIGN UP MODAL INFO
 r_e("submit").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
-
   let email = r_e("email").value;
   let pass = r_e("pass").value;
 
-  // 2. send the email/password to firestore
-
+  // 2. Send the email/password to Firestore
   auth
     .createUserWithEmailAndPassword(email, pass)
-    .then(() => {
-      // clear the input fields
+    .then((credential) => {
+      // Extract the user's email from the authentication object
+      const userEmail = credential.user.email;
+
+      // 3. Save the user's email to your Firestore collection
+      db.collection("users").doc(userEmail).set({
+        email: userEmail,
+        // Add more fields as needed
+      });
+
+      // Clear the input fields
       r_e("email").value = "";
       r_e("pass").value = "";
 
-      document.querySelector("#signoutbtn").classList.add("is-hidden");
-      // close the modal
+      document.querySelector("#signoutbtn").classList.remove("is-hidden");
+      document.querySelector("#signinbtn").classList.add("is-hidden");
+      // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
+
     })
+    
     .catch((error) => {
       // Handle errors
       var errorCode = error.code;
@@ -117,9 +129,11 @@ r_e("submit").addEventListener("click", () => {
 
       // Display error message to the user
       alert(errorMessage);
+     
     });
 });
 
+//SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
 
@@ -134,10 +148,12 @@ r_e("submit2").addEventListener("click", () => {
     r_e("pass2").value = "";
 
     document.querySelector("#signoutbtn").classList.remove("is-hidden");
-    document.querySelector("#signinbtn").classList.add("is-hidden");
+    
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
+    location.reload();
+    document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
 
@@ -185,35 +201,6 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("booking").classList.add("is-hidden");
   r_e("leaveareview").classList.remove("is-hidden");
 });
-
-//testing out review page
-r_e("leaveareviewpage").addEventListener("click", () => {
-  r_e("content").classList.add("is-hidden");
-  r_e("rating_form").classList.remove("is-hidden");
-  hide_search();
-});
-
-// pulling content from reviews collection in firebase
-// let review_content = r_e("content");
-// r_e("review_page").addEventListener("click", () => {
-//   r_e("search_feature").classList.remove("is-hidden");
-//   show_content();
-//   show_reviews();
-// });
-
-// // FIX THIS CODE
-// r_e("search_btn").addEventListener("click", () => {
-//   // find the search term entered by user
-//   let term = r_e("search_name").value;
-//   // find all reviews with a course title matching the term
-//   search_courses("user_name", term);
-//   r_e("search_name").value = "";
-// });
-
-// r_e("allreviews").addEventListener("click", () => {
-//   review_content.innerHTML = "";
-//   show_reviews();
-// });
 
 // Function to render the calendar
 function showModal() {
@@ -295,26 +282,6 @@ function renderCalendar(year, month) {
   }
 }
 
-// Add event listeners to the buttons
-// const bookButtons = document.querySelectorAll(".book-btn");
-// bookButtons.forEach((button) => {
-//   button.addEventListener("click", () => {
-//     const card = button.closest(".card");
-//     const date = card.id;
-//     showModal();
-//   });
-// });
-// // Handling the form submission
-// document
-//   .getElementById("bookingForm")
-//   .addEventListener("submit", function (event) {
-//     event.preventDefault(); // Perform the booking operation here, using the information from the form // For example, you could send this information to a server
-//     alert(
-//       "Appointment booked for " + document.getElementById("bookingDate").value
-//     );
-//     closeModal(); // Close the modal after submission
-//   });
-
 document
   .getElementById("monthSelector")
   .addEventListener("change", function () {
@@ -389,6 +356,7 @@ function showModal(date) {
     const bookingDateInput = document.getElementById("bookingDate");
     if (bookingDateInput) {
       bookingDateInput.value = date; // Set the selected date in the modal
+      bookingDateInput.setAttribute("readonly", "readonly");
       // Add the booked appointment to the "Booked Appointments" column
       addBookedAppointment(date);
     } else {
@@ -398,6 +366,8 @@ function showModal(date) {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
 }
+
+// WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
 function addBookedAppointment(date) {
@@ -438,50 +408,45 @@ if (submitButton) {
 }
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
+
 document.addEventListener("DOMContentLoaded", function () {
-  // Add event listener to the day of the week selector
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
-      // Get the selected day of the week
       const selectedDay = this.value;
+      const calendarContainer = document.getElementById("calendar-container");
+      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
 
-      // Get all calendar cards
-      const calendarCards = document.querySelectorAll(".card-content");
-
-      // tracking cards to display and hide
-      const cardsToDisplay = [];
-      const cardsToHide = [];
-
-      // Iterate over each card and toggle visibility based on selected day
       calendarCards.forEach((card) => {
-        const cardContent = card.querySelector(".DOW").innerText; // Get the card's content
+        const cardContent = card.querySelector(".DOW").innerText;
 
         if (cardContent.includes(selectedDay)) {
-          cardsToDisplay.push(card); // Add to cards to display
+          card.parentElement.style.display = "block"; // Show card
+          const cardParent = card.parentElement;
+
+          // Move the card to the top of the container
+          calendarContainer.insertBefore(
+            cardParent,
+            calendarContainer.firstChild
+          );
+
+          const bookButton = cardParent.querySelector(".book-btn");
+          if (bookButton) {
+            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
+            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          }
         } else {
-          cardsToHide.push(card); // Add to cards to hide
+          card.parentElement.style.display = "none"; // Hide card
         }
       });
-
-      const calendarContainer = document.getElementById("calendar");
-      cardsToDisplay.forEach((card) => {
-        calendarContainer.prepend(card);
-        card.style.display = "block";
-      });
-
-      cardsToHide.forEach((card) => {
-        card.style.display = "none";
-      });
-
-      // Toggle card visibility based on whether the card's content contains the selected day
-      // if (cardContent.includes(selectedDay)) {
-      // card.style.display = "block"; // Show the card
-      // } else {
-      // card.style.display = "none"; // Hide the card
-      // }
     });
 });
+
+function handleBookingClick() {
+  const card = this.closest(".card");
+  const date = card.id;
+  showModal(date);
+}
 
 // JavaScript for burger menu toggle
 document.addEventListener("DOMContentLoaded", () => {
@@ -528,10 +493,87 @@ function updateSlidePosition() {
 // Check if the user is signed in
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    // User is signed in
+    // User is signed in, hide btns
     document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
+    document.getElementById("signinbtn").style.display = "none"; // Hide the Sign in button
   } else {
     // No user is signed in
     document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
   }
 });
+
+//leave a review
+document.getElementById("submission").addEventListener("click", async () => {
+  // Check if the user is authenticated
+  if (!firebase.auth().currentUser) {
+    alert("Please sign in before submitting a review.");
+    return;
+  }
+
+  const name = document.getElementById("name_input").value;
+  const review = document.getElementById("review_input").value;
+  const rating = document.getElementById("rating").value;
+  const email_review = auth.currentUser.email; // Check if the name and review fields are not empty
+
+  if (name.trim() === "" || review.trim() === "") {
+    alert("Name and review cannot be empty.");
+    return;
+  } // Save the review to Firestore
+
+  await db.collection("reviews").add({
+    name,
+    review,
+    rating,
+    email_review,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  }); // Clear the input fields
+
+  document.getElementById("name_input").value = "";
+  document.getElementById("review_input").value = ""; // Display a success message or update the UI
+
+  alert("Review submitted successfully!");
+  show_reviews();
+});
+
+// Event listener for the "Leave a Review" tab
+r_e("leaveareviewpage").addEventListener("click", async () => {
+  show_reviews();
+});
+
+function show_reviews() {
+  db.collection("reviews")
+    .get()
+    .then((data) => {
+      let docs = data.docs;
+
+      let html = ""; // loop through the docs array
+      docs.forEach((doc) => {
+        let stars = doc.data().rating;
+        let ids = doc.id; // console.log(doc.id);
+        let num = "";
+        for (i = 0; i < stars; i++) {
+          num += `<a href="">
+      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+    </a>`;
+        }
+
+        if (auth.currentUser.email == doc.data().email_review) {
+          html += `<div class="box"><h1 class="is-size-5">${
+            doc.data().review
+          }</h1>
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; <div><button id="${
+            doc.id
+          }" class="is-white">Delete</button></div>
+          </div>`;
+        } else {
+          html += `<div class="box"><h1 class="is-size-5">${
+            doc.data().review
+          }</h1>
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; </div>`;
+        }
+        r_e("leaveareview_reviews-container").innerHTML = html;
+      });
+    });
+}

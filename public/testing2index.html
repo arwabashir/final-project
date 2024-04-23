@@ -61,7 +61,7 @@
             <button id="signinbtn" class="button is-outlined is-success is-light">Sign In</button>
           </div>
           
-          <div class="navbar-item" id="signoutDiv" style="display: none;">
+          <div class="navbar-item  mt-6" id="signoutDiv" style="display: none;">
             <button id="signoutbtn" class="button is-outlined is-success is-light">Sign Out</button>
           </div>
           
@@ -95,7 +95,8 @@
       <section>
         <h1 class="title is-1 has-text-centered">About Us</h1>
         <h1 class="title">Our Mission</h1>
-        <p>
+        <br>
+        <p class="subtitle">
           At the heart of our organization lies a deeply held commitment: to profoundly impact lives by fostering genuine connections and offering unwaveringly compassionate care. Through our dedicated efforts, we aim to redefine the landscape of personal care services, aspiring to lead with an unparalleled standard of excellence. Our vision encompasses not only providing the highest quality of care but also pioneering innovative approaches that set new benchmarks within the industry. We are driven by a relentless passion to make a meaningful difference in the lives of those we serve, guided by integrity, empathy, and a steadfast dedication to our mission.
         </p>
         <br />
@@ -113,7 +114,32 @@
         <br />
 
         <!--Owner Info Cards-->
-        <h1 class="title">Meet the Owners</h1>
+        <h1 class="title">Meet the Owner</h1>
+         <!-- Yia Chang Info-->
+ <div class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-4">
+        <!--card-->
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img
+                src=""
+              />
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="column is-8">
+        <!--image-->
+        <h1 class="title">Yia Chang</h1>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam iusto quos corrupti tempore id accusantium minima quae, omnis adipisci quidem.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<h1 class="title">Meet the Head Administrator/Nurse</h1>
      <!-- Mee Vue Info-->
      <div class="section">
       <div class="container">
@@ -140,30 +166,7 @@
     </div>
         </ul>
         <br />
- <!-- Yia Chang Info-->
- <div class="section">
-  <div class="container">
-    <div class="columns">
-      <div class="column is-4">
-        <!--card-->
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img
-                src=""
-              />
-            </figure>
-          </div>
-        </div>
-      </div>
-      <div class="column is-8">
-        <!--image-->
-        <h1 class="title">Yia Chang</h1>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam iusto quos corrupti tempore id accusantium minima quae, omnis adipisci quidem.</p>
-      </div>
-    </div>
-  </div>
-</div>
+
         </ul>
       </section>
     </div>
@@ -288,6 +291,15 @@
         <option value="Wednesday">Wednesday</option>
         <option value="Thursday">Thursday</option>
         <option value="Friday">Friday</option>
+        <option value="Any">Any</option>
+      </select>
+      <br><br>
+      <h3>By Time:</h3>
+      <select id="timeSelector">
+        <option value="9am-12pm">9am-12pm</option>
+        <option value="12pm-3pm">12pm-3pm</option>
+        <option value="3pm-5pm">3pm-5pm</option>
+        <option value="Any">Any</option>
       </select>
     </div>
 
@@ -318,6 +330,14 @@
             <input id="bookingDate" class="input" type="text" placeholder="Select date">
           </div>
         </div>
+        <div id="reasonForInquiry">
+          <label class="label">Reason For Inquiry: </label>
+          <input type="radio" id="lookingForCaretaker" name="reason" value="lookingForCaretaker">
+          <label for="lookingForCaretaker">Looking for caretaker</label><br>
+          <input type="radio" id="lookingToBeCaretaker" name="reason" value="lookingToBeCaretaker">
+          <label for="lookingToBeCaretaker">Looking to be a caretaker</label>
+          <div id="errorReason" style="color: red; display: none;">Please select a reason for inquiry.</div>
+        </div>
         <!-- Example submit button -->
         <div class="field">
           <div class="control">
@@ -333,37 +353,36 @@
 
 
     
-
-    <!--leave a review-->
-    <div class="section is-hidden" id="leaveareview">
-      <section>
-        <div class="field ml-6 mr-6 pt-3 pb-3">
-          <label class="label">Name:</label>
-          <div class="control">
-            <input class="input" id="name_input" type="text" placeholder="Enter your name here" />
-          </div>
-          <label class="label pt-3">Review</label>
-          <div class="control">
-            <input class="input" id="review_input" type="text" placeholder="Type in your review here" />
-          </div>
-          <div class="field mt-3">
-            <button class="button is-primary" id="course_submission">Submit</button>
-          </div>
+  <!--leave a review-->
+  <div class="section is-hidden" id="leaveareview">
+    <section>
+      <div class="field ml-6 mr-6 pt-3 pb-3">
+        <label class="label">Name:</label>
+        <div class="control">
+          <input class="input" id="name_input" type="text" placeholder="Enter your name here" />
         </div>
-        <div class="reviews-container ml-6 mr-6 pt-3" id="leaveareview_reviews-container">
+        <label class="label pt-3">Review</label>
+        <div class="control">
+          <input class="input" id="review_input" type="text" placeholder="Type in your review here" />
         </div>
-        <div class="has-text-centered mt-3">
-          <input class="input is-link" type="text" id="search_name" placeholder="Name" />
-          <button class="button is-link mt-2 mb-2" value="Search" id="search_btn">Search</button>
-          <p class="mb-3">
-            <a id="allreviews">All Reviews</a>
-          </p>
+        <label class="label pt-3">Rating</label>
+        <div class="select">
+          <select id="rating">
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+          </select>
         </div>
-      </section>
-    </div>
-    
-    
-
+        <div class="field mt-3">
+          <button class="button is-primary" id="submission">Submit</button>
+        </div>
+      </div>
+      <div class="reviews-container ml-6 mr-6 pt-3" id="leaveareview_reviews-container">
+      </div>
+    </section>
+  </div>
  
     <!--footer-->
     <footer class="footer has-background-success-light">
@@ -414,16 +433,16 @@
             <input type="password" id="pass" />
           </div>
         </div>
-
+<br>
         <!-- submit -->
         <div class="field">
           <div class="control">
-            <button id="submit" class="m-3 button is-link">Submit</button>
+            <button id="submit" class="button is-link">Submit</button>
+            <span style="margin-left: 10px;"></span>
+            <button id="Cancel" class=" button is-link is-light">Cancel</button>
           </div>
         </div>
-        <div class="control">
-          <button id="Cancel" class="button is-link is-light">Cancel</button>
-        </div>
+       
 
         <!-- div error -->
         <div class="error has-text-danger"></div>
@@ -450,17 +469,19 @@
           </div>
         </div>
 
+        <br>
         <!-- submit -->
         <div class="field">
           <div class="control">
-          <button id="submit2" class="m-3 button is-link">Submit</button>
+          <button id="submit2" class=" button is-link">Submit</button>
+          <span style="margin-left: 10px;"></span>
+            <button id="Cancel2" class=" button is-link is-light">Cancel</button>
+          </div>
         </div>
-        <div class="control">
-          <button id="Cancel2" class="button is-link is-light">Cancel</button>
-        </div>
-
+      
         <!-- div error -->
         <div class="error has-text-danger"></div>
+
       </div>
     </div>
    </div>

@@ -100,6 +100,28 @@
 .next {
   right: 0;
 }
+/* Style for reviews container */
+.reviews-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
 
+.review-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.review-name {
+  font-weight: bold;
+}
+
+.review-text {
+  margin-top: 5px;
+}
 
 
