@@ -90,7 +90,6 @@ s4.addEventListener("click", () => {
   document.getElementById("myModal2").classList.remove("is-active");
 });
 
-
 //SIGN UP MODAL INFO
 r_e("submit").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
@@ -119,9 +118,8 @@ r_e("submit").addEventListener("click", () => {
       // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
-
     })
-    
+
     .catch((error) => {
       // Handle errors
       var errorCode = error.code;
@@ -129,7 +127,6 @@ r_e("submit").addEventListener("click", () => {
 
       // Display error message to the user
       alert(errorMessage);
-     
     });
 });
 
@@ -148,7 +145,7 @@ r_e("submit2").addEventListener("click", () => {
     r_e("pass2").value = "";
 
     document.querySelector("#signoutbtn").classList.remove("is-hidden");
-    
+
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
@@ -576,3 +573,17 @@ function show_reviews() {
       });
     });
 }
+
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("reviews")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        show_reviews();
+      });
+  }
+});
