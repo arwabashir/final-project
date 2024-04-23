@@ -121,6 +121,7 @@ r_e("submit").addEventListener("click", () => {
       alert("You have signed up!");
 
     })
+    
     .catch((error) => {
       // Handle errors
       var errorCode = error.code;
@@ -128,6 +129,7 @@ r_e("submit").addEventListener("click", () => {
 
       // Display error message to the user
       alert(errorMessage);
+     
     });
 });
 
@@ -150,6 +152,7 @@ r_e("submit2").addEventListener("click", () => {
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
+    location.reload();
   });
 });
 
