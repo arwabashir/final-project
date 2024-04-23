@@ -148,11 +148,12 @@ r_e("submit2").addEventListener("click", () => {
     r_e("pass2").value = "";
 
     document.querySelector("#signoutbtn").classList.remove("is-hidden");
-    document.querySelector("#signinbtn").classList.add("is-hidden");
+    
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
     location.reload();
+    document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
 
