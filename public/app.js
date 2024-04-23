@@ -113,7 +113,8 @@ r_e("submit").addEventListener("click", () => {
       r_e("email").value = "";
       r_e("pass").value = "";
 
-      document.querySelector("#signoutbtn").classList.add("is-hidden");
+      document.querySelector("#signoutbtn").classList.remove("is-hidden");
+      document.querySelector("#signinbtn").classList.add("is-hidden");
       // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
