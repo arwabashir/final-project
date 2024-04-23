@@ -90,25 +90,34 @@ s4.addEventListener("click", () => {
   document.getElementById("myModal2").classList.remove("is-active");
 });
 
+
 r_e("submit").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
-
   let email = r_e("email").value;
   let pass = r_e("pass").value;
 
-  // 2. send the email/password to firestore
-
+  // 2. Send the email/password to Firestore
   auth
     .createUserWithEmailAndPassword(email, pass)
-    .then(() => {
-      // clear the input fields
+    .then((credential) => {
+      // Extract the user's email from the authentication object
+      const userEmail = credential.user.email;
+
+      // 3. Save the user's email to your Firestore collection
+      db.collection("users").doc(userEmail).set({
+        email: userEmail,
+        // Add more fields as needed
+      });
+
+      // Clear the input fields
       r_e("email").value = "";
       r_e("pass").value = "";
 
       document.querySelector("#signoutbtn").classList.add("is-hidden");
-      // close the modal
+      // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
+
     })
     .catch((error) => {
       // Handle errors
@@ -119,6 +128,7 @@ r_e("submit").addEventListener("click", () => {
       alert(errorMessage);
     });
 });
+
 
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
