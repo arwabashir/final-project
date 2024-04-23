@@ -495,6 +495,7 @@ firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     // User is signed in
     document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
+    document.getElementById("signinbtn").style.display = "none"; // Hide the Sign in button
   } else {
     // No user is signed in
     document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
