@@ -90,7 +90,6 @@ s4.addEventListener("click", () => {
   document.getElementById("myModal2").classList.remove("is-active");
 });
 
-
 //SIGN UP MODAL INFO
 r_e("submit").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
@@ -119,9 +118,8 @@ r_e("submit").addEventListener("click", () => {
       // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
-
     })
-    
+
     .catch((error) => {
       // Handle errors
       var errorCode = error.code;
@@ -129,7 +127,6 @@ r_e("submit").addEventListener("click", () => {
 
       // Display error message to the user
       alert(errorMessage);
-     
     });
 });
 
@@ -148,7 +145,7 @@ r_e("submit2").addEventListener("click", () => {
     r_e("pass2").value = "";
 
     document.querySelector("#signoutbtn").classList.remove("is-hidden");
-    
+
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
@@ -348,7 +345,26 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
 
-// Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
+// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
+// function showModal(date) {
+//   const bookingModal = document.getElementById("bookingModal");
+//   if (bookingModal) {
+//     bookingModal.classList.add("is-active"); // Show the modal
+//     const bookingDateInput = document.getElementById("bookingDate");
+//     if (bookingDateInput) {
+//       bookingDateInput.value = date; // Set the selected date in the modal
+//       bookingDateInput.setAttribute("readonly", "readonly");
+//       // Add the booked appointment to the "Booked Appointments" column
+//       addBookedAppointment(date);
+//     } else {
+//       console.error("Input field with ID 'bookingDate' not found.");
+//     }
+//   } else {
+//     console.error("Booking modal with ID 'bookingModal' not found.");
+//   }
+// }
+
+// Function to show the booking modal
 function showModal(date) {
   const bookingModal = document.getElementById("bookingModal");
   if (bookingModal) {
@@ -357,8 +373,6 @@ function showModal(date) {
     if (bookingDateInput) {
       bookingDateInput.value = date; // Set the selected date in the modal
       bookingDateInput.setAttribute("readonly", "readonly");
-      // Add the booked appointment to the "Booked Appointments" column
-      addBookedAppointment(date);
     } else {
       console.error("Input field with ID 'bookingDate' not found.");
     }
@@ -366,6 +380,20 @@ function showModal(date) {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
 }
+
+// Function to handle booking appointment button click
+document
+  .getElementById("bookAppointmentButton")
+  .addEventListener("click", function () {
+    const bookingDate = document.getElementById("bookingDate").value;
+    // Add the booked appointment to the "Booked Appointments" column
+    addBookedAppointment(bookingDate);
+    // Close the modal
+    const bookingModal = document.getElementById("bookingModal");
+    if (bookingModal) {
+      bookingModal.classList.remove("is-active");
+    }
+  });
 
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
