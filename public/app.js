@@ -351,6 +351,44 @@ function showModal(date) {
   }
 }
 
+// Testing: function to show error message if neither radio button is selected:
+// THIS IS NOT WORKING RIGHT NOW BUT DOES NOT CAUSE ANY ISSUES
+document.addEventListener("DOMContentLoaded", function () {
+  const lookingForCaretakerRadio = document.getElementById(
+    "lookingForCaretaker"
+  );
+  const lookingToBeCaretakerRadio = document.getElementById(
+    "lookingToBeCaretaker"
+  );
+  const errorReason = document.getElementById("errorReason");
+  const bookAppointmentButton = document.querySelector(
+    "#bookAppointmentButton"
+  );
+
+  if (
+    bookAppointmentButton &&
+    lookingForCaretakerRadio &&
+    lookingToBeCaretakerRadio &&
+    errorReason
+  ) {
+    bookAppointmentButton.addEventListener("click", function (event) {
+      if (
+        !lookingForCaretakerRadio.checked &&
+        !lookingToBeCaretakerRadio.checked
+      ) {
+        errorReason.style.display = "block";
+        event.preventDefault(); // Prevent form submission
+      } else {
+        errorReason.style.display = "none";
+        // Proceed with booking
+        // addBookedAppointment(date);
+      }
+    });
+  } else {
+    console.error("Button or radio buttons or error message not found.");
+  }
+});
+
 // Function to add booked appointment to the "Booked Appointments" column
 function addBookedAppointment(date) {
   const bookedAppointmentsContainer = document.getElementById(
