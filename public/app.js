@@ -54,29 +54,29 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-    location.reload();
+    // location.reload();
   });
 });
 
-// function showSignOutButton() {
-//   document.getElementById("signoutDiv").style.display = "block";
-// }
+function showSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "block";
+}
 
-// // Function to hide the sign-out button
-// function hideSignOutButton() {
-//   document.getElementById("signoutDiv").style.display = "none";
-// }
+// Function to hide the sign-out button
+function hideSignOutButton() {
+  document.getElementById("signoutDiv").style.display = "none";
+}
 
-// // Check if a user is signed in or signed out
-// firebase.auth().onAuthStateChanged(function (user) {
-//   if (user) {
-//     // User is signed in
-//     showSignOutButton();
-//   } else {
-//     // No user is signed in
-//     hideSignOutButton();
-//   }
-// });
+// Check if a user is signed in or signed out
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in
+    showSignOutButton();
+  } else {
+    // No user is signed in
+    hideSignOutButton();
+  }
+});
 
 let s3 = document.querySelector("#Cancel");
 
@@ -113,12 +113,11 @@ r_e("submit").addEventListener("click", () => {
       r_e("email").value = "";
       r_e("pass").value = "";
 
-      document.querySelector("#signupbtn").classList.add("is-hidden");
-      document.querySelector("#signinbtn").classList.add("is-hidden");
       document.querySelector("#signoutbtn").classList.remove("is-hidden");
+      document.querySelector("#signinbtn").classList.add("is-hidden");
       // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
-      alert("You have signed up and are now signed in!");
+      alert("You have signed up!");
     })
 
     .catch((error) => {
@@ -145,12 +144,13 @@ r_e("submit2").addEventListener("click", () => {
     r_e("email2").value = "";
     r_e("pass2").value = "";
 
-    document.querySelector("#signinbtn").classList.add("is-hidden");
     document.querySelector("#signoutbtn").classList.remove("is-hidden");
+
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
     // location.reload();
+    document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
 
@@ -490,12 +490,11 @@ function updateSlidePosition() {
 // Check if the user is signed in
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    show_reviews();
     // User is signed in
-    // document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
+    document.getElementById("signupbtn").style.display = "none"; // Hide the Sign Up button
   } else {
     // No user is signed in
-    // document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
+    document.getElementById("signupbtn").style.display = "block"; // Show the Sign Up button
   }
 });
 
@@ -537,6 +536,16 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   show_reviews();
 });
 
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // show reviews
+    show_reviews();
+  } else {
+    r_e(
+      "leaveareview_reviews-container"
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
+  }
+});
 function show_reviews() {
   db.collection("reviews")
     .get()
@@ -588,21 +597,3 @@ document.addEventListener("click", (event) => {
       });
   }
 });
-
-function checkState() {
-  const user = auth().currentUser;
-
-  if (user) {
-    // User is signed in
-    document.querySelector("#signupbtn").classList.add("is-hidden");
-    document.querySelector("#signinbtn").classList.add("is-hidden");
-    document.querySelector("#signoutbtn").classList.remove("is-hidden");
-  } else {
-    // No user is signed in
-    document.querySelector("#signupbtn").classList.remove("is-hidden");
-    document.querySelector("#signinbtn").classList.remove("is-hidden");
-    document.querySelector("#signoutbtn").classList.add("is-hidden");
-  }
-}
-
-checkState();
