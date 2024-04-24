@@ -371,6 +371,28 @@ function showModal(date) {
   }
 }
 
+// document.addEventListener("DOMContentLoaded", function () {
+//   const bookAppointmentButton = document.getElementById(
+//     "bookAppointmentButton"
+//   );
+
+//   if (bookAppointmentButton) {
+//     bookAppointmentButton.addEventListener("click", function () {
+//       const bookingDateInput = document.getElementById("bookingDate");
+
+//       if (bookingDateInput) {
+//         const date = bookingDateInput.value;
+//         addBookedAppointment(date);
+//       } else {
+//         console.error("Input field with ID 'bookingDate' not found.");
+//       }
+//     });
+//   } else {
+//     console.error("Button with ID 'bookAppointmentButton' not found.");
+//   }
+// });
+
+// ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
 document.addEventListener("DOMContentLoaded", function () {
   const bookAppointmentButton = document.getElementById(
     "bookAppointmentButton"
@@ -378,13 +400,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (bookAppointmentButton) {
     bookAppointmentButton.addEventListener("click", function () {
+      // Get input fields
       const bookingDateInput = document.getElementById("bookingDate");
+      const lookingForCaretakerRadio = document.getElementById(
+        "lookingForCaretaker"
+      );
+      const lookingToBeCaretakerRadio = document.getElementById(
+        "lookingToBeCaretaker"
+      );
+      const bookingCommentsInput = document.getElementById("bookingComments");
 
-      if (bookingDateInput) {
+      if (
+        bookingDateInput &&
+        (lookingForCaretakerRadio || lookingToBeCaretakerRadio)
+      ) {
         const date = bookingDateInput.value;
+        const inquiryReason = lookingForCaretakerRadio.checked
+          ? "lookingForCaretaker"
+          : "lookingToBeCaretaker";
+        const comments = bookingCommentsInput.value;
+
+        // Call addBookedAppointment function
         addBookedAppointment(date);
+
+        // Check if user is signed in
+        const user = firebase.auth().currentUser;
+        if (user) {
+          const userEmail = user.email;
+
+          // Reference to the user's document
+          const userDocRef = db.collection("users").doc(userEmail);
+
+          // Add appointment to user's subcollection
+          userDocRef
+            .collection("appointments")
+            .add({
+              date: date,
+              inquiryReason: inquiryReason,
+              comments: comments,
+            })
+            .then(function () {
+              // Appointment added successfully
+              console.log("Appointment added successfully");
+              // You can add further actions here if needed
+            })
+            .catch(function (error) {
+              console.error("Error adding appointment: ", error);
+            });
+        } else {
+          // User is not signed in, show a message
+          alert("Please sign in before booking an appointment");
+        }
       } else {
-        console.error("Input field with ID 'bookingDate' not found.");
+        console.error("One or more input fields not found.");
       }
     });
   } else {
