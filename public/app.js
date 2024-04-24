@@ -362,7 +362,6 @@ function showModal(date) {
   }
 }
 
-// Start of testing section:
 document.addEventListener("DOMContentLoaded", function () {
   const bookAppointmentButton = document.getElementById(
     "bookAppointmentButton"
