@@ -354,8 +354,6 @@ function showModal(date) {
     if (bookingDateInput) {
       bookingDateInput.value = date; // Set the selected date in the modal
       bookingDateInput.setAttribute("readonly", "readonly");
-      // Add the booked appointment to the "Booked Appointments" column
-      addBookedAppointment(date);
     } else {
       console.error("Input field with ID 'bookingDate' not found.");
     }
@@ -363,6 +361,28 @@ function showModal(date) {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
 }
+
+// Start of testing section:
+document.addEventListener("DOMContentLoaded", function () {
+  const bookAppointmentButton = document.getElementById(
+    "bookAppointmentButton"
+  );
+
+  if (bookAppointmentButton) {
+    bookAppointmentButton.addEventListener("click", function () {
+      const bookingDateInput = document.getElementById("bookingDate");
+
+      if (bookingDateInput) {
+        const date = bookingDateInput.value;
+        addBookedAppointment(date);
+      } else {
+        console.error("Input field with ID 'bookingDate' not found.");
+      }
+    });
+  } else {
+    console.error("Button with ID 'bookAppointmentButton' not found.");
+  }
+});
 
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
