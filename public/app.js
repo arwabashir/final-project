@@ -287,14 +287,23 @@ document
     renderCalendar(year, selectedMonth);
   });
 
-// Separate function to attach event listeners to booking buttons
+// Separate function to attach event listeners to booking buttons + check that user is signed in to allow booking
 function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
   bookButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const card = button.closest(".card");
-      const date = card.id;
-      showModal(date);
+      // Check if the user is signed in
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in, show the booking modal
+          const card = button.closest(".card");
+          const date = card.id;
+          showModal(date);
+        } else {
+          // User is not signed in, show a message
+          alert("Please sign in before booking an appointment");
+        }
+      });
     });
   });
 }
