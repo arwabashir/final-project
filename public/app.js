@@ -54,7 +54,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-    location.reload();
+    // location.reload();
   });
 });
 
@@ -149,7 +149,7 @@ r_e("submit2").addEventListener("click", () => {
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
-    location.reload();
+    // location.reload();
     document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
@@ -354,7 +354,26 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
 
-// Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
+// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
+// function showModal(date) {
+//   const bookingModal = document.getElementById("bookingModal");
+//   if (bookingModal) {
+//     bookingModal.classList.add("is-active"); // Show the modal
+//     const bookingDateInput = document.getElementById("bookingDate");
+//     if (bookingDateInput) {
+//       bookingDateInput.value = date; // Set the selected date in the modal
+//       bookingDateInput.setAttribute("readonly", "readonly");
+//       // Add the booked appointment to the "Booked Appointments" column
+//       addBookedAppointment(date);
+//     } else {
+//       console.error("Input field with ID 'bookingDate' not found.");
+//     }
+//   } else {
+//     console.error("Booking modal with ID 'bookingModal' not found.");
+//   }
+// }
+
+// Function to show the booking modal
 function showModal(date) {
   const bookingModal = document.getElementById("bookingModal");
   if (bookingModal) {
@@ -459,6 +478,20 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Button with ID 'bookAppointmentButton' not found.");
   }
 });
+
+// Function to handle booking appointment button click
+document
+  .getElementById("bookAppointmentButton")
+  .addEventListener("click", function () {
+    const bookingDate = document.getElementById("bookingDate").value;
+    // Add the booked appointment to the "Booked Appointments" column
+    addBookedAppointment(bookingDate);
+    // Close the modal
+    const bookingModal = document.getElementById("bookingModal");
+    if (bookingModal) {
+      bookingModal.classList.remove("is-active");
+    }
+  });
 
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
@@ -633,6 +666,16 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   show_reviews();
 });
 
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // show reviews
+    show_reviews();
+  } else {
+    r_e(
+      "leaveareview_reviews-container"
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
+  }
+});
 function show_reviews() {
   db.collection("reviews")
     .get()
@@ -670,3 +713,17 @@ function show_reviews() {
       });
     });
 }
+
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("reviews")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        show_reviews();
+      });
+  }
+});
