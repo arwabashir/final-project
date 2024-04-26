@@ -390,27 +390,6 @@ function showModal(date) {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const bookAppointmentButton = document.getElementById(
-//     "bookAppointmentButton"
-//   );
-
-//   if (bookAppointmentButton) {
-//     bookAppointmentButton.addEventListener("click", function () {
-//       const bookingDateInput = document.getElementById("bookingDate");
-
-//       if (bookingDateInput) {
-//         const date = bookingDateInput.value;
-//         addBookedAppointment(date);
-//       } else {
-//         console.error("Input field with ID 'bookingDate' not found.");
-//       }
-//     });
-//   } else {
-//     console.error("Button with ID 'bookAppointmentButton' not found.");
-//   }
-// });
-
 // ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
 document.addEventListener("DOMContentLoaded", function () {
   const bookAppointmentButton = document.getElementById(
