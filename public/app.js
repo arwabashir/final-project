@@ -673,7 +673,7 @@ auth.onAuthStateChanged((user) => {
   } else {
     r_e(
       "leaveareview_reviews-container"
-    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please Sign in to Read and Write Reviews!</p>`;
   }
 });
 function show_reviews() {
