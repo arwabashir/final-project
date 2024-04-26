@@ -411,7 +411,7 @@ function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
   if (addingModal) {
     addingModal.classList.add("is-active");
-    const addingDateInput = document.getElementById("addingModal");
+    const addingDateInput = document.getElementById("appointmentDate");
     if (addingDateInput) {
       addingDateInput.value = date;
       addingDateInput.setAttribute("readonly", "readonly");
