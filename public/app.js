@@ -523,12 +523,29 @@ function closeModal() {
   }
 }
 
+function closeAddModal() {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.remove("is-active");
+  } else {
+    console.error("Cannot close modal");
+  }
+}
+
 // Add event listener to close button of the modal
 const closeButton = document.querySelector(".modal-close");
 if (closeButton) {
   closeButton.addEventListener("click", closeModal);
 } else {
   console.error("Close button for modal not found.");
+}
+
+// Add event listener to close button of the add modal
+const closeAddButton = document.getElementById("closeaddbtn");
+if (closeAddButton) {
+  closeAddButton.addEventListener("click", closeAddModal);
+} else {
+  console.error("Close modal error");
 }
 
 // Add event listener to the form submission button
