@@ -308,6 +308,7 @@ function attachBookingListeners() {
   });
 }
 
+
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
@@ -535,44 +536,73 @@ if (submitButton) {
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
+// document.addEventListener("DOMContentLoaded", function () {
+//   document
+//     .getElementById("daySelector")
+//     .addEventListener("change", function () {
+//       const selectedDay = this.value;
+//       const calendarContainer = document.getElementById("calendar-container");
+//       const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+
+//       calendarCards.forEach((card) => {
+//         const cardContent = card.querySelector(".DOW").innerText;
+
+//         if (cardContent.includes(selectedDay)) {
+//           card.parentElement.style.display = "block"; // Show card
+//           const cardParent = card.parentElement;
+
+//           // Move the card to the top of the container
+//           calendarContainer.insertBefore(
+//             cardParent,
+//             calendarContainer.firstChild
+//           );
+
+//           const bookButton = cardParent.querySelector(".book-btn");
+//           if (bookButton) {
+//             bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
+//             bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+//           }
+//         } else {
+//           card.parentElement.style.display = "none"; // Hide card
+//         }
+//       });
+//     });
+// });
+
 document.addEventListener("DOMContentLoaded", function () {
-  document
-    .getElementById("daySelector")
-    .addEventListener("change", function () {
-      const selectedDay = this.value;
-      const calendarContainer = document.getElementById("calendar-container");
-      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+  const calendarContainer = document.getElementById("calendar-container");
+  const calendarCards = document.querySelectorAll(".card-content");
 
-      calendarCards.forEach((card) => {
-        const cardContent = card.querySelector(".DOW").innerText;
+  document.getElementById("daySelector").addEventListener("change", function () {
+    const selectedDay = this.value;
 
-        if (cardContent.includes(selectedDay)) {
-          card.parentElement.style.display = "block"; // Show card
-          const cardParent = card.parentElement;
+    // Clear the calendar container before rendering filtered content
+    calendarContainer.innerHTML = '';
 
-          // Move the card to the top of the container
-          calendarContainer.insertBefore(
-            cardParent,
-            calendarContainer.firstChild
-          );
+    calendarCards.forEach((card) => {
+      const cardContent = card.querySelector(".DOW").innerText;
+      const cardParent = card.parentElement;
 
-          const bookButton = cardParent.querySelector(".book-btn");
-          if (bookButton) {
-            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
-            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
-          }
-        } else {
-          card.parentElement.style.display = "none"; // Hide card
+      if (cardContent.includes(selectedDay)) {
+        const clonedCard = cardParent.cloneNode(true); // Clone the card element
+        calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+
+        const bookButton = clonedCard.querySelector(".book-btn");
+        if (bookButton) {
+          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
         }
-      });
+      }
     });
+  });
 });
+
 
 function handleBookingClick() {
   const card = this.closest(".card");
   const date = card.id;
   showModal(date);
 }
+
 
 // JavaScript for burger menu toggle
 document.addEventListener("DOMContentLoaded", () => {
@@ -714,16 +744,16 @@ function show_reviews() {
     });
 }
 
-document.addEventListener("click", (event) => {
-  // Check if the clicked element is a button
-  if (event.target.tagName === "BUTTON") {
-    // Get the ID of the clicked button
-    let buttonId = event.target.id;
-    db.collection("reviews")
-      .doc(buttonId)
-      .delete()
-      .then(() => {
-        show_reviews();
-      });
-  }
-});
+// document.addEventListener("click", (event) => {
+//   // Check if the clicked element is a button
+//   if (event.target.tagName === "BUTTON") {
+//     // Get the ID of the clicked button
+//     let buttonId = event.target.id;
+//     db.collection("reviews")
+//       .doc(buttonId)
+//       .delete()
+//       .then(() => {
+//         show_reviews();
+//       });
+//   }
+// });
