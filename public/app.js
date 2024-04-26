@@ -308,6 +308,23 @@ function attachBookingListeners() {
   });
 }
 
+function attachAddListeners() {
+  const addButtons = document.querySelectorAll(".add-btn");
+  addButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          const card = button.closest(".card");
+          const date = card.id;
+          showAddModal(date);
+        } else {
+          alert("Please sign in before adding an appointment");
+        }
+      });
+    });
+  });
+}
+
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
@@ -387,6 +404,18 @@ function showModal(date) {
     }
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
+
+function showAddModal(date) {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.add("is-active");
+    const addingDateInput = document.getElementById("addingModal");
+    if (addingDateInput) {
+      addingDateInput.value = date;
+      addingDateInput.setAttribute("readonly", "readonly");
+    }
   }
 }
 
