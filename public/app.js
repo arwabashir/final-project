@@ -534,76 +534,52 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
-// TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
-  document
-    .getElementById("daySelector")
-    .addEventListener("change", function () {
-      const selectedDay = this.value;
-      const calendarContainer = document.getElementById("calendar-container");
-      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+  const calendarContainer = document.getElementById("calendar-container");
+  const calendarCards = document.querySelectorAll(".card-content");
 
-      calendarCards.forEach((card) => {
-        const cardContent = card.querySelector(".DOW").innerText;
+  document.getElementById("daySelector").addEventListener("change", function () {
+    const selectedDay = this.value;
 
-        if (cardContent.includes(selectedDay)) {
-          card.parentElement.style.display = "block"; // Show card
-          const cardParent = card.parentElement;
+    // Clear the calendar container before rendering filtered content
+    calendarContainer.innerHTML = '';
 
-          // Move the card to the top of the container
-          calendarContainer.insertBefore(
-            cardParent,
-            calendarContainer.firstChild
-          );
+    calendarCards.forEach((card) => {
+      const cardContent = card.querySelector(".DOW").innerText;
+      const cardParent = card.parentElement;
 
-          const bookButton = cardParent.querySelector(".book-btn");
-          if (bookButton) {
-            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
-            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
-          }
-        } else {
-          card.parentElement.style.display = "none"; // Hide card
+      if (cardContent.includes(selectedDay)) {
+        const clonedCard = cardParent.cloneNode(true); // Clone the card element
+        calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+
+        const bookButton = clonedCard.querySelector(".book-btn");
+        if (bookButton) {
+          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
         }
-      });
+      }
     });
+  });
 });
 
-//KIANAS CODE THAT REMOVED THE CALENDAR SHOWING UP AT THE BOTTOM
-
-// document.addEventListener("DOMContentLoaded", function () {
-//   const calendarContainer = document.getElementById("calendar-container");
-//   const calendarCards = document.querySelectorAll(".card-content");
-
-//   document.getElementById("daySelector").addEventListener("change", function () {
-//     const selectedDay = this.value;
-
-//     // Clear the calendar container before rendering filtered content
-//     calendarContainer.innerHTML = '';
-
-//     calendarCards.forEach((card) => {
-//       const cardContent = card.querySelector(".DOW").innerText;
-//       const cardParent = card.parentElement;
-
-//       if (cardContent.includes(selectedDay)) {
-//         const clonedCard = cardParent.cloneNode(true); // Clone the card element
-//         calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
-
-//         const bookButton = clonedCard.querySelector(".book-btn");
-//         if (bookButton) {
-//           bookButton.addEventListener("click", handleBookingClick); // Add the event listener
-//         }
-//       }
-//     });
-//   });
-// });
 
 
-function handleBookingClick() {
-  const card = this.closest(".card");
+function handleBookingClick(event) {
+  // Check if the user is signed in
+  if (!firebase.auth().currentUser) {
+    // If not signed in, prevent default action (modal opening)
+    event.preventDefault();
+    // Prompt the user to sign in
+    alert("You must be signed in first to book an appointment.");
+    return;
+  }
+  
+  // If the user is signed in, continue with the booking action
+  const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
 }
+
 
 
 // JavaScript for burger menu toggle
