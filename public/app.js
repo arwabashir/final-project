@@ -558,6 +558,15 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
+const submitAdd = document.querySelector("#submitAdd");
+if (submitAdd) {
+  submitAdd.addEventListener("click", () => {
+    closeAddModal(); // Close the modal after submitting the form
+  });
+} else {
+  console.error("Submit button for adding form not found.");
+}
+
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
