@@ -508,6 +508,20 @@ function addBookedAppointment(date) {
   const bookedAppointmentsContainer = document.getElementById(
     "booked-appointments"
   );
+  user = auth.currentUser.email;
+  if (user) {
+    // db.collection("users");
+    const userDocRef = db.collection("users").doc(user.email);
+    console.log(userDocRef.collection("appointments").doc(date));
+  }
+  // Add appointment to user's subcollection
+  // userDocRef
+  //   .collection("appointments")
+  //   .add({
+  //     date: date,
+  //     inquiryReason: inquiryReason,
+  //     comments: comments,
+  //   })
   const appointmentElement = document.createElement("div");
   appointmentElement.textContent = date;
   bookedAppointmentsContainer.appendChild(appointmentElement);
