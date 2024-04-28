@@ -308,6 +308,23 @@ function attachBookingListeners() {
   });
 }
 
+function attachAddListeners() {
+  const addButtons = document.querySelectorAll(".add-btn");
+  addButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          const card = button.closest(".card");
+          const date = card.id;
+          showAddModal(date);
+        } else {
+          alert("Please sign in before adding an appointment");
+        }
+      });
+    });
+  });
+}
+
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
@@ -390,26 +407,17 @@ function showModal(date) {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const bookAppointmentButton = document.getElementById(
-//     "bookAppointmentButton"
-//   );
-
-//   if (bookAppointmentButton) {
-//     bookAppointmentButton.addEventListener("click", function () {
-//       const bookingDateInput = document.getElementById("bookingDate");
-
-//       if (bookingDateInput) {
-//         const date = bookingDateInput.value;
-//         addBookedAppointment(date);
-//       } else {
-//         console.error("Input field with ID 'bookingDate' not found.");
-//       }
-//     });
-//   } else {
-//     console.error("Button with ID 'bookAppointmentButton' not found.");
-//   }
-// });
+function showAddModal(date) {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.add("is-active");
+    const addingDateInput = document.getElementById("appointmentDate");
+    if (addingDateInput) {
+      addingDateInput.value = date;
+      addingDateInput.setAttribute("readonly", "readonly");
+    }
+  }
+}
 
 // ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
 document.addEventListener("DOMContentLoaded", function () {
@@ -515,12 +523,29 @@ function closeModal() {
   }
 }
 
+function closeAddModal() {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.remove("is-active");
+  } else {
+    console.error("Cannot close modal");
+  }
+}
+
 // Add event listener to close button of the modal
 const closeButton = document.querySelector(".modal-close");
 if (closeButton) {
   closeButton.addEventListener("click", closeModal);
 } else {
   console.error("Close button for modal not found.");
+}
+
+// Add event listener to close button of the add modal
+const closeAddButton = document.getElementById("closeaddbtn");
+if (closeAddButton) {
+  closeAddButton.addEventListener("click", closeAddModal);
+} else {
+  console.error("Close modal error");
 }
 
 // Add event listener to the form submission button
@@ -533,47 +558,51 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const calendarContainer = document.getElementById("calendar-container");
-  const calendarCards = document.querySelectorAll(".card-content");
+const submitAdd = document.querySelector("#submitAdd");
+if (submitAdd) {
+  submitAdd.addEventListener("click", () => {
+    closeAddModal(); // Close the modal after submitting the form
+  });
+} else {
+  console.error("Submit button for adding form not found.");
+}
+// TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
+document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
       const selectedDay = this.value;
-
-      // Clear the calendar container before rendering filtered content
-      calendarContainer.innerHTML = "";
+      const calendarContainer = document.getElementById("calendar-container");
+      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
 
       calendarCards.forEach((card) => {
         const cardContent = card.querySelector(".DOW").innerText;
-        const cardParent = card.parentElement;
 
         if (cardContent.includes(selectedDay)) {
-          const clonedCard = cardParent.cloneNode(true); // Clone the card element
-          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+          card.parentElement.style.display = "block"; // Show card
+          const cardParent = card.parentElement;
 
-          const bookButton = clonedCard.querySelector(".book-btn");
+          // Move the card to the top of the container
+          calendarContainer.insertBefore(
+            cardParent,
+            calendarContainer.firstChild
+          );
+
+          const bookButton = cardParent.querySelector(".book-btn");
           if (bookButton) {
+            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
             bookButton.addEventListener("click", handleBookingClick); // Add the event listener
           }
+        } else {
+          card.parentElement.style.display = "none"; // Hide card
         }
       });
     });
 });
 
-function handleBookingClick(event) {
-  // Check if the user is signed in
-  if (!firebase.auth().currentUser) {
-    // If not signed in, prevent default action (modal opening)
-    event.preventDefault();
-    // Prompt the user to sign in
-    alert("You must be signed in first to book an appointment.");
-    return;
-  }
-
-  // If the user is signed in, continue with the booking action
-  const card = event.target.closest(".card");
+function handleBookingClick() {
+  const card = this.closest(".card");
   const date = card.id;
   showModal(date);
 }
@@ -677,7 +706,7 @@ auth.onAuthStateChanged((user) => {
   } else {
     r_e(
       "leaveareview_reviews-container"
-    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please Sign in to Read and Write Reviews!</p>`;
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
   }
 });
 function show_reviews() {
@@ -731,16 +760,3 @@ document.addEventListener("click", (event) => {
       });
   }
 });
-
-// document.getElementById("add_apt").addEventListener("click", function () {
-//   const add2 = document.getElementById("addModal");
-//   add2.classList.add("is-active");
-//   document
-//     .getElementById("submitAddModal")
-//     .addEventListener("click", function () {
-//       // const add2 = document.getElementById("addModal");
-//       add2.classList.remove("is-active");
-//       // Close the modal
-//     });
-//   // Close the modal
-// });
