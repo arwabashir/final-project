@@ -526,11 +526,29 @@ function addBookedAppointment() {
             doc.data().inquiryReason
           }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
             doc.data().comments
-          }</p><br><button class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          }</p><br><button id="${
+            doc.id
+          }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
         });
         bookedAppointmentsContainer.innerHTML = html;
       });
   }
+
+  document.addEventListener("click", (event) => {
+    // Check if the clicked element is a button
+    if (event.target.tagName === "BUTTON") {
+      // Get the ID of the clicked button
+      let buttonId = event.target.id;
+      db.collection("users")
+        .doc(auth.currentUser.email)
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          addBookedAppointment();
+        });
+    }
+  });
 
   //     if (auth.currentUser.email == doc.data().email_review) {
   // user = auth.currentUser.email;
@@ -738,10 +756,14 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   show_reviews();
 });
 
+r_e("bookingpage").addEventListener("click", async () => {
+  addBookedAppointments();
+});
 auth.onAuthStateChanged((user) => {
   if (user) {
     // show reviews
     show_reviews();
+    addBookedAppointment();
   } else {
     r_e(
       "leaveareview_reviews-container"
