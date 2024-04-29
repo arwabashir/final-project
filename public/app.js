@@ -596,6 +596,15 @@ function addBookedAppointment(date) {
   bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
+// Function to add available appointments to "recentappointments" column
+function addRecentAppointment(date) {
+  const recentAppointmentsContainer =
+    document.getElementById("recentappointments");
+  const apptElement = document.createElement("div");
+  apptElement.textContent = date;
+  recentAppointmentsContainer.appendChild(apptElement);
+}
+
 // Function to close the modal
 function closeModal() {
   const bookingModal = document.getElementById("bookingModal");
