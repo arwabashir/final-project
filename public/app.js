@@ -474,17 +474,6 @@ function leftColumnAdmin() {
   `;
 }
 
-r_e("bookingpage").addEventListener("click", function () {
-  console.log("Booking page clicked");
-  if (isAdminUser()) {
-    // If admin, construct the left column for admin
-    leftColumnAdmin();
-  } else {
-    // If non-admin, construct the left column for non-admin
-    leftColumnNonAdmin();
-  }
-});
-
 // Make default drop down option on the daySelector the current day of the week
 // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
