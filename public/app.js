@@ -803,36 +803,6 @@ function addAppointmentTime() {
     });
 }
 
-// this is the addAppointmentTime that creates a key value pair with the timestamp - but it breaks the delete button function
-// function addAppointmentTime() {
-//   const appointmentDate = document.getElementById("appointmentDate").value;
-//   const appointmentTime = document.getElementById("appointmentTime").value;
-
-//   // Get the current timestamp
-//   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-//   // Create a document reference with the appointment date as its ID
-//   const appointmentRef = db.collection("bookings").doc(appointmentDate);
-
-//   // Add the new appointment time and its corresponding timestamp to the document
-//   appointmentRef
-//     .update({
-//       [`times.${appointmentTime}`]: timestamp,
-//     })
-//     .then(() => {
-//       console.log("Appointment added successfully");
-//       // Show success message
-//       const successMessage = document.getElementById("successMessage");
-//       successMessage.textContent = "Appointment added successfully!";
-//       successMessage.style.display = "block";
-//       // Optionally, you can close the modal here
-//       // closeModal(); // Example function to close the modal
-//     })
-//     .catch((error) => {
-//       console.error("Error adding appointment: ", error);
-//     });
-// }
-
 document
   .getElementById("submitAdd")
   .addEventListener("click", addAppointmentTime);
