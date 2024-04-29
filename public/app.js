@@ -70,10 +70,8 @@ function hideSignOutButton() {
 // Check if a user is signed in or signed out
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    // User is signed in
     showSignOutButton();
   } else {
-    // No user is signed in
     hideSignOutButton();
   }
 });
@@ -92,21 +90,18 @@ s4.addEventListener("click", () => {
 
 //SIGN UP MODAL INFO
 r_e("submit").addEventListener("click", () => {
-  // 1. Collect the email/password combination from the input fields
   let email = r_e("email").value;
   let pass = r_e("pass").value;
 
-  // 2. Send the email/password to Firestore
+  //Send the email/password to Firestore
   auth
     .createUserWithEmailAndPassword(email, pass)
     .then((credential) => {
-      // Extract the user's email from the authentication object
       const userEmail = credential.user.email;
 
-      // 3. Save the user's email to your Firestore collection
+      // Save the user's email to your Firestore collection
       db.collection("users").doc(userEmail).set({
         email: userEmail,
-        // Add more fields as needed
       });
 
       // Clear the input fields
@@ -115,7 +110,6 @@ r_e("submit").addEventListener("click", () => {
 
       document.querySelector("#signoutbtn").classList.remove("is-hidden");
       document.querySelector("#signinbtn").classList.add("is-hidden");
-      // Close the modal
       document.getElementById("myModal").classList.remove("is-active");
       alert("You have signed up!");
     })
@@ -132,13 +126,10 @@ r_e("submit").addEventListener("click", () => {
 
 //SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
-  // 1. Collect the email/password combination from the input fields
-
   let email2 = r_e("email2").value;
   let pass2 = r_e("pass2").value;
 
-  // 2. send the email/passwrod to firestore
-
+  // send the email/passwrod to firebase
   auth.signInWithEmailAndPassword(email2, pass2).then(() => {
     // clear the input fields
     r_e("email2").value = "";
@@ -149,7 +140,6 @@ r_e("submit2").addEventListener("click", () => {
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
-    // location.reload();
     document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
@@ -239,9 +229,9 @@ function renderCalendar(year, month) {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const currentDate = new Date(year, month, day);
-    const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    const dayOfWeek = currentDate.getDay();
 
-    // Check if the current day is a weekday (Monday to Friday)
+    // Check if the current day is a weekday
     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
       const dateId = `${year}-${month + 1}-${day}`;
       const isAdmin = isAdminUser();
@@ -278,74 +268,6 @@ function renderCalendar(year, month) {
     attachBookingListeners();
   }
 }
-
-// async function renderCalendar(year, month) {
-//   const calendarContainer = document.getElementById("calendar-container");
-//   const daysInMonth = new Date(year, month + 1, 0).getDate();
-//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
-
-//   let calendarHTML = `
-//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
-//   <div id="calendar" class="box">
-//   <div class="columns is-multiline">
-// `;
-
-//   for (let day = 1; day <= daysInMonth; day++) {
-//     const currentDate = new Date(year, month, day);
-//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-
-//     // Check if the current day is a weekday (Monday to Friday)
-//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-//       const dateId = `${year}-${month + 1}-${day}`;
-//       const isAdmin = isAdminUser();
-
-//       // Determine button text and class based on user role
-//       const buttonText = isAdmin ? "Add" : "Book";
-//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
-
-//       // Fetch appointment times from Firestore
-//       const appointmentRef = db.collection("bookings").doc(dateId);
-//       const doc = await appointmentRef.get();
-
-//       let timesHTML = "";
-//       if (doc.exists) {
-//         const appointmentData = doc.data();
-//         if (appointmentData.times) {
-//           timesHTML = appointmentData.times
-//             .map((time) => `<p>${time}</p>`)
-//             .join("");
-//         }
-//       }
-
-//       calendarHTML += `
-//       <div class="column is-one-third">
-//         <div class="card" id="${dateId}">
-//           <div class="card-content">
-//             <p class="title is-4">${monthNames[month]} ${day}</p>
-//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
-//             <div class="appointment-times">${timesHTML}</div>
-//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
-//           </div>
-//         </div>
-//       </div>
-//     `;
-//     }
-//   }
-
-//   // Close the calendar HTML
-//   calendarHTML += `
-//       </div>
-//     </div>
-//   `;
-
-//   // Render the calendar HTML
-//   calendarContainer.innerHTML = calendarHTML;
-//   if (isAdminUser()) {
-//     attachAddListeners();
-//   } else {
-//     attachBookingListeners();
-//   }
-// }
 
 document
   .getElementById("monthSelector")
@@ -442,7 +364,6 @@ r_e("bookingpage").addEventListener("click", () => {
 });
 
 // Make default drop down option on the daySelector the current day of the week
-// THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
   let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
@@ -453,25 +374,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
-
-// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
-// function showModal(date) {
-//   const bookingModal = document.getElementById("bookingModal");
-//   if (bookingModal) {
-//     bookingModal.classList.add("is-active"); // Show the modal
-//     const bookingDateInput = document.getElementById("bookingDate");
-//     if (bookingDateInput) {
-//       bookingDateInput.value = date; // Set the selected date in the modal
-//       bookingDateInput.setAttribute("readonly", "readonly");
-//       // Add the booked appointment to the "Booked Appointments" column
-//       addBookedAppointment(date);
-//     } else {
-//       console.error("Input field with ID 'bookingDate' not found.");
-//     }
-//   } else {
-//     console.error("Booking modal with ID 'bookingModal' not found.");
-//   }
-// }
 
 // Function to show the booking modal
 function showModal(date) {
@@ -570,7 +472,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Function to handle booking appointment button click
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
@@ -607,6 +508,16 @@ function deleteAppointment(date, time) {
     });
   });
 }
+// Function to add booked appointment to the "Booked Appointments" column
+function addBookedAppointment(date) {
+  const bookedAppointmentsContainer = document.getElementById(
+    "booked-appointments"
+  );
+  const appointmentElement = document.createElement("div");
+  appointmentElement.textContent = date;
+  bookedAppointmentsContainer.appendChild(appointmentElement);
+}
+
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
@@ -770,12 +681,12 @@ function closeAddModal() {
 }
 
 // Add event listener to close button of the modal
-const closeButton = document.querySelector(".modal-close");
-if (closeButton) {
-  closeButton.addEventListener("click", closeModal);
-} else {
-  console.error("Close button for modal not found.");
-}
+// const closeButton = document.querySelector(".modal-close");
+// if (closeButton) {
+//   closeButton.addEventListener("click", closeModal);
+// } else {
+//   console.error("Close button for modal not found.");
+// }
 
 // Add event listener to close button of the add modal
 const closeAddButton = document.getElementById("closeaddbtn");
@@ -786,20 +697,20 @@ if (closeAddButton) {
 }
 
 // Add event listener to the form submission button
-const submitButton = document.querySelector("#bookAppointmentButton");
-if (submitButton) {
-  submitButton.addEventListener("click", () => {
-    closeModal(); // Close the modal after submitting the form
-  });
-} else {
-  console.error("Submit button for booking form not found.");
-}
+// const submitButton = document.querySelector("#bookAppointmentButton");
+// if (submitButton) {
+//   submitButton.addEventListener("click", () => {
+//     closeModal();
+//   });
+// } else {
+//   console.error("Submit button for booking form not found.");
+// }
 
 // Event listener - closes modal after add appointment time form is submitted
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
-    closeAddModal(); // Close the modal after submitting the form
+    closeAddModal();
   });
 } else {
   console.error("Submit button for adding form not found.");
@@ -818,7 +729,6 @@ function addAppointmentTime() {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        // Document already exists, update the array of times
         const existingTimes = doc.data().times || [];
         existingTimes.push(appointmentTime);
         return appointmentRef.update({
@@ -837,8 +747,6 @@ function addAppointmentTime() {
       const successMessage = document.getElementById("successMessage");
       successMessage.textContent = "Appointment added successfully!";
       successMessage.style.display = "block";
-      // Optionally, you can close the modal here
-      // closeModal(); // Example function to close the modal
     })
     .catch((error) => {
       console.error("Error adding appointment: ", error);
@@ -850,7 +758,6 @@ document
   .addEventListener("click", addAppointmentTime);
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
-
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar-container");
   const calendarCards = document.querySelectorAll(".card-content");
@@ -868,12 +775,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const cardParent = card.parentElement;
 
         if (cardContent.includes(selectedDay)) {
-          const clonedCard = cardParent.cloneNode(true); // Clone the card element
-          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+          const clonedCard = cardParent.cloneNode(true);
+          calendarContainer.appendChild(clonedCard);
 
           const bookButton = clonedCard.querySelector(".book-btn");
           if (bookButton) {
-            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+            bookButton.addEventListener("click", handleBookingClick);
           }
         }
       });
@@ -883,7 +790,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function handleBookingClick(event) {
   // Check if the user is signed in
   if (!firebase.auth().currentUser) {
-    // If not signed in, prevent default action (modal opening)
+    // If not signed in
     event.preventDefault();
     // Prompt the user to sign in
     alert("You must be signed in first to book an appointment.");
@@ -961,12 +868,12 @@ document.getElementById("submission").addEventListener("click", async () => {
   const name = document.getElementById("name_input").value;
   const review = document.getElementById("review_input").value;
   const rating = document.getElementById("rating").value;
-  const email_review = auth.currentUser.email; // Check if the name and review fields are not empty
+  const email_review = auth.currentUser.email;
 
   if (name.trim() === "" || review.trim() === "") {
     alert("Name and review cannot be empty.");
     return;
-  } // Save the review to Firestore
+  } // Save the review to Firebase
 
   await db.collection("reviews").add({
     name,
@@ -977,7 +884,7 @@ document.getElementById("submission").addEventListener("click", async () => {
   }); // Clear the input fields
 
   document.getElementById("name_input").value = "";
-  document.getElementById("review_input").value = ""; // Display a success message or update the UI
+  document.getElementById("review_input").value = "";
 
   alert("Review submitted successfully!");
   show_reviews();
@@ -1011,10 +918,10 @@ function show_reviews() {
     .then((data) => {
       let docs = data.docs;
 
-      let html = ""; // loop through the docs array
+      let html = "";
       docs.forEach((doc) => {
         let stars = doc.data().rating;
-        let ids = doc.id; // console.log(doc.id);
+        let ids = doc.id;
         let num = "";
         for (i = 0; i < stars; i++) {
           num += `<a href="">
