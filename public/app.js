@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const comments = bookingCommentsInput.value;
 
         // Call addBookedAppointment function
-        addBookedAppointment(date);
+        addBookedAppointment();
 
         // Check if user is signed in
         const user = firebase.auth().currentUser;
@@ -504,16 +504,39 @@ document
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
-function addBookedAppointment(date) {
+function addBookedAppointment() {
   const bookedAppointmentsContainer = document.getElementById(
     "booked-appointments"
   );
   user = auth.currentUser.email;
   if (user) {
-    // db.collection("users");
-    const userDocRef = db.collection("users").doc(user.email);
-    console.log(userDocRef.collection("appointments").doc(date));
+    db.collection("users")
+      .doc(user)
+      .collection("appointments")
+      .get()
+      .then((data) => {
+        let docs = data.docs;
+
+        let html = ""; // loop through the docs array
+        docs.forEach((doc) => {
+          console.log(doc.id);
+          html += `<div class="box"><p>Date: ${doc.data().date}</p><p>Reason: ${
+            doc.data().inquiryReason
+          }</p><p>Comments: ${
+            doc.data().comments
+          }</p><button class="button is-primary is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+        });
+        bookedAppointmentsContainer.innerHTML = html;
+      });
   }
+
+  //     if (auth.currentUser.email == doc.data().email_review) {
+  // user = auth.currentUser.email;
+  // if (user) {
+  //   // db.collection("users");
+  //   const userDocRef = db.collection("users").doc(user);
+  //   console.log(userDocRef.collection("appointments").doc(date));
+  // }
   // Add appointment to user's subcollection
   // userDocRef
   //   .collection("appointments")
@@ -522,9 +545,9 @@ function addBookedAppointment(date) {
   //     inquiryReason: inquiryReason,
   //     comments: comments,
   //   })
-  const appointmentElement = document.createElement("div");
-  appointmentElement.textContent = date;
-  bookedAppointmentsContainer.appendChild(appointmentElement);
+  // const appointmentElement = document.createElement("div");
+  // appointmentElement.textContent = date;
+  // bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
 // Function to close the modal
