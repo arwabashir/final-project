@@ -357,8 +357,8 @@ async function renderCalendar(year, month) {
     // If loading message doesn't exist, create and append it
     loadingMessage = document.createElement("div");
     loadingMessage.id = "loading-message";
-    loadingMessage.textContent =
-      "Please allow a few moments for the calendar to load...";
+    loadingMessage.innerHTML =
+      "<strong>Please allow a few moments for the calendar to load...</strong>";
     calendarContainer.appendChild(loadingMessage);
   }
 
