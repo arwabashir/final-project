@@ -255,7 +255,7 @@ function renderCalendar(year, month) {
         <div class="card" id="${dateId}">
           <div class="card-content">
             <p class="title is-4">${monthNames[month]} ${day}</p>
-            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
+            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
           </div>
         </div>
@@ -278,6 +278,74 @@ function renderCalendar(year, month) {
     attachBookingListeners();
   }
 }
+
+// async function renderCalendar(year, month) {
+//   const calendarContainer = document.getElementById("calendar-container");
+//   const daysInMonth = new Date(year, month + 1, 0).getDate();
+//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
+
+//   let calendarHTML = `
+//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
+//   <div id="calendar" class="box">
+//   <div class="columns is-multiline">
+// `;
+
+//   for (let day = 1; day <= daysInMonth; day++) {
+//     const currentDate = new Date(year, month, day);
+//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+//     // Check if the current day is a weekday (Monday to Friday)
+//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+//       const dateId = `${year}-${month + 1}-${day}`;
+//       const isAdmin = isAdminUser();
+
+//       // Determine button text and class based on user role
+//       const buttonText = isAdmin ? "Add" : "Book";
+//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
+
+//       // Fetch appointment times from Firestore
+//       const appointmentRef = db.collection("bookings").doc(dateId);
+//       const doc = await appointmentRef.get();
+
+//       let timesHTML = "";
+//       if (doc.exists) {
+//         const appointmentData = doc.data();
+//         if (appointmentData.times) {
+//           timesHTML = appointmentData.times
+//             .map((time) => `<p>${time}</p>`)
+//             .join("");
+//         }
+//       }
+
+//       calendarHTML += `
+//       <div class="column is-one-third">
+//         <div class="card" id="${dateId}">
+//           <div class="card-content">
+//             <p class="title is-4">${monthNames[month]} ${day}</p>
+//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
+//             <div class="appointment-times">${timesHTML}</div>
+//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
+//           </div>
+//         </div>
+//       </div>
+//     `;
+//     }
+//   }
+
+//   // Close the calendar HTML
+//   calendarHTML += `
+//       </div>
+//     </div>
+//   `;
+
+//   // Render the calendar HTML
+//   calendarContainer.innerHTML = calendarHTML;
+//   if (isAdminUser()) {
+//     attachAddListeners();
+//   } else {
+//     attachBookingListeners();
+//   }
+// }
 
 document
   .getElementById("monthSelector")
@@ -356,6 +424,21 @@ r_e("bookingpage").addEventListener("click", () => {
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
   renderCalendar(currentYear, currentMonth);
+});
+
+// All actions triggered off booking page (render calendar and display appropriate left column)
+r_e("bookingpage").addEventListener("click", () => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  renderCalendar(currentYear, currentMonth);
+  if (isAdminUser()) {
+    // Hide the left column if the user is an admin
+    document.getElementById("leftColumn").innerHTML = `
+    <h2 class='title'>Recently Added Appointments</h2>
+    <div id="recentappointments"></div>
+  `;
+  }
 });
 
 // Make default drop down option on the daySelector the current day of the week
@@ -501,6 +584,13 @@ document
     }
   });
 
+// Function to handle adding appointment time click
+document.getElementById("submitAdd").addEventListener("click", function () {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+  addRecentAppointment(appointmentDate, appointmentTime);
+});
+
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
@@ -639,6 +729,7 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
+// Event listener - closes modal after add appointment time form is submitted
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
@@ -647,43 +738,94 @@ if (submitAdd) {
 } else {
   console.error("Submit button for adding form not found.");
 }
+
+// sending appointment time to firebase
+function addAppointmentTime() {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+
+  // Create a document reference with the appointment date as its ID
+  const appointmentRef = db.collection("bookings").doc(appointmentDate);
+
+  // Add the new appointment time to the existing array of times (or create a new array)
+  appointmentRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        // Document already exists, update the array of times
+        const existingTimes = doc.data().times || [];
+        existingTimes.push(appointmentTime);
+        return appointmentRef.update({
+          times: existingTimes,
+        });
+      } else {
+        // Document doesn't exist, create a new one with the array of times
+        return appointmentRef.set({
+          times: [appointmentTime],
+        });
+      }
+    })
+    .then(() => {
+      console.log("Appointment added successfully");
+      // Show success message
+      const successMessage = document.getElementById("successMessage");
+      successMessage.textContent = "Appointment added successfully!";
+      successMessage.style.display = "block";
+      // Optionally, you can close the modal here
+      // closeModal(); // Example function to close the modal
+    })
+    .catch((error) => {
+      console.error("Error adding appointment: ", error);
+    });
+}
+
+document
+  .getElementById("submitAdd")
+  .addEventListener("click", addAppointmentTime);
+
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
+  const calendarContainer = document.getElementById("calendar-container");
+  const calendarCards = document.querySelectorAll(".card-content");
+
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
       const selectedDay = this.value;
-      const calendarContainer = document.getElementById("calendar-container");
-      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+
+      // Clear the calendar container before rendering filtered content
+      calendarContainer.innerHTML = "";
 
       calendarCards.forEach((card) => {
         const cardContent = card.querySelector(".DOW").innerText;
+        const cardParent = card.parentElement;
 
         if (cardContent.includes(selectedDay)) {
-          card.parentElement.style.display = "block"; // Show card
-          const cardParent = card.parentElement;
+          const clonedCard = cardParent.cloneNode(true); // Clone the card element
+          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
 
-          // Move the card to the top of the container
-          calendarContainer.insertBefore(
-            cardParent,
-            calendarContainer.firstChild
-          );
-
-          const bookButton = cardParent.querySelector(".book-btn");
+          const bookButton = clonedCard.querySelector(".book-btn");
           if (bookButton) {
-            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
             bookButton.addEventListener("click", handleBookingClick); // Add the event listener
           }
-        } else {
-          card.parentElement.style.display = "none"; // Hide card
         }
       });
     });
 });
 
-function handleBookingClick() {
-  const card = this.closest(".card");
+function handleBookingClick(event) {
+  // Check if the user is signed in
+  if (!firebase.auth().currentUser) {
+    // If not signed in, prevent default action (modal opening)
+    event.preventDefault();
+    // Prompt the user to sign in
+    alert("You must be signed in first to book an appointment.");
+    return;
+  }
+
+  // If the user is signed in, continue with the booking action
+  const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
 }
@@ -814,7 +956,10 @@ function show_reviews() {
     </a>`;
         }
 
-        if (auth.currentUser.email == doc.data().email_review) {
+        if (
+          auth.currentUser.email == doc.data().email_review ||
+          isAdminUser()
+        ) {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>

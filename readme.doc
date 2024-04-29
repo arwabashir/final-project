@@ -2,6 +2,80 @@ https://trello.com/invite/b/ETHDJgfp/ATTIfd49e41ff81ca2bcf460ebf84d734fb1412AE0A
 
 https://github.com/arwabashir/final-project.git
 
+SPRINT 3-------------
+User Stories:
+
+Story #5: As an admin for the business, I would like to be able to add in an available appointment time and date for clients to choose from.
+
+Story #6: As an admin for the business, I want to delete a review that did not have any relevance to the business and it was just promotion or spam.
+
+-Task table is an image in sprint 3 deliverable folder
+-Burndown charts are in sprint 2 deliverable folder   
+
+Daily Scrum Meetings
+#1 April 16
+What did you do yesterday? 
+-We were going through bugs
+What are you planning to do today?
+-Arwa: fix alignment of sign out btn/fix alignment of submit on sign up form
+-Nikita: Review page (delete functionality)
+-Kiana: booking form/time functionality
+-Niha: Review page/day filter→ fix the booking form btn to work
+-Hana: Booking form
+Any problems are you facing?
+-A lot merge conflicts
+
+#2 April 22
+What did you do yesterday?
+-Everyone worked on parts of the website
+What are you planning to do today?
+-Arwa: admin functionality to delete/add appts
+-Kiana: time functionality/time filter 
+-Nikita: delete functionality for booked appts
+-Niha: admin functionality to delete/add appts
+-Hana: time functionality/time filter 
+Any problems are you facing?
+-Admin functionality for booking cards
+
+#3 April 27
+What did you do yesterday?
+-All: work on website
+What are you planning to do today?
+-Arwa: presentation
+-Kiana: debugging
+-Nikita: debugging
+-Niha: presentation
+-Hana: debugging
+Any problems are you facing?
+-Just working through random small bugs 
+ 
+ Sprint Review
+
+a. 	What did you learn from doing our third sprint?
+We learned how to incorporate firebase into our project. We created collections for reviews, users, and bookings. We also learned how to create rules on firebase to separate admins from regular users. 
+b. 	What did go well? Why?
+Something that went well was how we all equally split up our tasks. We made sure to reach out to each other if we ever had any questions. We made sure to split up the code for the filters for the booking tab. One person was in charge of the months, one person was in charge of the days, and one person will be in charge for the times. 
+c. 	What didn’t go well? Why not?
+Something that didn’t go well was our merge conflicts. We kept having to go through each individual line because we couldn't tell what code was new or old. 
+d. 	How can you make things better next time?
+In the future, we will make sure to keep merging our individual branches more often so we won't have to spend too much time fixing the errors. This will ensure we all have the most up to date versions of the code and we will make sure to communicate everytime we make changes so people can pull.
+e. 	Are you satisfied with what you already completed?
+Yes, we are satisfied. We believe we are working at a good pace as we have the majority of the code done. For the next couple of days, we will just be working through finalizing the code for admin access and fixing minor bugs that we find. 
+f.  	Which group was invited? What are your observations/notes? Everybody was present?
+Group 7 was invited, everyone was present. These were our notes on their project:
+Overall, your website is really cool! The design is great and the colors used are nice. I like that employers are only able to see their own posts as that prevents any competition or bias - and just makes it fair in general. The site looks very organized as it is split into a 3 column view on the student side, while it is split into a 2 column view on the employer side. Functionality works well overall. Here is some feedback after playing around with the site: 
+- When clicking on the logo it makes it seem as if you’ve been signed out but the sign out button is still there - kind of confusing
+- When editing information, should remove the text in the boxes (ex: age has the answer 20 in the text box, major says Consumer Behavior, etc.)
+- Once someone updates information, should add a popup that says “information updated” or something similar - because otherwise you aren’t aware unless you go back to the main page
+- The phone number, year in school, available days, and desired hours don’t save when attempting to update information
+- Cannot edit employer business post
+- Business employers should have a different “my profile” — things that don’t apply to them should be removed
+
+
+
+
+
+
 SPRINT 2-------------
 User Stories:
 
