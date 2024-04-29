@@ -426,6 +426,18 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
+r_e("bookingpage").addEventListener("click", () => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  renderCalendar(currentYear, currentMonth);
+  if (isAdminUser()) {
+    // Hide the left column if the user is an admin
+    document.getElementById("leftColumn").innerHTML =
+      "<h2 class='title'>Recently Added Appointments</h2>";
+  }
+});
+
 // Make default drop down option on the daySelector the current day of the week
 // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
