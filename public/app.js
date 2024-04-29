@@ -721,16 +721,16 @@ function show_reviews() {
     });
 }
 
-// document.addEventListener("click", (event) => {
-//   // Check if the clicked element is a button
-//   if (event.target.tagName === "BUTTON") {
-//     // Get the ID of the clicked button
-//     let buttonId = event.target.id;
-//     db.collection("reviews")
-//       .doc(buttonId)
-//       .delete()
-//       .then(() => {
-//         show_reviews();
-//       });
-//   }
-// });
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("reviews")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        show_reviews();
+      });
+  }
+});
