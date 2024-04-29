@@ -607,9 +607,37 @@ function addBookedAppointment(date) {
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
-  const apptElement = document.createElement("div");
-  apptElement.textContent = `${time} on ${date}`;
-  recentAppointmentsContainer.appendChild(apptElement);
+  const appointmentContainer = document.createElement("div");
+  appointmentContainer.classList.add("field", "has-addons");
+
+  const inputControl = document.createElement("div");
+  inputControl.classList.add("control");
+
+  const inputField = document.createElement("input");
+  inputField.classList.add("input");
+  inputField.type = "text";
+  inputField.value = `${time} on ${date}`; // Set the value of the input field to date and time
+
+  inputControl.appendChild(inputField);
+
+  const buttonControl = document.createElement("div");
+  buttonControl.classList.add("control");
+
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("button", "is-danger");
+  deleteButton.textContent = "Delete"; // Text content for the delete button
+
+  // Add an event listener to delete the appointment on click
+  deleteButton.addEventListener("click", function () {
+    appointmentContainer.remove();
+  });
+
+  buttonControl.appendChild(deleteButton);
+
+  appointmentContainer.appendChild(inputControl);
+  appointmentContainer.appendChild(buttonControl);
+
+  recentAppointmentsContainer.appendChild(appointmentContainer);
 }
 
 // Function to close the modal
