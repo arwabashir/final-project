@@ -426,6 +426,7 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
+// All actions triggered off booking page (render calendar and display appropriate left column)
 r_e("bookingpage").addEventListener("click", () => {
   const today = new Date();
   const currentMonth = today.getMonth();
@@ -433,8 +434,10 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
   if (isAdminUser()) {
     // Hide the left column if the user is an admin
-    document.getElementById("leftColumn").innerHTML =
-      "<h2 class='title'>Recently Added Appointments</h2>";
+    document.getElementById("leftColumn").innerHTML = `
+    <h2 class='title'>Recently Added Appointments</h2>
+    <div id="recentappointments" class="has-text-centered"></div>
+  `;
   }
 });
 
