@@ -491,9 +491,9 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
-    const bookingDate = document.getElementById("bookingDate").value;
+    // const bookingDate = document.getElementById("bookingDate").value;
     // Add the booked appointment to the "Booked Appointments" column
-    addBookedAppointment(bookingDate);
+    // addBookedAppointment(bookingDate);
     // Close the modal
     const bookingModal = document.getElementById("bookingModal");
     if (bookingModal) {
@@ -509,6 +509,30 @@ function addBookedAppointment() {
     "booked-appointments"
   );
   user = auth.currentUser.email;
+  // if (isAdminUser()) {
+  //   let html = "";
+  //   db.collection("users")
+  //     .doc()
+  //     .collection("appointments")
+  //     .get()
+  //     .then((data) => {
+  //       let docs = data.docs;
+  //       console.log(docs);
+  //       docs.forEach((doc) => {
+  //         console.log(doc.id);
+  //         html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+  //           doc.data().date
+  //         }</p><p>Reason: ${
+  //           doc.data().inquiryReason
+  //         }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+  //           doc.data().comments
+  //         }</p><br><button id="${
+  //           doc.id
+  //         }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+  //       });
+  //       bookedAppointmentsContainer.innerHTML = html;
+  //     });
+  // } else {
   if (user) {
     db.collection("users")
       .doc(user)
@@ -534,22 +558,6 @@ function addBookedAppointment() {
       });
   }
 
-  document.addEventListener("click", (event) => {
-    // Check if the clicked element is a button
-    if (event.target.tagName === "BUTTON") {
-      // Get the ID of the clicked button
-      let buttonId = event.target.id;
-      db.collection("users")
-        .doc(auth.currentUser.email)
-        .collection("appointments")
-        .doc(buttonId)
-        .delete()
-        .then(() => {
-          addBookedAppointment();
-        });
-    }
-  });
-
   //     if (auth.currentUser.email == doc.data().email_review) {
   // user = auth.currentUser.email;
   // if (user) {
@@ -569,6 +577,22 @@ function addBookedAppointment() {
   // appointmentElement.textContent = date;
   // bookedAppointmentsContainer.appendChild(appointmentElement);
 }
+
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("users")
+      .doc(auth.currentUser.email)
+      .collection("appointments")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        addBookedAppointment();
+      });
+  }
+});
 
 // Function to close the modal
 function closeModal() {
@@ -757,7 +781,7 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
 });
 
 r_e("bookingpage").addEventListener("click", async () => {
-  addBookedAppointments();
+  addBookedAppointment();
 });
 auth.onAuthStateChanged((user) => {
   if (user) {
