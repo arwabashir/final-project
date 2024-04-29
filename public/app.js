@@ -973,7 +973,10 @@ function show_reviews() {
     </a>`;
         }
 
-        if (auth.currentUser.email == doc.data().email_review) {
+        if (
+          auth.currentUser.email == doc.data().email_review ||
+          isAdminUser()
+        ) {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
@@ -994,16 +997,16 @@ function show_reviews() {
     });
 }
 
-// document.addEventListener("click", (event) => {
-//   // Check if the clicked element is a button
-//   if (event.target.tagName === "BUTTON") {
-//     // Get the ID of the clicked button
-//     let buttonId = event.target.id;
-//     db.collection("reviews")
-//       .doc(buttonId)
-//       .delete()
-//       .then(() => {
-//         show_reviews();
-//       });
-//   }
-// });
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("reviews")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        show_reviews();
+      });
+  }
+});
