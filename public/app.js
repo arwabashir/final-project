@@ -763,13 +763,61 @@ if (submitAdd) {
   console.error("Submit button for adding form not found.");
 }
 
-// testing: sending appointment time to firebase
+// sending appointment time to firebase
+// function addAppointmentTime() {
+//   const appointmentDate = document.getElementById("appointmentDate").value;
+//   const appointmentTime = document.getElementById("appointmentTime").value;
+
+//   // Create a document reference with the appointment date as its ID
+//   const appointmentRef = db.collection("bookings").doc(appointmentDate);
+
+//   // Add the new appointment time to the existing array of times (or create a new array)
+//   appointmentRef
+//     .get()
+//     .then((doc) => {
+//       if (doc.exists) {
+//         // Document already exists, update the array of times
+//         const existingTimes = doc.data().times || [];
+//         existingTimes.push(appointmentTime);
+//         return appointmentRef.update({
+//           times: existingTimes,
+//         });
+//       } else {
+//         // Document doesn't exist, create a new one with the array of times
+//         return appointmentRef.set({
+//           times: [appointmentTime],
+//         });
+//       }
+//     })
+//     .then(() => {
+//       console.log("Appointment added successfully");
+//       // Show success message
+//       const successMessage = document.getElementById("successMessage");
+//       successMessage.textContent = "Appointment added successfully!";
+//       successMessage.style.display = "block";
+//       // Optionally, you can close the modal here
+//       // closeModal(); // Example function to close the modal
+//     })
+//     .catch((error) => {
+//       console.error("Error adding appointment: ", error);
+//     });
+// }
+
 function addAppointmentTime() {
   const appointmentDate = document.getElementById("appointmentDate").value;
   const appointmentTime = document.getElementById("appointmentTime").value;
 
+  // Get the current timestamp
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
   // Create a document reference with the appointment date as its ID
   const appointmentRef = db.collection("bookings").doc(appointmentDate);
+
+  // Create an object with the appointment time and its corresponding timestamp
+  const appointmentData = {
+    time: appointmentTime,
+    timestamp: timestamp,
+  };
 
   // Add the new appointment time to the existing array of times (or create a new array)
   appointmentRef
@@ -778,14 +826,14 @@ function addAppointmentTime() {
       if (doc.exists) {
         // Document already exists, update the array of times
         const existingTimes = doc.data().times || [];
-        existingTimes.push(appointmentTime);
+        existingTimes.push(appointmentData);
         return appointmentRef.update({
           times: existingTimes,
         });
       } else {
         // Document doesn't exist, create a new one with the array of times
         return appointmentRef.set({
-          times: [appointmentTime],
+          times: [appointmentData],
         });
       }
     })
