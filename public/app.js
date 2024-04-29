@@ -426,6 +426,65 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
+// construct left column for non admin:
+function leftColumnNonAdmin() {
+  const leftColumn = document.getElementById("leftColumn");
+  leftColumn.innerHTML = `
+  <h2 class="title">Filter Appointments</h2>
+  <h3>By Month:</h3>
+  <select id="monthSelector">
+  <option value="0">January</option>
+  <option value="1">February</option>
+  <option value="2">March</option>
+  <option value="3">April</option>
+  <option value="4">May</option>
+  <option value="5">June</option>
+  <option value="6">July</option>
+  <option value="7">August</option>
+  <option value="8">September</option>
+  <option value="9">October</option>
+  <option value="10">November</option>
+  <option value="11">December</option>
+  </select>
+  <br><br>
+  <h3>By Day:</h3>
+  <select id="daySelector">
+  <option value="Monday">Monday</option>
+  <option value="Tuesday">Tuesday</option>
+  <option value="Wednesday">Wednesday</option>
+  <option value="Thursday">Thursday</option>
+  <option value="Friday">Friday</option>
+  <option value="Any">Any</option>
+  </select>
+  <br><br>
+  <h3>By Time:</h3>
+  <select id="timeSelector">
+  <option value="9am-12pm">9am-12pm</option>
+  <option value="12pm-3pm">12pm-3pm</option>
+  <option value="3pm-5pm">3pm-5pm</option>
+  <option value="Any">Any</option>
+  </select>
+`;
+}
+
+function leftColumnAdmin() {
+  const leftColumn = document.getElementById("leftColumn");
+  leftColumn.innerHTML = `
+    <h2 class="title">Recently Added Appointments</h2>
+  `;
+}
+
+r_e("bookingpage").addEventListener("click", function () {
+  console.log("Booking page clicked");
+  if (isAdminUser()) {
+    // If admin, construct the left column for admin
+    leftColumnAdmin();
+  } else {
+    // If non-admin, construct the left column for non-admin
+    leftColumnNonAdmin();
+  }
+});
+
 // Make default drop down option on the daySelector the current day of the week
 // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
