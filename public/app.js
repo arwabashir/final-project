@@ -226,60 +226,7 @@ function isAdminUser() {
 }
 
 // updated renderCalendar function with checking for admin user
-// function renderCalendar(year, month) {
-//   const calendarContainer = document.getElementById("calendar-container");
-//   const daysInMonth = new Date(year, month + 1, 0).getDate();
-//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
-
-//   let calendarHTML = `
-//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
-//   <div id="calendar" class="box">
-//   <div class="columns is-multiline">
-// `;
-
-//   for (let day = 1; day <= daysInMonth; day++) {
-//     const currentDate = new Date(year, month, day);
-//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-
-//     // Check if the current day is a weekday (Monday to Friday)
-//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-//       const dateId = `${year}-${month + 1}-${day}`;
-//       const isAdmin = isAdminUser();
-
-//       // Determine button text and class based on user role
-//       const buttonText = isAdmin ? "Add" : "Book";
-//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
-
-//       calendarHTML += `
-//       <div class="column is-one-third">
-//         <div class="card" id="${dateId}">
-//           <div class="card-content">
-//             <p class="title is-4">${monthNames[month]} ${day}</p>
-//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
-//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
-//           </div>
-//         </div>
-//       </div>
-//     `;
-//     }
-//   }
-
-//   // Close the calendar HTML
-//   calendarHTML += `
-//       </div>
-//     </div>
-//   `;
-
-//   // Render the calendar HTML
-//   calendarContainer.innerHTML = calendarHTML;
-//   if (isAdminUser()) {
-//     attachAddListeners();
-//   } else {
-//     attachBookingListeners();
-//   }
-// }
-
-async function renderCalendar(year, month) {
+function renderCalendar(year, month) {
   const calendarContainer = document.getElementById("calendar-container");
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
@@ -303,27 +250,12 @@ async function renderCalendar(year, month) {
       const buttonText = isAdmin ? "Add" : "Book";
       const buttonClass = isAdmin ? "add-btn" : "book-btn";
 
-      // Fetch appointment times from Firestore
-      const appointmentRef = db.collection("bookings").doc(dateId);
-      const doc = await appointmentRef.get();
-
-      let timesHTML = "";
-      if (doc.exists) {
-        const appointmentData = doc.data();
-        if (appointmentData.times) {
-          timesHTML = appointmentData.times
-            .map((time) => `<p>${time}</p>`)
-            .join("");
-        }
-      }
-
       calendarHTML += `
       <div class="column is-one-third">
         <div class="card" id="${dateId}">
           <div class="card-content">
             <p class="title is-4">${monthNames[month]} ${day}</p>
             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
-            <div class="appointment-times">${timesHTML}</div>
             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
           </div>
         </div>
@@ -346,6 +278,74 @@ async function renderCalendar(year, month) {
     attachBookingListeners();
   }
 }
+
+// async function renderCalendar(year, month) {
+//   const calendarContainer = document.getElementById("calendar-container");
+//   const daysInMonth = new Date(year, month + 1, 0).getDate();
+//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
+
+//   let calendarHTML = `
+//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
+//   <div id="calendar" class="box">
+//   <div class="columns is-multiline">
+// `;
+
+//   for (let day = 1; day <= daysInMonth; day++) {
+//     const currentDate = new Date(year, month, day);
+//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+//     // Check if the current day is a weekday (Monday to Friday)
+//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+//       const dateId = `${year}-${month + 1}-${day}`;
+//       const isAdmin = isAdminUser();
+
+//       // Determine button text and class based on user role
+//       const buttonText = isAdmin ? "Add" : "Book";
+//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
+
+//       // Fetch appointment times from Firestore
+//       const appointmentRef = db.collection("bookings").doc(dateId);
+//       const doc = await appointmentRef.get();
+
+//       let timesHTML = "";
+//       if (doc.exists) {
+//         const appointmentData = doc.data();
+//         if (appointmentData.times) {
+//           timesHTML = appointmentData.times
+//             .map((time) => `<p>${time}</p>`)
+//             .join("");
+//         }
+//       }
+
+//       calendarHTML += `
+//       <div class="column is-one-third">
+//         <div class="card" id="${dateId}">
+//           <div class="card-content">
+//             <p class="title is-4">${monthNames[month]} ${day}</p>
+//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
+//             <div class="appointment-times">${timesHTML}</div>
+//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
+//           </div>
+//         </div>
+//       </div>
+//     `;
+//     }
+//   }
+
+//   // Close the calendar HTML
+//   calendarHTML += `
+//       </div>
+//     </div>
+//   `;
+
+//   // Render the calendar HTML
+//   calendarContainer.innerHTML = calendarHTML;
+//   if (isAdminUser()) {
+//     attachAddListeners();
+//   } else {
+//     attachBookingListeners();
+//   }
+// }
 
 document
   .getElementById("monthSelector")
