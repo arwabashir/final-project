@@ -308,7 +308,6 @@ function attachBookingListeners() {
   });
 }
 
-
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
@@ -534,35 +533,34 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar-container");
   const calendarCards = document.querySelectorAll(".card-content");
 
-  document.getElementById("daySelector").addEventListener("change", function () {
-    const selectedDay = this.value;
+  document
+    .getElementById("daySelector")
+    .addEventListener("change", function () {
+      const selectedDay = this.value;
 
-    // Clear the calendar container before rendering filtered content
-    calendarContainer.innerHTML = '';
+      // Clear the calendar container before rendering filtered content
+      calendarContainer.innerHTML = "";
 
-    calendarCards.forEach((card) => {
-      const cardContent = card.querySelector(".DOW").innerText;
-      const cardParent = card.parentElement;
+      calendarCards.forEach((card) => {
+        const cardContent = card.querySelector(".DOW").innerText;
+        const cardParent = card.parentElement;
 
-      if (cardContent.includes(selectedDay)) {
-        const clonedCard = cardParent.cloneNode(true); // Clone the card element
-        calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+        if (cardContent.includes(selectedDay)) {
+          const clonedCard = cardParent.cloneNode(true); // Clone the card element
+          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
 
-        const bookButton = clonedCard.querySelector(".book-btn");
-        if (bookButton) {
-          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          const bookButton = clonedCard.querySelector(".book-btn");
+          if (bookButton) {
+            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          }
         }
-      }
+      });
     });
-  });
 });
-
-
 
 function handleBookingClick(event) {
   // Check if the user is signed in
@@ -573,14 +571,12 @@ function handleBookingClick(event) {
     alert("You must be signed in first to book an appointment.");
     return;
   }
-  
+
   // If the user is signed in, continue with the booking action
   const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
 }
-
-
 
 // JavaScript for burger menu toggle
 document.addEventListener("DOMContentLoaded", () => {
@@ -701,7 +697,10 @@ function show_reviews() {
     </a>`;
         }
 
-        if (auth.currentUser.email == doc.data().email_review) {
+        if (
+          auth.currentUser.email == doc.data().email_review ||
+          isAdminUser()
+        ) {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
