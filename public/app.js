@@ -587,8 +587,8 @@ document
 // Function to handle adding appointment time click
 document.getElementById("submitAdd").addEventListener("click", function () {
   const appointmentDate = document.getElementById("appointmentDate").value;
-  // Add the booked appointment to the "Booked Appointments" column
-  addRecentAppointment(appointmentDate);
+  const appointmentTime = document.getElementById("appointmentTime").value;
+  addRecentAppointment(appointmentDate, appointmentTime);
 });
 
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
@@ -604,11 +604,11 @@ function addBookedAppointment(date) {
 }
 
 // Function to add available appointments to "recentappointments" column
-function addRecentAppointment(date) {
+function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
   const apptElement = document.createElement("div");
-  apptElement.textContent = date;
+  apptElement.textContent = `${time} on ${date}`;
   recentAppointmentsContainer.appendChild(apptElement);
 }
 
