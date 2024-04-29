@@ -996,6 +996,7 @@ auth.onAuthStateChanged((user) => {
     // show reviews
     show_reviews();
     addBookedAppointment();
+    // addRecentAppointment();
   } else {
     r_e(
       "leaveareview_reviews-container"
