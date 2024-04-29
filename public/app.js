@@ -472,7 +472,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Function to handle booking appointment button click
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
@@ -591,12 +590,12 @@ function closeAddModal() {
 }
 
 // Add event listener to close button of the modal
-const closeButton = document.querySelector(".modal-close");
-if (closeButton) {
-  closeButton.addEventListener("click", closeModal);
-} else {
-  console.error("Close button for modal not found.");
-}
+// const closeButton = document.querySelector(".modal-close");
+// if (closeButton) {
+//   closeButton.addEventListener("click", closeModal);
+// } else {
+//   console.error("Close button for modal not found.");
+// }
 
 // Add event listener to close button of the add modal
 const closeAddButton = document.getElementById("closeaddbtn");
@@ -607,14 +606,14 @@ if (closeAddButton) {
 }
 
 // Add event listener to the form submission button
-const submitButton = document.querySelector("#bookAppointmentButton");
-if (submitButton) {
-  submitButton.addEventListener("click", () => {
-    closeModal();
-  });
-} else {
-  console.error("Submit button for booking form not found.");
-}
+// const submitButton = document.querySelector("#bookAppointmentButton");
+// if (submitButton) {
+//   submitButton.addEventListener("click", () => {
+//     closeModal();
+//   });
+// } else {
+//   console.error("Submit button for booking form not found.");
+// }
 
 // Event listener - closes modal after add appointment time form is submitted
 const submitAdd = document.querySelector("#submitAdd");
