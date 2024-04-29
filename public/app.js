@@ -520,11 +520,13 @@ function addBookedAppointment() {
         let html = ""; // loop through the docs array
         docs.forEach((doc) => {
           console.log(doc.id);
-          html += `<div class="box"><p>Date: ${doc.data().date}</p><p>Reason: ${
+          html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+            doc.data().date
+          }</p><p>Reason: ${
             doc.data().inquiryReason
-          }</p><p>Comments: ${
+          }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
             doc.data().comments
-          }</p><button class="button is-primary is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          }</p><br><button class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
         });
         bookedAppointmentsContainer.innerHTML = html;
       });
