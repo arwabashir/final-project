@@ -583,7 +583,30 @@ document
       bookingModal.classList.remove("is-active");
     }
   });
+// Function to delete the specified time from Firebase
+function deleteAppointment(date, time) {
+  const bookingRef = firebase.firestore().collection("bookings").doc(date);
 
+  // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
+  return firebase.firestore().runTransaction((transaction) => {
+    // Get the document snapshot within the transaction
+    return transaction.get(bookingRef).then((doc) => {
+      if (!doc.exists) {
+        throw new Error("Document does not exist!");
+      }
+      const times = doc.data().times;
+      const index = times.indexOf(time);
+
+      if (index !== -1) {
+        // If the time is found in the array, remove it
+        times.splice(index, 1);
+        transaction.update(bookingRef, { times: times });
+      } else {
+        console.log("Time not found in the array.");
+      }
+    });
+  });
+}
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
