@@ -436,7 +436,7 @@ r_e("bookingpage").addEventListener("click", () => {
     // Hide the left column if the user is an admin
     document.getElementById("leftColumn").innerHTML = `
     <h2 class='title'>Recently Added Appointments</h2>
-    <div id="recentappointments" class="has-text-centered"></div>
+    <div id="recentappointments"></div>
   `;
   }
 });
@@ -583,6 +583,13 @@ document
       bookingModal.classList.remove("is-active");
     }
   });
+
+// Function to handle adding appointment time click
+document.getElementById("submitAdd").addEventListener("click", function () {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  // Add the booked appointment to the "Booked Appointments" column
+  addRecentAppointment(appointmentDate);
+});
 
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
