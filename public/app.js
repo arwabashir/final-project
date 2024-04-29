@@ -648,6 +648,49 @@ function addBookedAppointment() {
       });
   }
 
+  function addRecentAppointment(date, time) {
+    const recentAppointmentsContainer =
+      document.getElementById("recentappointments");
+    const appointmentContainer = document.createElement("div");
+    appointmentContainer.classList.add("field", "has-addons");
+
+    const inputControl = document.createElement("div");
+    inputControl.classList.add("control");
+
+    const inputField = document.createElement("input");
+    inputField.classList.add("input");
+    inputField.type = "text";
+    inputField.value = `${date} ${time}`;
+    inputField.readOnly = true; // Make the input field read-only
+
+    inputControl.appendChild(inputField);
+
+    const buttonControl = document.createElement("div");
+    buttonControl.classList.add("control");
+
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("button", "is-danger");
+    deleteButton.textContent = "Delete";
+
+    // Add an event listener to delete the appointment on click
+    deleteButton.addEventListener("click", function () {
+      deleteAppointment(date, time)
+        .then(() => {
+          appointmentContainer.remove();
+        })
+        .catch((error) => {
+          console.error("Error deleting appointment:", error);
+        });
+    });
+
+    buttonControl.appendChild(deleteButton);
+
+    appointmentContainer.appendChild(inputControl);
+    appointmentContainer.appendChild(buttonControl);
+
+    recentAppointmentsContainer.appendChild(appointmentContainer);
+  }
+
   //     if (auth.currentUser.email == doc.data().email_review) {
   // user = auth.currentUser.email;
   // if (user) {
