@@ -255,7 +255,7 @@ function renderCalendar(year, month) {
         <div class="card" id="${dateId}">
           <div class="card-content">
             <p class="title is-4">${monthNames[month]} ${day}</p>
-            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
+            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
           </div>
         </div>
@@ -278,6 +278,74 @@ function renderCalendar(year, month) {
     attachBookingListeners();
   }
 }
+
+// async function renderCalendar(year, month) {
+//   const calendarContainer = document.getElementById("calendar-container");
+//   const daysInMonth = new Date(year, month + 1, 0).getDate();
+//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
+
+//   let calendarHTML = `
+//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
+//   <div id="calendar" class="box">
+//   <div class="columns is-multiline">
+// `;
+
+//   for (let day = 1; day <= daysInMonth; day++) {
+//     const currentDate = new Date(year, month, day);
+//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+//     // Check if the current day is a weekday (Monday to Friday)
+//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+//       const dateId = `${year}-${month + 1}-${day}`;
+//       const isAdmin = isAdminUser();
+
+//       // Determine button text and class based on user role
+//       const buttonText = isAdmin ? "Add" : "Book";
+//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
+
+//       // Fetch appointment times from Firestore
+//       const appointmentRef = db.collection("bookings").doc(dateId);
+//       const doc = await appointmentRef.get();
+
+//       let timesHTML = "";
+//       if (doc.exists) {
+//         const appointmentData = doc.data();
+//         if (appointmentData.times) {
+//           timesHTML = appointmentData.times
+//             .map((time) => `<p>${time}</p>`)
+//             .join("");
+//         }
+//       }
+
+//       calendarHTML += `
+//       <div class="column is-one-third">
+//         <div class="card" id="${dateId}">
+//           <div class="card-content">
+//             <p class="title is-4">${monthNames[month]} ${day}</p>
+//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
+//             <div class="appointment-times">${timesHTML}</div>
+//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
+//           </div>
+//         </div>
+//       </div>
+//     `;
+//     }
+//   }
+
+//   // Close the calendar HTML
+//   calendarHTML += `
+//       </div>
+//     </div>
+//   `;
+
+//   // Render the calendar HTML
+//   calendarContainer.innerHTML = calendarHTML;
+//   if (isAdminUser()) {
+//     attachAddListeners();
+//   } else {
+//     attachBookingListeners();
+//   }
+// }
 
 document
   .getElementById("monthSelector")
@@ -308,6 +376,22 @@ function attachBookingListeners() {
   });
 }
 
+function attachAddListeners() {
+  const addButtons = document.querySelectorAll(".add-btn");
+  addButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          const card = button.closest(".card");
+          const date = card.id;
+          showAddModal(date);
+        } else {
+          alert("Please sign in before adding an appointment");
+        }
+      });
+    });
+  });
+}
 
 // Sets the default drop down month to the current month and default month on page to the curent month and year
 document.addEventListener("DOMContentLoaded", function () {
@@ -340,6 +424,21 @@ r_e("bookingpage").addEventListener("click", () => {
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
   renderCalendar(currentYear, currentMonth);
+});
+
+// All actions triggered off booking page (render calendar and display appropriate left column)
+r_e("bookingpage").addEventListener("click", () => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  renderCalendar(currentYear, currentMonth);
+  if (isAdminUser()) {
+    // Hide the left column if the user is an admin
+    document.getElementById("leftColumn").innerHTML = `
+    <h2 class='title'>Recently Added Appointments</h2>
+    <div id="recentappointments"></div>
+  `;
+  }
 });
 
 // Make default drop down option on the daySelector the current day of the week
@@ -391,26 +490,17 @@ function showModal(date) {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const bookAppointmentButton = document.getElementById(
-//     "bookAppointmentButton"
-//   );
-
-//   if (bookAppointmentButton) {
-//     bookAppointmentButton.addEventListener("click", function () {
-//       const bookingDateInput = document.getElementById("bookingDate");
-
-//       if (bookingDateInput) {
-//         const date = bookingDateInput.value;
-//         addBookedAppointment(date);
-//       } else {
-//         console.error("Input field with ID 'bookingDate' not found.");
-//       }
-//     });
-//   } else {
-//     console.error("Button with ID 'bookAppointmentButton' not found.");
-//   }
-// });
+function showAddModal(date) {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.add("is-active");
+    const addingDateInput = document.getElementById("appointmentDate");
+    if (addingDateInput) {
+      addingDateInput.value = date;
+      addingDateInput.setAttribute("readonly", "readonly");
+    }
+  }
+}
 
 // ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
 document.addEventListener("DOMContentLoaded", function () {
@@ -494,6 +584,13 @@ document
     }
   });
 
+// Function to handle adding appointment time click
+document.getElementById("submitAdd").addEventListener("click", function () {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+  addRecentAppointment(appointmentDate, appointmentTime);
+});
+
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
@@ -506,6 +603,111 @@ function addBookedAppointment(date) {
   bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
+// Function to add available appointments to "recentappointments" column
+// function addRecentAppointment(date, time) {
+//   const recentAppointmentsContainer =
+//     document.getElementById("recentappointments");
+//   const appointmentContainer = document.createElement("div");
+//   appointmentContainer.classList.add("field", "has-addons");
+
+//   const inputControl = document.createElement("div");
+//   inputControl.classList.add("control");
+
+//   const inputField = document.createElement("input");
+//   inputField.classList.add("input");
+//   inputField.type = "text";
+//   inputField.value = `${time} on ${date}`; // Set the value of the input field to date and time
+
+//   inputControl.appendChild(inputField);
+
+//   const buttonControl = document.createElement("div");
+//   buttonControl.classList.add("control");
+
+//   const deleteButton = document.createElement("button");
+//   deleteButton.classList.add("button", "is-danger");
+//   deleteButton.textContent = "Delete"; // Text content for the delete button
+
+//   // Add an event listener to delete the appointment on click
+//   deleteButton.addEventListener("click", function () {
+//     appointmentContainer.remove();
+//   });
+
+//   buttonControl.appendChild(deleteButton);
+
+//   appointmentContainer.appendChild(inputControl);
+//   appointmentContainer.appendChild(buttonControl);
+
+//   recentAppointmentsContainer.appendChild(appointmentContainer);
+// }
+
+function addRecentAppointment(date, time) {
+  const recentAppointmentsContainer =
+    document.getElementById("recentappointments");
+  const appointmentContainer = document.createElement("div");
+  appointmentContainer.classList.add("field", "has-addons");
+
+  const inputControl = document.createElement("div");
+  inputControl.classList.add("control");
+
+  const inputField = document.createElement("input");
+  inputField.classList.add("input");
+  inputField.type = "text";
+  inputField.value = `${date} ${time}`;
+  inputField.readOnly = true; // Make the input field read-only
+
+  inputControl.appendChild(inputField);
+
+  const buttonControl = document.createElement("div");
+  buttonControl.classList.add("control");
+
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("button", "is-danger");
+  deleteButton.textContent = "Delete";
+
+  // Add an event listener to delete the appointment on click
+  deleteButton.addEventListener("click", function () {
+    deleteAppointment(date, time)
+      .then(() => {
+        appointmentContainer.remove();
+      })
+      .catch((error) => {
+        console.error("Error deleting appointment:", error);
+      });
+  });
+
+  buttonControl.appendChild(deleteButton);
+
+  appointmentContainer.appendChild(inputControl);
+  appointmentContainer.appendChild(buttonControl);
+
+  recentAppointmentsContainer.appendChild(appointmentContainer);
+}
+
+// Function to delete the specified time from Firebase
+function deleteAppointment(date, time) {
+  const bookingRef = firebase.firestore().collection("bookings").doc(date);
+
+  // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
+  return firebase.firestore().runTransaction((transaction) => {
+    // Get the document snapshot within the transaction
+    return transaction.get(bookingRef).then((doc) => {
+      if (!doc.exists) {
+        throw new Error("Document does not exist!");
+      }
+      const times = doc.data().times;
+      const index = times.indexOf(time);
+
+      if (index !== -1) {
+        // If the time is found in the array, remove it
+        times.splice(index, 1);
+        transaction.update(bookingRef, { times: times });
+      } else {
+        console.log("Time not found in the array.");
+      }
+    });
+  });
+}
+
 // Function to close the modal
 function closeModal() {
   const bookingModal = document.getElementById("bookingModal");
@@ -516,12 +718,29 @@ function closeModal() {
   }
 }
 
+function closeAddModal() {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.remove("is-active");
+  } else {
+    console.error("Cannot close modal");
+  }
+}
+
 // Add event listener to close button of the modal
 const closeButton = document.querySelector(".modal-close");
 if (closeButton) {
   closeButton.addEventListener("click", closeModal);
 } else {
   console.error("Close button for modal not found.");
+}
+
+// Add event listener to close button of the add modal
+const closeAddButton = document.getElementById("closeaddbtn");
+if (closeAddButton) {
+  closeAddButton.addEventListener("click", closeAddModal);
+} else {
+  console.error("Close modal error");
 }
 
 // Add event listener to the form submission button
@@ -534,35 +753,90 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
+// Event listener - closes modal after add appointment time form is submitted
+const submitAdd = document.querySelector("#submitAdd");
+if (submitAdd) {
+  submitAdd.addEventListener("click", () => {
+    closeAddModal(); // Close the modal after submitting the form
+  });
+} else {
+  console.error("Submit button for adding form not found.");
+}
+
+// sending appointment time to firebase
+function addAppointmentTime() {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+
+  // Create a document reference with the appointment date as its ID
+  const appointmentRef = db.collection("bookings").doc(appointmentDate);
+
+  // Add the new appointment time to the existing array of times (or create a new array)
+  appointmentRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        // Document already exists, update the array of times
+        const existingTimes = doc.data().times || [];
+        existingTimes.push(appointmentTime);
+        return appointmentRef.update({
+          times: existingTimes,
+        });
+      } else {
+        // Document doesn't exist, create a new one with the array of times
+        return appointmentRef.set({
+          times: [appointmentTime],
+        });
+      }
+    })
+    .then(() => {
+      console.log("Appointment added successfully");
+      // Show success message
+      const successMessage = document.getElementById("successMessage");
+      successMessage.textContent = "Appointment added successfully!";
+      successMessage.style.display = "block";
+      // Optionally, you can close the modal here
+      // closeModal(); // Example function to close the modal
+    })
+    .catch((error) => {
+      console.error("Error adding appointment: ", error);
+    });
+}
+
+document
+  .getElementById("submitAdd")
+  .addEventListener("click", addAppointmentTime);
+
+// TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar-container");
   const calendarCards = document.querySelectorAll(".card-content");
 
-  document.getElementById("daySelector").addEventListener("change", function () {
-    const selectedDay = this.value;
+  document
+    .getElementById("daySelector")
+    .addEventListener("change", function () {
+      const selectedDay = this.value;
 
-    // Clear the calendar container before rendering filtered content
-    calendarContainer.innerHTML = '';
+      // Clear the calendar container before rendering filtered content
+      calendarContainer.innerHTML = "";
 
-    calendarCards.forEach((card) => {
-      const cardContent = card.querySelector(".DOW").innerText;
-      const cardParent = card.parentElement;
+      calendarCards.forEach((card) => {
+        const cardContent = card.querySelector(".DOW").innerText;
+        const cardParent = card.parentElement;
 
-      if (cardContent.includes(selectedDay)) {
-        const clonedCard = cardParent.cloneNode(true); // Clone the card element
-        calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
+        if (cardContent.includes(selectedDay)) {
+          const clonedCard = cardParent.cloneNode(true); // Clone the card element
+          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
 
-        const bookButton = clonedCard.querySelector(".book-btn");
-        if (bookButton) {
-          bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          const bookButton = clonedCard.querySelector(".book-btn");
+          if (bookButton) {
+            bookButton.addEventListener("click", handleBookingClick); // Add the event listener
+          }
         }
-      }
+      });
     });
-  });
 });
-
-
 
 function handleBookingClick(event) {
   // Check if the user is signed in
@@ -573,14 +847,12 @@ function handleBookingClick(event) {
     alert("You must be signed in first to book an appointment.");
     return;
   }
-  
+
   // If the user is signed in, continue with the booking action
   const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
 }
-
-
 
 // JavaScript for burger menu toggle
 document.addEventListener("DOMContentLoaded", () => {

@@ -297,7 +297,7 @@
 <br>
   <div class="columns">
     <!-- Left Column: Filtering Dropdown Months Option -->
-    <div class="column is-one-quarter">
+    <div class="column is-one-quarter" id="leftColumn">
       <h2 class="title">Filter Appointments</h2>
       <h3>By Month:</h3>
       <select id="monthSelector">
@@ -325,6 +325,13 @@
         <option value="Any">Any</option>
       </select>
       <br><br>
+      <h3>By Time:</h3>
+      <select id="timeSelector">
+      <option value="9am-12pm">9am-12pm</option>
+      <option value="12pm-3pm">12pm-3pm</option>
+      <option value="3pm-5pm">3pm-5pm</option>
+      <option value="Any">Any</option>
+      </select>
 
     </div>
 
@@ -347,7 +354,7 @@
     <div class="modal-content">
       <!-- Your modal content goes here -->
       <div class="box">
-        <h1 class="title">Booking Modal</h1>
+        <h1 class="title">Book an Appointment</h1>
         <!-- Example input fields -->
         <p class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
         <div class="field">
@@ -381,7 +388,32 @@
     </div>
     <button class="modal-close is-large" aria-label="close"></button>
   </div>
-  
+
+  <!-- Adding an Appointment Time Form (admin side) -->
+  <div id="addingModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box">
+        <h1 class="title">Add Appointment Time</h1>
+        <div class="field">
+          <label class="label">Date</label>
+          <div class="control">
+            <input id="appointmentDate" class="input" type="text" placeholder="Select date">
+          </div>
+        </div>
+        <div class="field">
+          <label class = "label">Time of Appointent</label>
+          <div class="control">
+            <input id="appointmentTime" class="input" type="time" min="09:00" max="17:00"/>
+          </div>
+        </div>
+        <br>
+        <button id="submitAdd" class="button is-primary has-text-white has-text-centered">Add</button>
+      </div>
+    </div>
+    <button id= "closeaddbtn" class="modal-close is-large" aria-label="close"></button>
+  </div>
+
 </div>
 
 
