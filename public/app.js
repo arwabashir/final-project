@@ -768,6 +768,9 @@ auth.onAuthStateChanged((user) => {
     r_e(
       "leaveareview_reviews-container"
     ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
+    r_e(
+      "booked-appointments"
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to view bookings!</p>`;
   }
 });
 function show_reviews() {
