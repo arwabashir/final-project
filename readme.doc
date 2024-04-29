@@ -62,7 +62,14 @@ In the future, we will make sure to keep merging our individual branches more of
 e. 	Are you satisfied with what you already completed?
 Yes, we are satisfied. We believe we are working at a good pace as we have the majority of the code done. For the next couple of days, we will just be working through finalizing the code for admin access and fixing minor bugs that we find. 
 f.  	Which group was invited? What are your observations/notes? Everybody was present?
-Group 7 was invited, everyone was present.
+Group 7 was invited, everyone was present. These were our notes on their project:
+Overall, your website is really cool! The design is great and the colors used are nice. I like that employers are only able to see their own posts as that prevents any competition or bias - and just makes it fair in general. The site looks very organized as it is split into a 3 column view on the student side, while it is split into a 2 column view on the employer side. Functionality works well overall. Here is some feedback after playing around with the site: 
+- When clicking on the logo it makes it seem as if you’ve been signed out but the sign out button is still there - kind of confusing
+- When editing information, should remove the text in the boxes (ex: age has the answer 20 in the text box, major says Consumer Behavior, etc.)
+- Once someone updates information, should add a popup that says “information updated” or something similar - because otherwise you aren’t aware unless you go back to the main page
+- The phone number, year in school, available days, and desired hours don’t save when attempting to update information
+- Cannot edit employer business post
+- Business employers should have a different “my profile” — things that don’t apply to them should be removed
 
 
 
