@@ -392,32 +392,34 @@
     <button class="modal-close is-large" aria-label="close"></button>
   </div>
 
-  <!-- Adding an Appointment Time Form (admin side) -->
-  <div id="addingModal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="box">
-        <h1 class="title">Add Appointment Time</h1>
-        <div class="field">
-          <label class="label">Date</label>
-          <div class="control">
-            <input id="appointmentDate" class="input" type="text" placeholder="Select date">
-          </div>
+<!-- Adding an Appointment Time Form (admin side) -->
+<div id="addingModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <h1 class="title">Add Appointment Time</h1>
+      <div class="field">
+        <label class="label">Date</label>
+        <div class="control">
+          <input id="appointmentDate" class="input" type="text" placeholder="Select date">
         </div>
-        <div class="field">
-          <label class = "label">Time of Appointent</label>
-          <div class="control">
-            <input id="appointmentTime" class="input" type="time" min="09:00" max="17:00"/>
-          </div>
-        </div>
-        <br>
-        <button id="submitAdd" class="button is-primary has-text-white has-text-centered">Add</button>
       </div>
+      <div class="field">
+        <label class="label">Time of Appointment</label>
+        <div class="control">
+          <select id="appointmentTime" class="input">
+            <option value="">Select Time</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <button id="submitAdd" class="button is-primary has-text-white has-text-centered">Add</button>
     </div>
-    <button id= "closeaddbtn" class="modal-close is-large" aria-label="close"></button>
   </div>
-
+  <button id="closeaddbtn" class="modal-close is-large" aria-label="close"></button>
 </div>
+
+
 
 
     

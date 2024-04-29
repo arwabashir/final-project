@@ -1059,3 +1059,17 @@ document.addEventListener("click", (event) => {
       });
   }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  var timeSelect = document.getElementById('appointmentTime');
+
+  // Populate the time options
+  for (var hour = 9; hour <= 17; hour++) {
+    var ampm = (hour < 12) ? 'AM' : 'PM';
+    var displayHour = (hour % 12 == 0) ? 12 : hour % 12;
+    var option = document.createElement('option');
+    option.value = hour + ':00';
+    option.textContent = displayHour + ':00 ' + ampm;
+    timeSelect.appendChild(option);
+  }
+});
