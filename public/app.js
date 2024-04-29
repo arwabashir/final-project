@@ -727,7 +727,10 @@ function show_reviews() {
     </a>`;
         }
 
-        if (auth.currentUser.email == doc.data().email_review) {
+        if (
+          auth.currentUser.email == doc.data().email_review ||
+          isAdminUser()
+        ) {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
