@@ -728,34 +728,6 @@ function addBookedAppointment() {
     "booked-appointments"
   );
   user = auth.currentUser.email;
-  // if (isAdminUser()) {
-  //   let html = "";
-  //   db.collection("users")
-  //     .get()
-  //     .then((data) => {
-  //       let html = "wow";
-  //       bookedAppointmentsContainer.innerHTML = html;
-  //       let docs = data.docs;
-  //       docs.forEach((doc) => {
-  //         doc
-  //           .collection("appointments")
-  //           .get()
-  //           .then((res) => {
-  //             let ress = res.docs;
-  //             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-  //               ress.data().date
-  //             }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
-  //               ress.data().inquiryReason
-  //             }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-  //               ress.data().comments
-  //             }</p><br><button id="${
-  //               ress.id
-  //             }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-  //           });
-  //       });
-  //       bookedAppointmentsContainer.innerHTML = html;
-  //     });
-  // } else {
   if (user) {
     db.collection("users")
       .doc(user)
