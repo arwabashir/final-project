@@ -381,10 +381,10 @@ function showModal(date) {
           for (i = 0; i < times.length; i++) {
             html += `<option value=${i}>${times[i]}</option>`;
           }
+          r_e("time").innerHTML = html;
         } else {
           console.log("No document!");
         }
-        r_e("time").innerHTML = html;
       })
       .catch((error) => {
         console.log("Error finding document:", error);
