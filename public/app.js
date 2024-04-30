@@ -1068,21 +1068,30 @@ auth.onAuthStateChanged((user) => {
     ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to view bookings!</p>`;
   }
 });
+
+let currentPage = 1;
+const reviewsPerPage = 5;
+
 function show_reviews() {
   db.collection("reviews")
     .get()
     .then((data) => {
       let docs = data.docs;
+      const totalPages = Math.ceil(docs.length / reviewsPerPage);
 
-      let html = ""; // loop through the docs array
-      docs.forEach((doc) => {
+      let startIndex = (currentPage - 1) * reviewsPerPage;
+      let endIndex = startIndex + reviewsPerPage;
+      let currentPageReviews = docs.slice(startIndex, endIndex);
+
+      let html = "";
+      currentPageReviews.forEach((doc) => {
         let stars = doc.data().rating;
-        let ids = doc.id; // console.log(doc.id);
+        let ids = doc.id;
         let num = "";
         for (i = 0; i < stars; i++) {
           num += `<a href="">
-      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
-    </a>`;
+      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+    </a>`;
         }
 
         if (
@@ -1092,21 +1101,42 @@ function show_reviews() {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; <div><button id="${
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; <div><button id="${
             doc.id
           }" class="is-white">Delete</button></div>
-          </div>`;
+          </div>`;
         } else {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; </div>`;
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; </div>`;
         }
-        r_e("leaveareview_reviews-container").innerHTML = html;
       });
+
+      // Add pagination controls
+      html += `<div class="pagination">`;
+      if (currentPage > 1) {
+        html += `<button onclick="prevPage()">Previous</button>`;
+      }
+      if (currentPage < totalPages) {
+        html += `<button onclick="nextPage()">Next</button>`;
+      }
+      html += `</div>`;
+
+      r_e("leaveareview_reviews-container").innerHTML = html;
     });
+}
+
+function nextPage() {
+  currentPage++;
+  show_reviews();
+}
+
+function prevPage() {
+  currentPage--;
+  show_reviews();
 }
 
 document.addEventListener("click", (event) => {
@@ -1122,3 +1152,5 @@ document.addEventListener("click", (event) => {
       });
   }
 });
+
+
