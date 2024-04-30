@@ -54,7 +54,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-     location.reload();
+    location.reload();
   });
 });
 
@@ -158,7 +158,8 @@ r_e("submit2").addEventListener("click", () => {
   let pass2 = r_e("pass2").value;
 
   // 2. send the email/password to Firebase for sign-in
-  auth.signInWithEmailAndPassword(email2, pass2)
+  auth
+    .signInWithEmailAndPassword(email2, pass2)
     .then(() => {
       // Clear the input fields
       r_e("email2").value = "";
@@ -169,13 +170,13 @@ r_e("submit2").addEventListener("click", () => {
 
       // Close the modal
       document.getElementById("myModal2").classList.remove("is-active");
-      
+
       // Alert the user that they are signed in
       alert("You are now signed in: " + email2);
-      
+
       // Reload the page to reflect the signed-in state
       window.location.href = window.location.href;
-      
+
       // Hide the sign-in button
       document.querySelector("#signinbtn").classList.add("is-hidden");
     })
@@ -184,8 +185,6 @@ r_e("submit2").addEventListener("click", () => {
       alert("Email or password incorrect");
     });
 });
-
-
 
 //about us page click event
 r_e("aboutuspage").addEventListener("click", () => {
@@ -261,14 +260,14 @@ function isAdminUser() {
 // Function to update UI based on user's admin status
 function updateUIBasedOnAdminStatus() {
   const isAdmin = isAdminUser();
-  const bookingDescription = document.getElementById('bookingDescription');
+  const bookingDescription = document.getElementById("bookingDescription");
   if (bookingDescription) {
-    bookingDescription.style.display = isAdmin ? 'none' : 'block';
+    bookingDescription.style.display = isAdmin ? "none" : "block";
   }
 }
 
 // Add an auth state listener to update UI when auth state changes
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     // User is signed in.
     updateUIBasedOnAdminStatus();
@@ -316,7 +315,6 @@ function renderCalendar(year, month) {
     `;
     }
   }
-
 
   // Close the calendar HTML
   calendarHTML += `
@@ -527,23 +525,6 @@ document.addEventListener("DOMContentLoaded", function () {
 //   }
 // }
 
-// Function to show the booking modal
-function showModal(date) {
-  const bookingModal = document.getElementById("bookingModal");
-  if (bookingModal) {
-    bookingModal.classList.add("is-active"); // Show the modal
-    const bookingDateInput = document.getElementById("bookingDate");
-    if (bookingDateInput) {
-      bookingDateInput.value = date; // Set the selected date in the modal
-      bookingDateInput.setAttribute("readonly", "readonly");
-    } else {
-      console.error("Input field with ID 'bookingDate' not found.");
-    }
-  } else {
-    console.error("Booking modal with ID 'bookingModal' not found.");
-  }
-}
-
 function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
   if (addingModal) {
@@ -556,27 +537,76 @@ function showAddModal(date) {
   }
 }
 
-// ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
+// Function to show the booking modal
+function showModal(date) {
+  const bookingModal = document.getElementById("bookingModal");
+  if (bookingModal) {
+    // Reset modal state
+    const bookingDateInput = document.getElementById("bookingDate");
+    const lookingForCaretakerRadio = document.getElementById(
+      "lookingForCaretaker"
+    );
+    const lookingToBeCaretakerRadio = document.getElementById(
+      "lookingToBeCaretaker"
+    );
+    const errorReason = document.getElementById("errorReason");
+
+    if (bookingDateInput) {
+      bookingDateInput.value = date; // Set the selected date in the modal
+      bookingDateInput.setAttribute("readonly", "readonly");
+    } else {
+      console.error("Input field with ID 'bookingDate' not found.");
+    }
+
+    if (lookingForCaretakerRadio && lookingToBeCaretakerRadio) {
+      lookingForCaretakerRadio.checked = false;
+      lookingToBeCaretakerRadio.checked = false;
+    }
+
+    if (errorReason) {
+      errorReason.style.display = "block"; // Display error message
+    }
+
+    bookingModal.classList.add("is-active"); // Show the modal
+  } else {
+    console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const bookAppointmentButton = document.getElementById(
     "bookAppointmentButton"
   );
+  const lookingForCaretakerRadio = document.getElementById(
+    "lookingForCaretaker"
+  );
+  const lookingToBeCaretakerRadio = document.getElementById(
+    "lookingToBeCaretaker"
+  );
+  const errorReason = document.getElementById("errorReason");
+
+  // Function to toggle error message visibility
+  function toggleErrorMessage() {
+    if (lookingForCaretakerRadio.checked || lookingToBeCaretakerRadio.checked) {
+      errorReason.style.display = "none";
+    } else {
+      errorReason.style.display = "block";
+    }
+  }
+
+  toggleErrorMessage(); // Initialize error message visibility
 
   if (bookAppointmentButton) {
-    bookAppointmentButton.addEventListener("click", function () {
+    bookAppointmentButton.addEventListener("click", function (event) {
       // Get input fields
       const bookingDateInput = document.getElementById("bookingDate");
-      const lookingForCaretakerRadio = document.getElementById(
-        "lookingForCaretaker"
-      );
-      const lookingToBeCaretakerRadio = document.getElementById(
-        "lookingToBeCaretaker"
-      );
       const bookingCommentsInput = document.getElementById("bookingComments");
 
+      // Check if date and at least one radio option is selected
       if (
         bookingDateInput &&
-        (lookingForCaretakerRadio || lookingToBeCaretakerRadio)
+        bookingDateInput.value !== "" && // Ensure a date is selected
+        (lookingForCaretakerRadio.checked || lookingToBeCaretakerRadio.checked)
       ) {
         const date = bookingDateInput.value;
         const inquiryReason = lookingForCaretakerRadio.checked
@@ -616,11 +646,20 @@ document.addEventListener("DOMContentLoaded", function () {
           alert("Please sign in before booking an appointment");
         }
       } else {
-        console.error("One or more input fields not found.");
+        // If date or radio option is not selected, show an error message
+        toggleErrorMessage();
+        console.error("One or more input fields not found or not selected.");
+        event.preventDefault(); // Prevent the default form submission behavior
       }
     });
   } else {
     console.error("Button with ID 'bookAppointmentButton' not found.");
+  }
+
+  // Event listeners to update error message visibility when radio options change
+  if (lookingForCaretakerRadio && lookingToBeCaretakerRadio) {
+    lookingForCaretakerRadio.addEventListener("change", toggleErrorMessage);
+    lookingToBeCaretakerRadio.addEventListener("change", toggleErrorMessage);
   }
 });
 
@@ -858,15 +897,15 @@ if (submitAdd) {
 } else {
   console.error("Submit button for adding form not found.");
 }
-  // Dynamically generate options for appointment time dropdown
-  var select = document.getElementById("appointmentTime");
-  for (var hour = 9; hour <= 17; hour++) {
-    var hour12 = hour % 12 || 12; // Convert hour to 12-hour format
-    var label = hour12 + ":00 " + (hour < 12 ? "AM" : "PM");
-    var option = document.createElement("option");
-    option.text = label;
-    select.add(option);
-  }
+// Dynamically generate options for appointment time dropdown
+var select = document.getElementById("appointmentTime");
+for (var hour = 9; hour <= 17; hour++) {
+  var hour12 = hour % 12 || 12; // Convert hour to 12-hour format
+  var label = hour12 + ":00 " + (hour < 12 ? "AM" : "PM");
+  var option = document.createElement("option");
+  option.text = label;
+  select.add(option);
+}
 
 // sending appointment time to firebase
 function addAppointmentTime() {
@@ -1152,5 +1191,3 @@ document.addEventListener("click", (event) => {
       });
   }
 });
-
-
