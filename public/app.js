@@ -589,6 +589,7 @@ document.addEventListener("DOMContentLoaded", function () {
           admindoc
             .collection("appointments")
             .add({
+              user: userEmail,
               date: date,
               inquiryReason: inquiryReason,
               time: time,
@@ -765,17 +766,31 @@ function addBookedAppointment() {
 
         let html = ""; // loop through the docs array
         docs.forEach((doc) => {
-          console.log(doc.id);
-          html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-            doc.data().date
-          }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
-            doc.data().inquiryReason
-          }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-            doc.data().comments
-          }</p><br><button id="${
-            doc.id
-          }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          if (isAdminUser()) {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p> <p>User: ${doc.data().user}</p><p>Time: ${
+              doc.data().time
+            }</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          } else {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          }
         });
+
         bookedAppointmentsContainer.innerHTML = html;
       });
     // }
