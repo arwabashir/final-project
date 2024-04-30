@@ -411,10 +411,9 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
   if (isAdminUser()) {
     // Hide the left column if the user is an admin
-    document.getElementById("leftColumn").innerHTML = `
-    <h2 class='title'>Recently Added Appointments</h2>
-    <div id="recentappointments"></div>
-  `;
+    document.getElementById("recent").classList.remove("is-hidden");
+    document.getElementById("recentappointments").classList.remove("is-hidden");
+    document.getElementById("appbtns").classList.remove("is-hidden");
   }
 });
 
