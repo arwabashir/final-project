@@ -790,53 +790,6 @@ function addRecentAppointment(date, time) {
   recentAppointmentsContainer.appendChild(appointmentContainer);
 }
 
-// Function to load recent appointments from Firebase Firestore - this one works
-// function loadRecentAppointmentsFromFirestore() {
-//   const recentAppointmentsContainer =
-//     document.getElementById("recentappointments");
-
-//   // Clear the container before populating it with new appointments
-//   recentAppointmentsContainer.innerHTML = "";
-
-//   // Query the Firestore collection "bookings" to get all appointments
-//   firebase
-//     .firestore()
-//     .collection("bookings")
-//     .get()
-//     .then((querySnapshot) => {
-//       // Create an array to store all appointments
-//       const appointments = [];
-
-//       // Iterate over each document in the collection
-//       querySnapshot.forEach((doc) => {
-//         const date = doc.id; // Get the date from the document ID
-//         const times = doc.data().times; // Get the times array from the document data
-
-//         // Iterate over each time in the times array
-//         times.forEach((time) => {
-//           // Push each appointment date and time combination to the appointments array
-//           appointments.push({ date, time });
-//         });
-//       });
-
-//       // Sort the appointments array chronologically by date and time
-//       appointments.sort((a, b) => {
-//         // Convert date and time strings to Date objects for comparison
-//         const dateA = new Date(`${a.date} ${a.time}`);
-//         const dateB = new Date(`${b.date} ${b.time}`);
-//         return dateA - dateB;
-//       });
-
-//       // Populate the recent appointments container with the sorted appointments
-//       appointments.forEach((appointment) => {
-//         addRecentAppointment(appointment.date, appointment.time);
-//       });
-//     })
-//     .catch((error) => {
-//       console.error("Error loading recent appointments:", error);
-//     });
-// }
-
 // Function to load recent appointments from Firebase Firestore
 function loadRecentAppointmentsFromFirestore() {
   const recentAppointmentsContainer =
