@@ -472,44 +472,66 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
   if (isAdminUser()) {
     // Hide the left column if the user is an admin
-    document.getElementById("leftColumn").innerHTML = `
-    <h2 class='title'>Recently Added Appointments</h2>
-    <div id="recentappointments"></div>
-  `;
+    document.getElementById("recent").classList.remove("is-hidden");
+    document.getElementById("recentappointments").classList.remove("is-hidden");
+    // show_times();
   }
 });
 
-// Make default drop down option on the daySelector the current day of the week
-// THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
-document.addEventListener("DOMContentLoaded", function () {
-  const today = new Date();
-  let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
-
-  if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
-    currentDayOfWeek = 1;
-  }
-
-  document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
-});
-
-// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
-// function showModal(date) {
-//   const bookingModal = document.getElementById("bookingModal");
-//   if (bookingModal) {
-//     bookingModal.classList.add("is-active"); // Show the modal
-//     const bookingDateInput = document.getElementById("bookingDate");
-//     if (bookingDateInput) {
-//       bookingDateInput.value = date; // Set the selected date in the modal
-//       bookingDateInput.setAttribute("readonly", "readonly");
-//       // Add the booked appointment to the "Booked Appointments" column
-//       addBookedAppointment(date);
-//     } else {
-//       console.error("Input field with ID 'bookingDate' not found.");
-//     }
-//   } else {
-//     console.error("Booking modal with ID 'bookingModal' not found.");
-//   }
+// function show_times() {
+//   db.collection("bookings")
+//     .get()
+//     .then((data) => {
+//       html = "";
+//       docs = data.docs;
+//       docs.forEach((doc) => {
+//         if (doc.exists) {
+//           const time = doc.data();
+//           const times = time.times;
+//           for (i = 0; i < times.length; i++) {
+//             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${doc.id}</p><p>Time: ${times[i]}</p><br><button id="${doc.id}"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+//           }
+//         } else {
+//           console.log("No document!");
+//         }
+//       });
+//       r_e("recentappointments").innerHTML = html;
+//     })
+//     .catch((error) => {
+//       console.log("Error finding document:", error);
+//     });
 // }
+// // Make default drop down option on the daySelector the current day of the week
+// // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
+// document.addEventListener("DOMContentLoaded", function () {
+//   const today = new Date();
+//   let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+
+//   if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
+//     currentDayOfWeek = 1;
+//   }
+
+//   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
+// });
+
+// // // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
+// // function showModal(date) {
+// //   const bookingModal = document.getElementById("bookingModal");
+// //   if (bookingModal) {
+// //     bookingModal.classList.add("is-active"); // Show the modal
+// //     const bookingDateInput = document.getElementById("bookingDate");
+// //     if (bookingDateInput) {
+// //       bookingDateInput.value = date; // Set the selected date in the modal
+// //       bookingDateInput.setAttribute("readonly", "readonly");
+// //       // Add the booked appointment to the "Booked Appointments" column
+// //       addBookedAppointment(date);
+// //     } else {
+// //       console.error("Input field with ID 'bookingDate' not found.");
+// //     }
+// //   } else {
+// //     console.error("Booking modal with ID 'bookingModal' not found.");
+// //   }
+// // }
 
 function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
@@ -554,15 +576,32 @@ document.addEventListener("DOMContentLoaded", function () {
         const time = document.getElementById("time").value;
         // Call addBookedAppointment function
         addBookedAppointment();
+        deleteAppointment(date, time);
 
         // Check if user is signed in
         const user = firebase.auth().currentUser;
-        if (user) {
+        if (user || isAdminUser()) {
           const userEmail = user.email;
 
           // Reference to the user's document
           const userDocRef = db.collection("users").doc(userEmail);
-
+          const admindoc = db.collection("users").doc("peace0mind15@yahoo.com");
+          admindoc
+            .collection("appointments")
+            .add({
+              date: date,
+              inquiryReason: inquiryReason,
+              time: time,
+              comments: comments,
+            })
+            .then(function () {
+              // Appointment added successfully
+              console.log("Appointment added successfully");
+              // You can add further actions here if needed
+            })
+            .catch(function (error) {
+              console.error("Error adding appointment: ", error);
+            });
           // Add appointment to user's subcollection
           userDocRef
             .collection("appointments")
@@ -691,23 +730,27 @@ function addBookedAppointment() {
   // if (isAdminUser()) {
   //   let html = "";
   //   db.collection("users")
-  //     .doc()
-  //     .collection("appointments")
   //     .get()
   //     .then((data) => {
+  //       let html = "wow";
+  //       bookedAppointmentsContainer.innerHTML = html;
   //       let docs = data.docs;
-  //       console.log(docs);
   //       docs.forEach((doc) => {
-  //         console.log(doc.id);
-  //         html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-  //           doc.data().date
-  //         }</p><p>Reason: ${
-  //           doc.data().inquiryReason
-  //         }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-  //           doc.data().comments
-  //         }</p><br><button id="${
-  //           doc.id
-  //         }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+  //         doc
+  //           .collection("appointments")
+  //           .get()
+  //           .then((res) => {
+  //             let ress = res.docs;
+  //             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+  //               ress.data().date
+  //             }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
+  //               ress.data().inquiryReason
+  //             }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+  //               ress.data().comments
+  //             }</p><br><button id="${
+  //               ress.id
+  //             }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+  //           });
   //       });
   //       bookedAppointmentsContainer.innerHTML = html;
   //     });
@@ -735,8 +778,8 @@ function addBookedAppointment() {
         });
         bookedAppointmentsContainer.innerHTML = html;
       });
+    // }
   }
-
   //     if (auth.currentUser.email == doc.data().email_review) {
   // user = auth.currentUser.email;
   // if (user) {
@@ -1015,7 +1058,7 @@ r_e("bookingpage").addEventListener("click", async () => {
   addBookedAppointment();
 });
 auth.onAuthStateChanged((user) => {
-  if (user) {
+  if (user || isAdminUser()) {
     // show reviews
     show_reviews();
     addBookedAppointment();
@@ -1083,3 +1126,9 @@ document.addEventListener("click", (event) => {
       });
   }
 });
+
+// if (isAdminUser()) {
+//   const appointmentDate = document.getElementById("appointmentDate").value;
+//   const appointmentTime = document.getElementById("appointmentTime").value;
+//   addRecentAppointment(appointmentDate, appointmentTime);
+// }
