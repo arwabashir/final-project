@@ -339,7 +339,8 @@
         <option value="Friday">Friday</option>
       </select>
       <br><br>
-
+      <h2 id="recent" class='title is-hidden'>Recently Added Appointments</h2>
+    <div id="recentappointments"class="is-hidden"></div>
     </div>
 
     <!-- Center Column: Calendar -->
@@ -363,7 +364,7 @@
       <div class="box">
         <h1 class="title">Book an Appointment</h1>
         <!-- Example input fields -->
-        <p class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
+        <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
         <div class="field">
           <label class="label">Date</label>
           <div class="control">
@@ -378,6 +379,11 @@
           <label for="lookingToBeCaretaker">Looking to be a caretaker</label>
           <div id="errorReason" style="color: red; display: none;">Please select a reason for inquiry.</div>
         </div>
+        <h1><b>Time: </b></h1>
+        <select name="Time" id="time">
+          <option value="0">No available Times Today</option>
+        </select>
+        <br><br>
         <!-- Comments Box -->
         <div class="field">
           <label class="label">Comments: </label>
