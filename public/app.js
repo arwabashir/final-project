@@ -154,26 +154,38 @@ r_e("submit").addEventListener("click", () => {
 //SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
-
   let email2 = r_e("email2").value;
   let pass2 = r_e("pass2").value;
 
-  // 2. send the email/passwrod to firestore
+  // 2. send the email/password to Firebase for sign-in
+  auth.signInWithEmailAndPassword(email2, pass2)
+    .then(() => {
+      // Clear the input fields
+      r_e("email2").value = "";
+      r_e("pass2").value = "";
 
-  auth.signInWithEmailAndPassword(email2, pass2).then(() => {
-    // clear the input fields
-    r_e("email2").value = "";
-    r_e("pass2").value = "";
+      // Hide the sign-in button and show the sign-out button
+      document.querySelector("#signoutbtn").classList.remove("is-hidden");
 
-    document.querySelector("#signoutbtn").classList.remove("is-hidden");
-
-    // close the modal
-    document.getElementById("myModal2").classList.remove("is-active");
-    alert("You are now signed in: " + email2);
-    window.location.href = window.location.href;
-    document.querySelector("#signinbtn").classList.add("is-hidden");
-  });
+      // Close the modal
+      document.getElementById("myModal2").classList.remove("is-active");
+      
+      // Alert the user that they are signed in
+      alert("You are now signed in: " + email2);
+      
+      // Reload the page to reflect the signed-in state
+      window.location.href = window.location.href;
+      
+      // Hide the sign-in button
+      document.querySelector("#signinbtn").classList.add("is-hidden");
+    })
+    .catch((error) => {
+      // Handle errors here
+      alert("Email or password incorrect");
+    });
 });
+
+
 
 //about us page click event
 r_e("aboutuspage").addEventListener("click", () => {
