@@ -559,6 +559,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .collection("appointments")
             .add({
               date: date,
+              // time: time,
               inquiryReason: inquiryReason,
               comments: comments,
             })
@@ -724,6 +725,8 @@ function addBookedAppointment() {
           console.log(doc.id);
           html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
             doc.data().date
+            // }</p><p>Time: ${
+            //   doc.data().time // Include the time here
           }</p><p>Reason: ${
             doc.data().inquiryReason
           }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
@@ -733,6 +736,9 @@ function addBookedAppointment() {
           }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
         });
         bookedAppointmentsContainer.innerHTML = html;
+        // })
+        // .catch((error) => {
+        //   console.error("Error getting appointments: ", error);
       });
   }
 
