@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const aboutUsPage = document.getElementById("aboutus");
   const ourServicesPage = document.getElementById("ourservices");
 
-  // Function to show the main page and hide other sections
-  function showMainPage() {
-    mainPage.classList.remove("is-hidden");
-    aboutUsPage.classList.add("is-hidden");
-    ourServicesPage.classList.add("is-hidden");
-  }
-
   // Function to show the about us page and hide other sections
   function showAboutUsPage() {
     mainPage.classList.add("is-hidden");
@@ -331,74 +324,6 @@ function renderCalendar(year, month) {
   }
 }
 
-// async function renderCalendar(year, month) {
-//   const calendarContainer = document.getElementById("calendar-container");
-//   const daysInMonth = new Date(year, month + 1, 0).getDate();
-//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
-
-//   let calendarHTML = `
-//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
-//   <div id="calendar" class="box">
-//   <div class="columns is-multiline">
-// `;
-
-//   for (let day = 1; day <= daysInMonth; day++) {
-//     const currentDate = new Date(year, month, day);
-//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-
-//     // Check if the current day is a weekday (Monday to Friday)
-//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-//       const dateId = `${year}-${month + 1}-${day}`;
-//       const isAdmin = isAdminUser();
-
-//       // Determine button text and class based on user role
-//       const buttonText = isAdmin ? "Add" : "Book";
-//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
-
-//       // Fetch appointment times from Firestore
-//       const appointmentRef = db.collection("bookings").doc(dateId);
-//       const doc = await appointmentRef.get();
-
-//       let timesHTML = "";
-//       if (doc.exists) {
-//         const appointmentData = doc.data();
-//         if (appointmentData.times) {
-//           timesHTML = appointmentData.times
-//             .map((time) => `<p>${time}</p>`)
-//             .join("");
-//         }
-//       }
-
-//       calendarHTML += `
-//       <div class="column is-one-third">
-//         <div class="card" id="${dateId}">
-//           <div class="card-content">
-//             <p class="title is-4">${monthNames[month]} ${day}</p>
-//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
-//             <div class="appointment-times">${timesHTML}</div>
-//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
-//           </div>
-//         </div>
-//       </div>
-//     `;
-//     }
-//   }
-
-//   // Close the calendar HTML
-//   calendarHTML += `
-//       </div>
-//     </div>
-//   `;
-
-//   // Render the calendar HTML
-//   calendarContainer.innerHTML = calendarHTML;
-//   if (isAdminUser()) {
-//     attachAddListeners();
-//   } else {
-//     attachBookingListeners();
-//   }
-// }
-
 document
   .getElementById("monthSelector")
   .addEventListener("change", function () {
@@ -505,25 +430,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
-
-// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
-// function showModal(date) {
-//   const bookingModal = document.getElementById("bookingModal");
-//   if (bookingModal) {
-//     bookingModal.classList.add("is-active"); // Show the modal
-//     const bookingDateInput = document.getElementById("bookingDate");
-//     if (bookingDateInput) {
-//       bookingDateInput.value = date; // Set the selected date in the modal
-//       bookingDateInput.setAttribute("readonly", "readonly");
-//       // Add the booked appointment to the "Booked Appointments" column
-//       addBookedAppointment(date);
-//     } else {
-//       console.error("Input field with ID 'bookingDate' not found.");
-//     }
-//   } else {
-//     console.error("Booking modal with ID 'bookingModal' not found.");
-//   }
-// }
 
 function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
@@ -673,26 +579,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(function (error) {
               console.error("Error adding appointment: ", error);
             });
-          // if (adminid != "") {
-          //   // Add appointment to user's subcollection
-          //   userDocRef
-          //     .collection("appointments")
-          //     .doc(adminid)
-          //     .set({
-          //       date: date,
-          //       time: time,
-          //       inquiryReason: inquiryReason,
-          //       comments: comments,
-          //     })
-          //     .then(function () {
-          //       // Appointment added successfully
-          //       console.log("Appointment added successfully");
-          //       // You can add further actions here if needed
-          //     })
-          //     .catch(function (error) {
-          //       console.error("Error adding appointment: ", error);
-          //     });
-          //}
         } else {
           // User is not signed in, show a message
           alert("Please sign in before booking an appointment");
@@ -719,9 +605,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
-    // const bookingDate = document.getElementById("bookingDate").value;
     // Add the booked appointment to the "Booked Appointments" column
-    // addBookedAppointment(bookingDate);
     // Close the modal
     const bookingModal = document.getElementById("bookingModal");
     if (bookingModal) {
@@ -919,30 +803,6 @@ function addBookedAppointment() {
     "booked-appointments"
   );
   user = auth.currentUser.email;
-  // if (isAdminUser()) {
-  //   let html = "";
-  //   db.collection("users")
-  //     .doc()
-  //     .collection("appointments")
-  //     .get()
-  //     .then((data) => {
-  //       let docs = data.docs;
-  //       console.log(docs);
-  //       docs.forEach((doc) => {
-  //         console.log(doc.id);
-  //         html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-  //           doc.data().date
-  //         }</p><p>Reason: ${
-  //           doc.data().inquiryReason
-  //         }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-  //           doc.data().comments
-  //         }</p><br><button id="${
-  //           doc.id
-  //         }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-  //       });
-  //       bookedAppointmentsContainer.innerHTML = html;
-  //     });
-  // } else {
   if (user) {
     db.collection("users")
       .doc(user)
@@ -980,25 +840,6 @@ function addBookedAppointment() {
         bookedAppointmentsContainer.innerHTML = html;
       });
   }
-
-  //     if (auth.currentUser.email == doc.data().email_review) {
-  // user = auth.currentUser.email;
-  // if (user) {
-  //   // db.collection("users");
-  //   const userDocRef = db.collection("users").doc(user);
-  //   console.log(userDocRef.collection("appointments").doc(date));
-  // }
-  // Add appointment to user's subcollection
-  // userDocRef
-  //   .collection("appointments")
-  //   .add({
-  //     date: date,
-  //     inquiryReason: inquiryReason,
-  //     comments: comments,
-  //   })
-  // const appointmentElement = document.createElement("div");
-  // appointmentElement.textContent = date;
-  // bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
 document.addEventListener("click", (event) => {
