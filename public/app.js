@@ -54,7 +54,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-    // location.reload();
+     location.reload();
   });
 });
 
@@ -149,7 +149,7 @@ r_e("submit2").addEventListener("click", () => {
     // close the modal
     document.getElementById("myModal2").classList.remove("is-active");
     alert("You are now signed in: " + email2);
-    // location.reload();
+    window.location.href = window.location.href;
     document.querySelector("#signinbtn").classList.add("is-hidden");
   });
 });
