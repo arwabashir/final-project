@@ -770,6 +770,7 @@ function addRecentAppointment(date, time) {
     deleteAppointment(date, time)
       .then(() => {
         appointmentContainer.remove();
+        window.location.href = window.location.href;
       })
       .catch((error) => {
         console.error("Error deleting appointment:", error);
@@ -783,6 +784,10 @@ function addRecentAppointment(date, time) {
 
   recentAppointmentsContainer.appendChild(appointmentContainer);
 }
+
+
+
+
 
 // Function to load recent appointments from Firebase Firestore
 function loadRecentAppointmentsFromFirestore() {
@@ -1286,16 +1291,16 @@ function prevPage() {
   show_reviews();
 }
 
-// document.addEventListener("click", (event) => {
-//   // Check if the clicked element is a button
-//   if (event.target.tagName === "BUTTON") {
-//     // Get the ID of the clicked button
-//     let buttonId = event.target.id;
-//     db.collection("reviews")
-//       .doc(buttonId)
-//       .delete()
-//       .then(() => {
-//         show_reviews();
-//       });
-//   }
-// });
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    db.collection("reviews")
+      .doc(buttonId)
+      .delete()
+      .then(() => {
+        show_reviews();
+      });
+  }
+});
