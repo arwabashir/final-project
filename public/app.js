@@ -419,28 +419,6 @@ function showModal(date) {
     } else {
       console.error("Input field with ID 'bookingDate' not found.");
     }
-
-    let html = `<p>${date}</p>`;
-    const addingDateInput = document.getElementById("appointmentDate");
-    db.collection("bookings")
-      .doc(date)
-      .get()
-      .then((doc) => {
-        html = "";
-        if (doc.exists) {
-          const time = doc.data();
-          const times = time.times;
-          for (i = 0; i < times.length; i++) {
-            html += `<option value=${times[i]}>${times[i]}</option>`;
-          }
-          r_e("time").innerHTML = html;
-        } else {
-          console.log("No document!");
-        }
-      })
-      .catch((error) => {
-        console.log("Error finding document:", error);
-      });
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
@@ -628,6 +606,28 @@ function showModal(date) {
     }
 
     bookingModal.classList.add("is-active"); // Show the modal
+
+    let html = `<p>${date}</p>`;
+    const addingDateInput = document.getElementById("appointmentDate");
+    db.collection("bookings")
+      .doc(date)
+      .get()
+      .then((doc) => {
+        html = "";
+        if (doc.exists) {
+          const time = doc.data();
+          const times = time.times;
+          for (i = 0; i < times.length; i++) {
+            html += `<option value=${times[i]}>${times[i]}</option>`;
+          }
+          r_e("time").innerHTML = html;
+        } else {
+          console.log("No document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error finding document:", error);
+      });
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
