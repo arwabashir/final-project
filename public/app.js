@@ -199,10 +199,10 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("leaveareview").classList.remove("is-hidden");
 });
 
-// Function to render the calendar
-function showModal() {
-  document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
-}
+// // Function to render the calendar
+// function showModal() {
+//   document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
+// }
 
 function closeModal() {
   document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
@@ -355,6 +355,44 @@ document
     renderCalendar(year, selectedMonth);
   });
 
+// Function to show the booking modal
+function showModal(date) {
+  const bookingModal = document.getElementById("bookingModal");
+  if (bookingModal) {
+    bookingModal.classList.add("is-active"); // Show the modal
+    const bookingDateInput = document.getElementById("bookingDate");
+    if (bookingDateInput) {
+      bookingDateInput.value = date; // Set the selected date in the modal
+      bookingDateInput.setAttribute("readonly", "readonly");
+    } else {
+      console.error("Input field with ID 'bookingDate' not found.");
+    }
+
+    let html = `<p>${date}</p>`;
+    const addingDateInput = document.getElementById("appointmentDate");
+    db.collection("bookings")
+      .doc(date)
+      .get()
+      .then((doc) => {
+        html = "";
+        if (doc.exists) {
+          const time = doc.data();
+          const times = time.times;
+          for (i = 0; i < times.length; i++) {
+            html += `<option value=${i}>${times[i]}</option>`;
+          }
+        } else {
+          console.log("No document!");
+        }
+        r_e("time").innerHTML = html;
+      })
+      .catch((error) => {
+        console.log("Error finding document:", error);
+      });
+  } else {
+    console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
 // Separate function to attach event listeners to booking buttons + check that user is signed in to allow booking
 function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
@@ -473,28 +511,12 @@ document.addEventListener("DOMContentLoaded", function () {
 //   }
 // }
 
-// Function to show the booking modal
-function showModal(date) {
-  const bookingModal = document.getElementById("bookingModal");
-  if (bookingModal) {
-    bookingModal.classList.add("is-active"); // Show the modal
-    const bookingDateInput = document.getElementById("bookingDate");
-    if (bookingDateInput) {
-      bookingDateInput.value = date; // Set the selected date in the modal
-      bookingDateInput.setAttribute("readonly", "readonly");
-    } else {
-      console.error("Input field with ID 'bookingDate' not found.");
-    }
-  } else {
-    console.error("Booking modal with ID 'bookingModal' not found.");
-  }
-}
-
 function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
   if (addingModal) {
     addingModal.classList.add("is-active");
     const addingDateInput = document.getElementById("appointmentDate");
+
     if (addingDateInput) {
       addingDateInput.value = date;
       addingDateInput.setAttribute("readonly", "readonly");
