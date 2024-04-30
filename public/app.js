@@ -67,6 +67,27 @@ function hideSignOutButton() {
   document.getElementById("signoutDiv").style.display = "none";
 }
 
+// Function to update the navigation bar based on authentication state
+function updateNavbar(user) {
+  const emailElement = document.getElementById("userEmail");
+  if (user) {
+    // User is signed in
+    emailElement.textContent = user.email;
+    emailElement.style.display = "block"; // Show the email element
+    document.querySelector("#signoutbtn").classList.remove("is-hidden");
+    document.querySelector("#signinbtn").classList.add("is-hidden");
+  } else {
+    // No user is signed in
+    emailElement.textContent = ""; // Clear the email element
+    emailElement.style.display = "none"; // Hide the email element
+    document.querySelector("#signoutbtn").classList.add("is-hidden");
+    document.querySelector("#signinbtn").classList.remove("is-hidden");
+  }
+}
+
+// Update the navigation bar when authentication state changes
+firebase.auth().onAuthStateChanged(updateNavbar);
+
 // Check if a user is signed in or signed out
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
