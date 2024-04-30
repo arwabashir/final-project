@@ -923,7 +923,6 @@ if (submitButton) {
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
-    location.reload(); // This will reload the entire page
     closeAddModal(); // Close the modal after submitting the form
   });
 } else {
