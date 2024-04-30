@@ -804,6 +804,15 @@ if (submitAdd) {
 } else {
   console.error("Submit button for adding form not found.");
 }
+  // Dynamically generate options for appointment time dropdown
+  var select = document.getElementById("appointmentTime");
+  for (var hour = 9; hour <= 17; hour++) {
+    var hour12 = hour % 12 || 12; // Convert hour to 12-hour format
+    var label = hour12 + ":00 " + (hour < 12 ? "AM" : "PM");
+    var option = document.createElement("option");
+    option.text = label;
+    select.add(option);
+  }
 
 // sending appointment time to firebase
 function addAppointmentTime() {
