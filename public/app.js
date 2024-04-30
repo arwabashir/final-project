@@ -676,31 +676,8 @@ document
       bookingModal.classList.remove("is-active");
     }
   });
+
 // Function to delete the specified time from Firebase
-// function deleteAppointment(date, time) {
-//   const bookingRef = firebase.firestore().collection("bookings").doc(date);
-
-//   // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
-//   return firebase.firestore().runTransaction((transaction) => {
-//     // Get the document snapshot within the transaction
-//     return transaction.get(bookingRef).then((doc) => {
-//       if (!doc.exists) {
-//         throw new Error("Document does not exist!");
-//       }
-//       const times = doc.data().times;
-//       const index = times.indexOf(time);
-
-//       if (index !== -1) {
-//         // If the time is found in the array, remove it
-//         times.splice(index, 1);
-//         transaction.update(bookingRef, { times: times });
-//       } else {
-//         console.log("Time not found in the array.");
-//       }
-//     });
-//   });
-// }
-
 function deleteAppointment(date, time) {
   // Convert the text date back to its original format
   const originalDate = reverseFormatDateText(date);
@@ -760,49 +737,6 @@ function reverseFormatDateText(formattedDate) {
 
   return originalDate;
 }
-
-// function addRecentAppointment(date, time) {
-//   const recentAppointmentsContainer =
-//     document.getElementById("recentappointments");
-//   const appointmentContainer = document.createElement("div");
-//   appointmentContainer.classList.add("field", "has-addons");
-
-//   const inputControl = document.createElement("div");
-//   inputControl.classList.add("control");
-
-//   const inputField = document.createElement("input");
-//   inputField.classList.add("input");
-//   inputField.type = "text";
-//   inputField.value = `${date} ${time}`;
-//   inputField.readOnly = true; // Make the input field read-only
-
-//   inputControl.appendChild(inputField);
-
-//   const buttonControl = document.createElement("div");
-//   buttonControl.classList.add("control");
-
-//   const deleteButton = document.createElement("button");
-//   deleteButton.classList.add("button", "is-danger");
-//   deleteButton.textContent = "Delete";
-
-//   // Add an event listener to delete the appointment on click
-//   deleteButton.addEventListener("click", function () {
-//     deleteAppointment(date, time)
-//       .then(() => {
-//         appointmentContainer.remove();
-//       })
-//       .catch((error) => {
-//         console.error("Error deleting appointment:", error);
-//       });
-//   });
-
-//   buttonControl.appendChild(deleteButton);
-
-//   appointmentContainer.appendChild(inputControl);
-//   appointmentContainer.appendChild(buttonControl);
-
-//   recentAppointmentsContainer.appendChild(appointmentContainer);
-// }
 
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
