@@ -483,10 +483,14 @@ function showModal(date) {
         if (doc.exists) {
           const time = doc.data();
           const times = time.times;
-          for (i = 0; i < times.length; i++) {
-            html += `<option value=${times[i]}>${times[i]}</option>`;
+          if (times.length == 0) {
+            html = "No Appointment Times Today";
+          } else {
+            for (i = 0; i < times.length; i++) {
+              html += `<option value=${times[i]}>${times[i]}</option>`;
+            }
+            r_e("time").innerHTML = html;
           }
-          r_e("time").innerHTML = html;
         } else {
           console.log("No document!");
         }
