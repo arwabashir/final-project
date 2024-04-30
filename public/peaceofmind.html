@@ -393,7 +393,7 @@
   </div>
 
   <!-- Adding an Appointment Time Form (admin side) -->
-  <div id="addingModal" class="modal">
+  <!-- <div id="addingModal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="box">
@@ -416,8 +416,36 @@
     </div>
     <button id= "closeaddbtn" class="modal-close is-large" aria-label="close"></button>
   </div>
+</div> -->
 
+<div id="addingModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <h1 class="title">Add Appointment Time</h1>
+      <div class="field">
+        <label class="label">Date</label>
+        <div class="control">
+          <input id="appointmentDate" class="input" type="text" placeholder="Select date">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Time of Appointment</label>
+        <div class="control">
+          <select id="appointmentTime" class="input">
+            <!-- JavaScript will dynamically generate options here -->
+          </select>
+        </div>
+      </div>
+      <br>
+      <button id="submitAdd" class="button is-primary has-text-white has-text-centered">Add</button>
+    </div>
+  </div>
+  <button id="closeaddbtn" class="modal-close is-large" aria-label="close"></button>
 </div>
+</div>
+
+
 
 
     
@@ -580,6 +608,7 @@
         appId: "1:956394414991:web:99175b0564568eec0ee1fa",
       };
 
+      //a
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
@@ -590,4 +619,5 @@
 
     <script src="app.js"></script>
   </body>
+
 </html>
