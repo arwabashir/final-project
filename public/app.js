@@ -258,6 +258,26 @@ function isAdminUser() {
   return currentUser && currentUser.email === "peace0mind15@yahoo.com";
 }
 
+// Function to update UI based on user's admin status
+function updateUIBasedOnAdminStatus() {
+  const isAdmin = isAdminUser();
+  const bookingDescription = document.getElementById('bookingDescription');
+  if (bookingDescription) {
+    bookingDescription.style.display = isAdmin ? 'none' : 'block';
+  }
+}
+
+// Add an auth state listener to update UI when auth state changes
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    updateUIBasedOnAdminStatus();
+  } else {
+    // No user is signed in.
+    // may want to handle this case as well
+  }
+});
+
 // updated renderCalendar function with checking for admin user
 function renderCalendar(year, month) {
   const calendarContainer = document.getElementById("calendar-container");
