@@ -231,10 +231,10 @@ r_e("leaveareviewpage").addEventListener("click", () => {
   r_e("leaveareview").classList.remove("is-hidden");
 });
 
-// // Function to render the calendar
-// function showModal() {
-//   document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
-// }
+// Function to render the calendar
+function showModal() {
+  document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
+}
 
 function closeModal() {
   document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
@@ -407,44 +407,6 @@ document
     renderCalendar(year, selectedMonth);
   });
 
-// Function to show the booking modal
-function showModal(date) {
-  const bookingModal = document.getElementById("bookingModal");
-  if (bookingModal) {
-    bookingModal.classList.add("is-active"); // Show the modal
-    const bookingDateInput = document.getElementById("bookingDate");
-    if (bookingDateInput) {
-      bookingDateInput.value = date; // Set the selected date in the modal
-      bookingDateInput.setAttribute("readonly", "readonly");
-    } else {
-      console.error("Input field with ID 'bookingDate' not found.");
-    }
-
-    let html = `<p>${date}</p>`;
-    const addingDateInput = document.getElementById("appointmentDate");
-    db.collection("bookings")
-      .doc(date)
-      .get()
-      .then((doc) => {
-        html = "";
-        if (doc.exists) {
-          const time = doc.data();
-          const times = time.times;
-          for (i = 0; i < times.length; i++) {
-            html += `<option value=${times[i]}>${times[i]}</option>`;
-          }
-          r_e("time").innerHTML = html;
-        } else {
-          console.log("No document!");
-        }
-      })
-      .catch((error) => {
-        console.log("Error finding document:", error);
-      });
-  } else {
-    console.error("Booking modal with ID 'bookingModal' not found.");
-  }
-}
 // Separate function to attach event listeners to booking buttons + check that user is signed in to allow booking
 function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
@@ -524,47 +486,25 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
   if (isAdminUser()) {
     // Hide the left column if the user is an admin
-    document.getElementById("recent").classList.remove("is-hidden");
-    document.getElementById("recentappointments").classList.remove("is-hidden");
-    // show_times();
+    document.getElementById("leftColumn").innerHTML = `
+    <h2 class='title'>Recently Added Appointments</h2>
+    <div id="recentappointments"></div>
+  `;
   }
 });
 
-// function show_times() {
-//   db.collection("bookings")
-//     .get()
-//     .then((data) => {
-//       html = "";
-//       docs = data.docs;
-//       docs.forEach((doc) => {
-//         if (doc.exists) {
-//           const time = doc.data();
-//           const times = time.times;
-//           for (i = 0; i < times.length; i++) {
-//             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${doc.id}</p><p>Time: ${times[i]}</p><br><button id="${doc.id}"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-//           }
-//         } else {
-//           console.log("No document!");
-//         }
-//       });
-//       r_e("recentappointments").innerHTML = html;
-//     })
-//     .catch((error) => {
-//       console.log("Error finding document:", error);
-//     });
-// }
-// // Make default drop down option on the daySelector the current day of the week
-// // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
-// document.addEventListener("DOMContentLoaded", function () {
-//   const today = new Date();
-//   let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+// Make default drop down option on the daySelector the current day of the week
+// THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
+document.addEventListener("DOMContentLoaded", function () {
+  const today = new Date();
+  let currentDayOfWeek = today.getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
 
-//   if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
-//     currentDayOfWeek = 1;
-//   }
+  if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
+    currentDayOfWeek = 1;
+  }
 
-//   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
-// });
+  document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
+});
 
 // // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
 // function showModal(date) {
@@ -628,6 +568,26 @@ function showModal(date) {
     }
 
     bookingModal.classList.add("is-active"); // Show the modal
+
+    db.collection("bookings")
+      .doc(date)
+      .get()
+      .then((doc) => {
+        html = "";
+        if (doc.exists) {
+          const time = doc.data();
+          const times = time.times;
+          for (i = 0; i < times.length; i++) {
+            html += `<option value=${times[i]}>${times[i]}</option>`;
+          }
+          r_e("time").innerHTML = html;
+        } else {
+          console.log("No document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error finding document:", error);
+      });
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
@@ -674,18 +634,20 @@ document.addEventListener("DOMContentLoaded", function () {
           : "lookingToBeCaretaker";
         const comments = bookingCommentsInput.value;
         const time = document.getElementById("time").value;
+
         // Call addBookedAppointment function
         addBookedAppointment();
-        deleteAppointment(date, time);
 
         // Check if user is signed in
         const user = firebase.auth().currentUser;
-        if (user || isAdminUser()) {
+        if (user) {
           const userEmail = user.email;
 
           // Reference to the user's document
           const userDocRef = db.collection("users").doc(userEmail);
+
           const admindoc = db.collection("users").doc("peace0mind15@yahoo.com");
+
           admindoc
             .collection("appointments")
             .add({
@@ -695,31 +657,42 @@ document.addEventListener("DOMContentLoaded", function () {
               time: time,
               comments: comments,
             })
-            .then(function () {
+            .then((docid) => {
               // Appointment added successfully
+              const adminid = docid.id;
               console.log("Appointment added successfully");
+
+              return userDocRef.collection("appointments").doc(adminid).set({
+                date: date,
+                time: time,
+                inquiryReason: inquiryReason,
+                comments: comments,
+              });
               // You can add further actions here if needed
             })
             .catch(function (error) {
               console.error("Error adding appointment: ", error);
             });
-          // Add appointment to user's subcollection
-          userDocRef
-            .collection("appointments")
-            .add({
-              date: date,
-              inquiryReason: inquiryReason,
-              time: time,
-              comments: comments,
-            })
-            .then(function () {
-              // Appointment added successfully
-              console.log("Appointment added successfully");
-              // You can add further actions here if needed
-            })
-            .catch(function (error) {
-              console.error("Error adding appointment: ", error);
-            });
+          // if (adminid != "") {
+          //   // Add appointment to user's subcollection
+          //   userDocRef
+          //     .collection("appointments")
+          //     .doc(adminid)
+          //     .set({
+          //       date: date,
+          //       time: time,
+          //       inquiryReason: inquiryReason,
+          //       comments: comments,
+          //     })
+          //     .then(function () {
+          //       // Appointment added successfully
+          //       console.log("Appointment added successfully");
+          //       // You can add further actions here if needed
+          //     })
+          //     .catch(function (error) {
+          //       console.error("Error adding appointment: ", error);
+          //     });
+          //}
         } else {
           // User is not signed in, show a message
           alert("Please sign in before booking an appointment");
@@ -946,6 +919,30 @@ function addBookedAppointment() {
     "booked-appointments"
   );
   user = auth.currentUser.email;
+  // if (isAdminUser()) {
+  //   let html = "";
+  //   db.collection("users")
+  //     .doc()
+  //     .collection("appointments")
+  //     .get()
+  //     .then((data) => {
+  //       let docs = data.docs;
+  //       console.log(docs);
+  //       docs.forEach((doc) => {
+  //         console.log(doc.id);
+  //         html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+  //           doc.data().date
+  //         }</p><p>Reason: ${
+  //           doc.data().inquiryReason
+  //         }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+  //           doc.data().comments
+  //         }</p><br><button id="${
+  //           doc.id
+  //         }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+  //       });
+  //       bookedAppointmentsContainer.innerHTML = html;
+  //     });
+  // } else {
   if (user) {
     db.collection("users")
       .doc(user)
@@ -980,11 +977,10 @@ function addBookedAppointment() {
             }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
           }
         });
-
         bookedAppointmentsContainer.innerHTML = html;
       });
-    // }
   }
+
   //     if (auth.currentUser.email == doc.data().email_review) {
   // user = auth.currentUser.email;
   // if (user) {
@@ -1010,14 +1006,39 @@ document.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     // Get the ID of the clicked button
     let buttonId = event.target.id;
-    db.collection("users")
-      .doc(auth.currentUser.email)
-      .collection("appointments")
-      .doc(buttonId)
-      .delete()
-      .then(() => {
-        addBookedAppointment();
-      });
+    if (isAdminUser()) {
+      db.collection("users")
+        .doc("peace0mind15@yahoo.com")
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc(auth.currentUser.email)
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    } else {
+      db.collection("users")
+        .doc(auth.currentUser.email)
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc("peace0mind15@yahoo.com")
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    }
   }
 });
 
@@ -1272,11 +1293,10 @@ r_e("bookingpage").addEventListener("click", async () => {
   addBookedAppointment();
 });
 auth.onAuthStateChanged((user) => {
-  if (user || isAdminUser()) {
+  if (user) {
     // show reviews
     show_reviews();
     addBookedAppointment();
-    // addRecentAppointment();
   } else {
     r_e(
       "leaveareview_reviews-container"
@@ -1370,9 +1390,3 @@ document.addEventListener("click", (event) => {
       });
   }
 });
-
-// if (isAdminUser()) {
-//   const appointmentDate = document.getElementById("appointmentDate").value;
-//   const appointmentTime = document.getElementById("appointmentTime").value;
-//   addRecentAppointment(appointmentDate, appointmentTime);
-// }
