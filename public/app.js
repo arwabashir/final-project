@@ -923,7 +923,7 @@ if (submitButton) {
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
-    closeAddModal(); // Close the modal after submitting the form
+    closeAddModal();
   });
 } else {
   console.error("Submit button for adding form not found.");
