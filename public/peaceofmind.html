@@ -54,6 +54,9 @@
           <div class="navbar-item">
             <span id="currentuser" class="has-text-danger"></span>
           </div>
+          <div>
+            <span class="navbar-item mt-6 bigger-font" id="userEmail" style="display: none;"></span>
+            </div>
           <div class="navbar-item">
             <button id="signupbtn" class="button is-outlined is-success is-light"> <a id="signupbtn">Sign Up</a> </button>
           </div>
@@ -76,7 +79,7 @@
       <section class="hero is-fullheight">
         <div class="hero-body">
           <div class="container">
-            <h1 class="title" style="color: white;">Proudly Serving the Green Bay Area</h1>
+            <h1 class="title" style="color: white;">Proudly Serving the Green Bay and Fox Valley Area</h1>
             <p class="subtitle has-text-weight-bold" style="color: white;">
               Leading the personal care services industry with the
               highest quality of care.
@@ -97,48 +100,85 @@
         <h1 class="title">Our Mission</h1>
         <br>
         <p class="subtitle">
-          At the heart of our organization lies a deeply held commitment: to profoundly impact lives by fostering genuine connections and offering unwaveringly compassionate care. Through our dedicated efforts, we aim to redefine the landscape of personal care services, aspiring to lead with an unparalleled standard of excellence. Our vision encompasses not only providing the highest quality of care but also pioneering innovative approaches that set new benchmarks within the industry. We are driven by a relentless passion to make a meaningful difference in the lives of those we serve, guided by integrity, empathy, and a steadfast dedication to our mission.
-        </p>
+          Since our establishment in 2015, we have been dedicated to profoundly impacting lives by fostering genuine connections and offering unwaveringly compassionate care. With the opening of our doors, we embarked on a journey fueled by the desire to redefine the landscape of personal care services. Through our unwavering commitment, we strive to lead with an unparalleled standard of excellence, continuously setting new benchmarks within the industry.  </p>
+          <p class="subtitle">Our vision extends beyond the conventional boundaries of care provision. We are not content with merely meeting expectations; we aim to surpass them. Innovation is at the core of our approach, driving us to pioneer new methods and techniques that elevate the quality of care we deliver. Our relentless pursuit of improvement is underpinned by a deep-seated passion to make a tangible and lasting difference in the lives of those we serve. Every interaction, every gesture of kindness, is imbued with the sincerity of our commitment. As we continue on our journey, our dedication remains steadfast.
+
+          </p>
         <br />
         <br />
         <h2 class="title is-3 has-text-left">Accepted Health Insurance</h2>
         <h3 class="title is-4">Medicaid</h3>
         <br>
         <h3 class="title is-4">Medicaid (Health Maintenance Organizations):</h3>
+        <br />
+        <style>
+          /* Center the logo container horizontally */
+          .logo-container {
+            display: flex;
+            justify-content: center; /* Horizontally center the items */
+          }
+        
+          .logo-container img {
+            width: 400px;
+            height: auto;
+            margin-right: 20px;
+            margin-left: 20px;
+          }
+        </style>
+        
         <div class="logo-container">
           <img src="anthem_logo.png" alt="Anthem BlueCross BlueShield Logo">
           <img src="network-health-logo.webp" alt="Network Health Logo">
           <img src="mhs_health_logo.jpeg" alt="MHS Health Wisconsin Logo">
         </div>
+        
+        
+        
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <br />
         <br />
 
+
+
         <!--Owner Info Cards-->
         <h1 class="title">Meet the Owner</h1>
-         <!-- Yia Chang Info-->
- <div class="section">
-  <div class="container">
-    <div class="columns">
-      <div class="column is-4">
-        <!--card-->
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img
-                src="yia_chang_headshot.jpg"
-              />
-            </figure>
+        <!-- Yia Chang Info-->
+        <div class="section">
+          <div class="container">
+            <div class="columns">
+              <div class="column is-4">
+                <!--card-->
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-4by3">
+                      <img src="yia_chang_headshot.jpg" />
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-8">
+                <!--image-->
+                <h1 class="title">Yia Chang</h1>
+                <p>Meet the heart and soul behind our exceptional healthcare venture, Yia Chang, a dedicated and visionary healthcare entrepreneur whose unwavering passion lies in serving others with utmost dedication. With a profound dedication to healthcare entrepreneurship, Yia embodies a passion for serving others that is truly inspiring. Her mission is clear: to deliver compassionate and high-quality care to clients within the comfort of their own homes.
+
+                  Yia's vision is rooted in empowering individuals to maintain their independence and enhance their quality of life, all while providing peace of mind to both clients and their families. As the founder and guiding light of our organization, she brings a wealth of expertise and a genuine commitment to making a positive impact in the lives of those we serve.
+                  
+                  </p>
+                  <br>
+                  <p>"At the heart of our mission is a deep-seated belief in the transformative power of care. It is my privilege to lead our team in providing exceptional service that not only meets but exceeds the expectations of our clients, fostering a community of wellness, independence, and dignity."</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="column is-8">
-        <!--image-->
-        <h1 class="title">Yia Chang</h1>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam iusto quos corrupti tempore id accusantium minima quae, omnis adipisci quidem.</p>
-      </div>
-    </div>
-  </div>
-</div>
+        <br>
+        <br>
+        <br>
+
 <h1 class="title">Meet the Head Administrator/Nurse</h1>
      <!-- Mee Vue Info-->
      <div class="section">
@@ -159,7 +199,13 @@
           <div class="column is-8">
             <!--image-->
             <h1 class="title">Mee Vue</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt omnis quasi temporibus maxime sapiente assumenda voluptatum fugiat praesentium? Fuga, possimus.</p>
+           <p>Bringing nearly two decades of dedicated service as a Registered Nurse, with a significant focus of 14 years devoted to the intricate realm of Homecare, Mee Vue is deeply driven by the ethos of holistic care. Her passion transcends the mere provision of medical assistance; it encompasses a commitment to understanding and addressing the diverse needs of her clients on every level.
+
+            Mee's journey in Homecare has been defined by a relentless pursuit of excellence, where she strives to uplift the lives of those under her care by nurturing their physical, emotional, and spiritual well-being. As Head Administrator/Nurse, she stands as a staunch advocate for the highest standards of quality, ensuring that each individual she serves receives personalized attention and support tailored to their unique circumstances.
+            
+            With unwavering dedication, Mee endeavors to forge meaningful connections with her clients, fostering an environment of trust, respect, and compassion that forms the cornerstone of our practice. </p>
+            <br>
+            <p>"It is my privilege to lead by example, championing the values of empathy, integrity, and excellence in all aspects of our Homecare services."</p>
           </div>
         </div>
       </div>
@@ -261,12 +307,12 @@
 <div class="section is-hidden" id="booking">
   <section>
     <h1 class="title is-1 has-text-centered">Book an Appointment</h1>
-    <p>If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
+    <p id="bookingDescription">If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
   </section>
 <br>
   <div class="columns">
     <!-- Left Column: Filtering Dropdown Months Option -->
-    <div class="column is-one-quarter">
+    <div class="column is-one-quarter" id="leftColumn">
       <h2 class="title">Filter Appointments</h2>
       <h3>By Month:</h3>
       <select id="monthSelector">
@@ -291,16 +337,14 @@
         <option value="Wednesday">Wednesday</option>
         <option value="Thursday">Thursday</option>
         <option value="Friday">Friday</option>
-        <option value="Any">Any</option>
       </select>
       <br><br>
-      <h3>By Time:</h3>
-      <select id="timeSelector">
-        <option value="9am-12pm">9am-12pm</option>
-        <option value="12pm-3pm">12pm-3pm</option>
-        <option value="3pm-5pm">3pm-5pm</option>
-        <option value="Any">Any</option>
-      </select>
+      <h2 id="recent" class='title is-hidden'>Recently Added Appointments</h2>
+    <div id="recentappointments"class="is-hidden">
+      <button id="prevButton">Previous</button>
+      <button id="nextButton">Next</button>
+    </div>
+  
     </div>
 
     <!-- Center Column: Calendar -->
@@ -324,7 +368,7 @@
       <div class="box">
         <h1 class="title">Book an Appointment</h1>
         <!-- Example input fields -->
-        <p class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
+        <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
         <div class="field">
           <label class="label">Date</label>
           <div class="control">
@@ -339,6 +383,11 @@
           <label for="lookingToBeCaretaker">Looking to be a caretaker</label>
           <div id="errorReason" style="color: red; display: none;">Please select a reason for inquiry.</div>
         </div>
+        <h1><b>Time: </b></h1>
+        <select name="Time" id="time">
+          <option value="0">No available Times Today</option>
+        </select>
+        <br><br>
         <!-- Comments Box -->
         <div class="field">
           <label class="label">Comments: </label>
@@ -358,7 +407,7 @@
   </div>
 
   <!-- Adding an Appointment Time Form (admin side) -->
-  <div id="addingModal" class="modal">
+  <!-- <div id="addingModal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="box">
@@ -381,8 +430,36 @@
     </div>
     <button id= "closeaddbtn" class="modal-close is-large" aria-label="close"></button>
   </div>
+</div> -->
 
+<div id="addingModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <h1 class="title">Add Appointment Time</h1>
+      <div class="field">
+        <label class="label">Date</label>
+        <div class="control">
+          <input id="appointmentDate" class="input" type="text" placeholder="Select date">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Time of Appointment</label>
+        <div class="control">
+          <select id="appointmentTime" class="input">
+            <!-- JavaScript will dynamically generate options here -->
+          </select>
+        </div>
+      </div>
+      <br>
+      <button id="submitAdd" class="button is-primary has-text-white has-text-centered">Add</button>
+    </div>
+  </div>
+  <button id="closeaddbtn" class="modal-close is-large" aria-label="close"></button>
 </div>
+</div>
+
+
 
 
     
@@ -449,7 +526,8 @@
 
     <div class="modal" id="myModal">
       <div class="modal-background"></div>
-      <div class="modal-content p-6 has-background-white">
+      <div class="modal-content p-6 has-background-white" style="max-width: 400px;">
+        <div class="has-text-centered">
         <h1 class="is-size-3 title">Sign Up</h1>
 
         <!-- Email -->
@@ -470,7 +548,7 @@
         <!-- submit -->
         <div class="field">
           <div class="control">
-            <button id="submit" class="button is-link">Submit</button>
+            <button id="submit" class="button is-link is-outlined is-success is-light">Submit</button>
             <span style="margin-left: 10px;"></span>
             <button id="Cancel" class=" button is-link is-light">Cancel</button>
           </div>
@@ -480,11 +558,13 @@
         <!-- div error -->
         <div class="error has-text-danger"></div>
       </div>
+      </div>
     </div>
 
     <div class="modal" id="myModal2">
       <div class="modal-background"></div>
-      <div class="modal-content p-6 has-background-white">
+      <div class="modal-content p-6 has-background-white"  style="max-width: 400px;">
+        <div class="has-text-centered">
         <h1 class="is-size-3 title">Sign In</h1>
 
         <!-- Email -->
@@ -506,7 +586,7 @@
         <!-- submit -->
         <div class="field">
           <div class="control">
-          <button id="submit2" class=" button is-link">Submit</button>
+          <button id="submit2" class=" button is-link is-outlined is-success is-light">Submit</button>
           <span style="margin-left: 10px;"></span>
             <button id="Cancel2" class=" button is-link is-light">Cancel</button>
           </div>
@@ -514,7 +594,7 @@
       
         <!-- div error -->
         <div class="error has-text-danger"></div>
-
+      </div>
       </div>
     </div>
    </div>
@@ -545,6 +625,7 @@
         appId: "1:956394414991:web:99175b0564568eec0ee1fa",
       };
 
+      //a
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
@@ -555,4 +636,5 @@
 
     <script src="app.js"></script>
   </body>
+
 </html>

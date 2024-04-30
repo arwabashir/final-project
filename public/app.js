@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const aboutUsPage = document.getElementById("aboutus");
   const ourServicesPage = document.getElementById("ourservices");
 
-  // Function to show the main page and hide other sections
-  function showMainPage() {
-    mainPage.classList.remove("is-hidden");
-    aboutUsPage.classList.add("is-hidden");
-    ourServicesPage.classList.add("is-hidden");
-  }
-
   // Function to show the about us page and hide other sections
   function showAboutUsPage() {
     mainPage.classList.add("is-hidden");
@@ -54,7 +47,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-    // location.reload();
+    location.reload();
   });
 });
 
@@ -66,6 +59,27 @@ function showSignOutButton() {
 function hideSignOutButton() {
   document.getElementById("signoutDiv").style.display = "none";
 }
+
+// Function to update the navigation bar based on authentication state
+function updateNavbar(user) {
+  const emailElement = document.getElementById("userEmail");
+  if (user) {
+    // User is signed in
+    emailElement.textContent = user.email;
+    emailElement.style.display = "block"; // Show the email element
+    document.querySelector("#signoutbtn").classList.remove("is-hidden");
+    document.querySelector("#signinbtn").classList.add("is-hidden");
+  } else {
+    // No user is signed in
+    emailElement.textContent = ""; // Clear the email element
+    emailElement.style.display = "none"; // Hide the email element
+    document.querySelector("#signoutbtn").classList.add("is-hidden");
+    document.querySelector("#signinbtn").classList.remove("is-hidden");
+  }
+}
+
+// Update the navigation bar when authentication state changes
+firebase.auth().onAuthStateChanged(updateNavbar);
 
 // Check if a user is signed in or signed out
 firebase.auth().onAuthStateChanged(function (user) {
@@ -133,25 +147,36 @@ r_e("submit").addEventListener("click", () => {
 //SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
-
   let email2 = r_e("email2").value;
   let pass2 = r_e("pass2").value;
 
-  // 2. send the email/passwrod to firestore
+  // 2. send the email/password to Firebase for sign-in
+  auth
+    .signInWithEmailAndPassword(email2, pass2)
+    .then(() => {
+      // Clear the input fields
+      r_e("email2").value = "";
+      r_e("pass2").value = "";
 
-  auth.signInWithEmailAndPassword(email2, pass2).then(() => {
-    // clear the input fields
-    r_e("email2").value = "";
-    r_e("pass2").value = "";
+      // Hide the sign-in button and show the sign-out button
+      document.querySelector("#signoutbtn").classList.remove("is-hidden");
 
-    document.querySelector("#signoutbtn").classList.remove("is-hidden");
+      // Close the modal
+      document.getElementById("myModal2").classList.remove("is-active");
 
-    // close the modal
-    document.getElementById("myModal2").classList.remove("is-active");
-    alert("You are now signed in: " + email2);
-    // location.reload();
-    document.querySelector("#signinbtn").classList.add("is-hidden");
-  });
+      // Alert the user that they are signed in
+      alert("You are now signed in: " + email2);
+
+      // Reload the page to reflect the signed-in state
+      window.location.href = window.location.href;
+
+      // Hide the sign-in button
+      document.querySelector("#signinbtn").classList.add("is-hidden");
+    })
+    .catch((error) => {
+      // Handle errors here
+      alert("Email or password incorrect");
+    });
 });
 
 //about us page click event
@@ -225,6 +250,26 @@ function isAdminUser() {
   return currentUser && currentUser.email === "peace0mind15@yahoo.com";
 }
 
+// Function to update UI based on user's admin status
+function updateUIBasedOnAdminStatus() {
+  const isAdmin = isAdminUser();
+  const bookingDescription = document.getElementById("bookingDescription");
+  if (bookingDescription) {
+    bookingDescription.style.display = isAdmin ? "none" : "block";
+  }
+}
+
+// Add an auth state listener to update UI when auth state changes
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in.
+    updateUIBasedOnAdminStatus();
+  } else {
+    // No user is signed in.
+    // may want to handle this case as well
+  }
+});
+
 // updated renderCalendar function with checking for admin user
 function renderCalendar(year, month) {
   const calendarContainer = document.getElementById("calendar-container");
@@ -255,7 +300,7 @@ function renderCalendar(year, month) {
         <div class="card" id="${dateId}">
           <div class="card-content">
             <p class="title is-4">${monthNames[month]} ${day}</p>
-            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>  
+            <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
           </div>
         </div>
@@ -358,6 +403,21 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
 });
 
+// All actions triggered off booking page (render calendar and display appropriate left column)
+r_e("bookingpage").addEventListener("click", () => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  renderCalendar(currentYear, currentMonth);
+  if (isAdminUser()) {
+    // Hide the left column if the user is an admin
+    document.getElementById("leftColumn").innerHTML = `
+    <h2 class='title'>Recently Added Appointments</h2>
+    <div id="recentappointments"></div>
+  `;
+  }
+});
+
 // Make default drop down option on the daySelector the current day of the week
 // THIS IS BROKEN WHEN THE VALUES OF THE DAY SELECTOR TURN FROM NUMERICAL TO THEIR ACTUAL DAY
 document.addEventListener("DOMContentLoaded", function () {
@@ -371,42 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
 
-// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
-// function showModal(date) {
-//   const bookingModal = document.getElementById("bookingModal");
-//   if (bookingModal) {
-//     bookingModal.classList.add("is-active"); // Show the modal
-//     const bookingDateInput = document.getElementById("bookingDate");
-//     if (bookingDateInput) {
-//       bookingDateInput.value = date; // Set the selected date in the modal
-//       bookingDateInput.setAttribute("readonly", "readonly");
-//       // Add the booked appointment to the "Booked Appointments" column
-//       addBookedAppointment(date);
-//     } else {
-//       console.error("Input field with ID 'bookingDate' not found.");
-//     }
-//   } else {
-//     console.error("Booking modal with ID 'bookingModal' not found.");
-//   }
-// }
-
-// Function to show the booking modal
-function showModal(date) {
-  const bookingModal = document.getElementById("bookingModal");
-  if (bookingModal) {
-    bookingModal.classList.add("is-active"); // Show the modal
-    const bookingDateInput = document.getElementById("bookingDate");
-    if (bookingDateInput) {
-      bookingDateInput.value = date; // Set the selected date in the modal
-      bookingDateInput.setAttribute("readonly", "readonly");
-    } else {
-      console.error("Input field with ID 'bookingDate' not found.");
-    }
-  } else {
-    console.error("Booking modal with ID 'bookingModal' not found.");
-  }
-}
-
 function showAddModal(date) {
   const addingModal = document.getElementById("addingModal");
   if (addingModal) {
@@ -419,36 +443,106 @@ function showAddModal(date) {
   }
 }
 
-// ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
+// Function to show the booking modal
+function showModal(date) {
+  const bookingModal = document.getElementById("bookingModal");
+  if (bookingModal) {
+    // Reset modal state
+    const bookingDateInput = document.getElementById("bookingDate");
+    const lookingForCaretakerRadio = document.getElementById(
+      "lookingForCaretaker"
+    );
+    const lookingToBeCaretakerRadio = document.getElementById(
+      "lookingToBeCaretaker"
+    );
+    const errorReason = document.getElementById("errorReason");
+
+    if (bookingDateInput) {
+      bookingDateInput.value = date; // Set the selected date in the modal
+      bookingDateInput.setAttribute("readonly", "readonly");
+    } else {
+      console.error("Input field with ID 'bookingDate' not found.");
+    }
+
+    if (lookingForCaretakerRadio && lookingToBeCaretakerRadio) {
+      lookingForCaretakerRadio.checked = false;
+      lookingToBeCaretakerRadio.checked = false;
+    }
+
+    if (errorReason) {
+      errorReason.style.display = "block"; // Display error message
+    }
+
+    bookingModal.classList.add("is-active"); // Show the modal
+
+    db.collection("bookings")
+      .doc(date)
+      .get()
+      .then((doc) => {
+        html = "";
+        if (doc.exists) {
+          const time = doc.data();
+          const times = time.times;
+          for (i = 0; i < times.length; i++) {
+            html += `<option value=${times[i]}>${times[i]}</option>`;
+          }
+          r_e("time").innerHTML = html;
+        } else {
+          console.log("No document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error finding document:", error);
+      });
+  } else {
+    console.error("Booking modal with ID 'bookingModal' not found.");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const bookAppointmentButton = document.getElementById(
     "bookAppointmentButton"
   );
+  const lookingForCaretakerRadio = document.getElementById(
+    "lookingForCaretaker"
+  );
+  const lookingToBeCaretakerRadio = document.getElementById(
+    "lookingToBeCaretaker"
+  );
+  const errorReason = document.getElementById("errorReason");
+
+  // Function to toggle error message visibility
+  function toggleErrorMessage() {
+    if (lookingForCaretakerRadio.checked || lookingToBeCaretakerRadio.checked) {
+      errorReason.style.display = "none";
+    } else {
+      errorReason.style.display = "block";
+    }
+  }
+
+  toggleErrorMessage(); // Initialize error message visibility
 
   if (bookAppointmentButton) {
-    bookAppointmentButton.addEventListener("click", function () {
+    bookAppointmentButton.addEventListener("click", function (event) {
       // Get input fields
       const bookingDateInput = document.getElementById("bookingDate");
-      const lookingForCaretakerRadio = document.getElementById(
-        "lookingForCaretaker"
-      );
-      const lookingToBeCaretakerRadio = document.getElementById(
-        "lookingToBeCaretaker"
-      );
       const bookingCommentsInput = document.getElementById("bookingComments");
 
+      // Check if date and at least one radio option is selected
       if (
         bookingDateInput &&
-        (lookingForCaretakerRadio || lookingToBeCaretakerRadio)
+        bookingDateInput.value !== "" && // Ensure a date is selected
+        (lookingForCaretakerRadio.checked || lookingToBeCaretakerRadio.checked)
       ) {
         const date = bookingDateInput.value;
         const inquiryReason = lookingForCaretakerRadio.checked
           ? "lookingForCaretaker"
           : "lookingToBeCaretaker";
         const comments = bookingCommentsInput.value;
+        const time = document.getElementById("time").value;
 
         // Call addBookedAppointment function
-        addBookedAppointment(date);
+        addBookedAppointment();
 
         // Check if user is signed in
         const user = firebase.auth().currentUser;
@@ -458,17 +552,28 @@ document.addEventListener("DOMContentLoaded", function () {
           // Reference to the user's document
           const userDocRef = db.collection("users").doc(userEmail);
 
-          // Add appointment to user's subcollection
-          userDocRef
+          const admindoc = db.collection("users").doc("peace0mind15@yahoo.com");
+
+          admindoc
             .collection("appointments")
             .add({
+              user: userEmail,
               date: date,
               inquiryReason: inquiryReason,
+              time: time,
               comments: comments,
             })
-            .then(function () {
+            .then((docid) => {
               // Appointment added successfully
+              const adminid = docid.id;
               console.log("Appointment added successfully");
+
+              return userDocRef.collection("appointments").doc(adminid).set({
+                date: date,
+                time: time,
+                inquiryReason: inquiryReason,
+                comments: comments,
+              });
               // You can add further actions here if needed
             })
             .catch(function (error) {
@@ -479,11 +584,20 @@ document.addEventListener("DOMContentLoaded", function () {
           alert("Please sign in before booking an appointment");
         }
       } else {
-        console.error("One or more input fields not found.");
+        // If date or radio option is not selected, show an error message
+        toggleErrorMessage();
+        console.error("One or more input fields not found or not selected.");
+        event.preventDefault(); // Prevent the default form submission behavior
       }
     });
   } else {
     console.error("Button with ID 'bookAppointmentButton' not found.");
+  }
+
+  // Event listeners to update error message visibility when radio options change
+  if (lookingForCaretakerRadio && lookingToBeCaretakerRadio) {
+    lookingForCaretakerRadio.addEventListener("change", toggleErrorMessage);
+    lookingToBeCaretakerRadio.addEventListener("change", toggleErrorMessage);
   }
 });
 
@@ -491,9 +605,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
-    const bookingDate = document.getElementById("bookingDate").value;
     // Add the booked appointment to the "Booked Appointments" column
-    addBookedAppointment(bookingDate);
     // Close the modal
     const bookingModal = document.getElementById("bookingModal");
     if (bookingModal) {
@@ -501,17 +613,275 @@ document
     }
   });
 
+// Function to delete the specified time from Firebase
+function deleteAppointment(date, time) {
+  // Convert the text date back to its original format
+  const originalDate = reverseFormatDateText(date);
+
+  const bookingRef = firebase
+    .firestore()
+    .collection("bookings")
+    .doc(originalDate);
+
+  // Use a transaction to ensure atomicity and consistency
+  return firebase.firestore().runTransaction((transaction) => {
+    // Get the document snapshot within the transaction
+    return transaction.get(bookingRef).then((doc) => {
+      if (!doc.exists) {
+        throw new Error("Document does not exist!");
+      }
+      const times = doc.data().times;
+      const index = times.indexOf(time);
+
+      if (index !== -1) {
+        // If the time is found in the array, remove it
+        times.splice(index, 1);
+        transaction.update(bookingRef, { times: times });
+      } else {
+        console.log("Time not found in the array.");
+      }
+    });
+  });
+}
+
+function reverseFormatDateText(formattedDate) {
+  // Split the formatted date into month, day, and year parts
+  const parts = formattedDate.split(" ");
+  const monthName = parts[0];
+  const day = parts[1].replace(",", ""); // Remove the comma
+  const year = parts[2];
+
+  // Convert the month name to its numerical equivalent
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames.indexOf(monthName) + 1; // Months are zero-indexed, so add 1
+
+  // Construct the original date in YYYY-MM-DD format
+  const originalDate = `${year}-${month}-${day}`;
+
+  return originalDate;
+}
+
+function addRecentAppointment(date, time) {
+  const recentAppointmentsContainer =
+    document.getElementById("recentappointments");
+  const appointmentContainer = document.createElement("div");
+  appointmentContainer.classList.add("field", "has-addons", "mb-3"); // Add margin-bottom for spacing
+
+  // Convert the date to its text equivalent using the formatDateText function
+  const formattedDate = formatDateText(date);
+
+  const inputControl = document.createElement("div");
+  inputControl.classList.add("control");
+
+  const inputField = document.createElement("input");
+  inputField.classList.add("input");
+  inputField.type = "text";
+  inputField.value = `${formattedDate} ${time}`;
+  inputField.readOnly = true; // Make the input field read-only
+
+  inputControl.appendChild(inputField);
+
+  const buttonControl = document.createElement("div");
+  buttonControl.classList.add("control");
+
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("button", "is-danger");
+  deleteButton.textContent = "Delete";
+
+  // Add an event listener to delete the appointment on click
+  deleteButton.addEventListener("click", function () {
+    deleteAppointment(date, time)
+      .then(() => {
+        appointmentContainer.remove();
+        window.location.href = window.location.href;
+      })
+      .catch((error) => {
+        console.error("Error deleting appointment:", error);
+      });
+  });
+
+  buttonControl.appendChild(deleteButton);
+
+  appointmentContainer.appendChild(inputControl);
+  appointmentContainer.appendChild(buttonControl);
+
+  recentAppointmentsContainer.appendChild(appointmentContainer);
+}
+
+// Function to load recent appointments from Firebase Firestore
+function loadRecentAppointmentsFromFirestore() {
+  const recentAppointmentsContainer =
+    document.getElementById("recentappointments");
+
+  // Clear the container before populating it with new appointments
+  recentAppointmentsContainer.innerHTML = "";
+
+  // Query the Firestore collection "bookings" to get all appointments
+  firebase
+    .firestore()
+    .collection("bookings")
+    .get()
+    .then((querySnapshot) => {
+      // Create an array to store all appointments
+      const appointments = [];
+
+      // Iterate over each document in the collection
+      querySnapshot.forEach((doc) => {
+        const date = doc.id; // Get the date from the document ID
+        const times = doc.data().times; // Get the times array from the document data
+
+        // Iterate over each time in the times array
+        times.forEach((time) => {
+          // Push each appointment date and time combination to the appointments array
+          appointments.push({ date, time });
+        });
+      });
+
+      // Sort the appointments array chronologically by date and time
+      appointments.sort((a, b) => {
+        // Convert date and time strings to Date objects for comparison
+        const dateA = new Date(`${a.date} ${a.time}`);
+        const dateB = new Date(`${b.date} ${b.time}`);
+        return dateA - dateB;
+      });
+
+      // Populate the recent appointments container with the sorted appointments
+      appointments.forEach((appointment) => {
+        // Convert the date to its text equivalent (e.g., "April 1, 2024")
+        const dateText = formatDateText(appointment.date);
+        // Call the addRecentAppointment function with the formatted date text
+        addRecentAppointment(dateText, appointment.time);
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading recent appointments:", error);
+    });
+}
+
+// Function to format the date text (e.g., "2024-4-1" to "April 1, 2024")
+function formatDateText(date) {
+  // Parse the date string into a Date object
+  const parsedDate = new Date(date);
+  // Get the month, day, and year components
+  const month = parsedDate.toLocaleString("en-us", { month: "long" });
+  const day = parsedDate.getDate();
+  const year = parsedDate.getFullYear();
+  // Format the date text (e.g., "April 1, 2024")
+  return `${month} ${day}, ${year}`;
+}
+
+// Call loadRecentAppointmentsFromFirestore when the "booking page" tab is clicked
+document
+  .getElementById("bookingpage")
+  .addEventListener("click", loadRecentAppointmentsFromFirestore);
+
+// Function to handle adding appointment time click
+document.getElementById("submitAdd").addEventListener("click", function () {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+  addRecentAppointment(appointmentDate, appointmentTime);
+});
+
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
-function addBookedAppointment(date) {
+function addBookedAppointment() {
   const bookedAppointmentsContainer = document.getElementById(
     "booked-appointments"
   );
-  const appointmentElement = document.createElement("div");
-  appointmentElement.textContent = date;
-  bookedAppointmentsContainer.appendChild(appointmentElement);
+  user = auth.currentUser.email;
+  if (user) {
+    db.collection("users")
+      .doc(user)
+      .collection("appointments")
+      .get()
+      .then((data) => {
+        let docs = data.docs;
+
+        let html = ""; // loop through the docs array
+        docs.forEach((doc) => {
+          if (isAdminUser()) {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p> <p>User: ${doc.data().user}</p><p>Time: ${
+              doc.data().time
+            }</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          } else {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          }
+        });
+        bookedAppointmentsContainer.innerHTML = html;
+      });
+  }
 }
+
+document.addEventListener("click", (event) => {
+  // Check if the clicked element is a button
+  if (event.target.tagName === "BUTTON") {
+    // Get the ID of the clicked button
+    let buttonId = event.target.id;
+    if (isAdminUser()) {
+      db.collection("users")
+        .doc("peace0mind15@yahoo.com")
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc(auth.currentUser.email)
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    } else {
+      db.collection("users")
+        .doc(auth.currentUser.email)
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc("peace0mind15@yahoo.com")
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    }
+  }
+});
 
 // Function to close the modal
 function closeModal() {
@@ -558,6 +928,7 @@ if (submitButton) {
   console.error("Submit button for booking form not found.");
 }
 
+// Event listener - closes modal after add appointment time form is submitted
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
@@ -566,44 +937,103 @@ if (submitAdd) {
 } else {
   console.error("Submit button for adding form not found.");
 }
+// Dynamically generate options for appointment time dropdown
+var select = document.getElementById("appointmentTime");
+for (var hour = 9; hour <= 17; hour++) {
+  var hour12 = hour % 12 || 12; // Convert hour to 12-hour format
+  var label = hour12 + ":00 " + (hour < 12 ? "AM" : "PM");
+  var option = document.createElement("option");
+  option.text = label;
+  select.add(option);
+}
+
+// sending appointment time to firebase
+function addAppointmentTime() {
+  const appointmentDate = document.getElementById("appointmentDate").value;
+  const appointmentTime = document.getElementById("appointmentTime").value;
+
+  // Create a document reference with the appointment date as its ID
+  const appointmentRef = db.collection("bookings").doc(appointmentDate);
+
+  // Add the new appointment time to the existing array of times (or create a new array)
+  appointmentRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        // Document already exists, update the array of times
+        const existingTimes = doc.data().times || [];
+        existingTimes.push(appointmentTime);
+        return appointmentRef.update({
+          times: existingTimes,
+        });
+      } else {
+        // Document doesn't exist, create a new one with the array of times
+        return appointmentRef.set({
+          times: [appointmentTime],
+        });
+      }
+    })
+    .then(() => {
+      console.log("Appointment added successfully");
+      // Show success message
+      const successMessage = document.getElementById("successMessage");
+      successMessage.textContent = "Appointment added successfully!";
+      successMessage.style.display = "block";
+      // Optionally, you can close the modal here
+      // closeModal(); // Example function to close the modal
+    })
+    .catch((error) => {
+      console.error("Error adding appointment: ", error);
+    });
+}
+
+document
+  .getElementById("submitAdd")
+  .addEventListener("click", addAppointmentTime);
 
 // TESTING: FILTERING APPOINTMENTS BY DAY OF WEEK:
 
 document.addEventListener("DOMContentLoaded", function () {
+  const calendarContainer = document.getElementById("calendar-container");
+  const calendarCards = document.querySelectorAll(".card-content");
+
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
       const selectedDay = this.value;
-      const calendarContainer = document.getElementById("calendar-container");
-      const calendarCards = document.querySelectorAll(".card-content"); // Iterate over each card and toggle visibility based on selected day
+
+      // Clear the calendar container before rendering filtered content
+      calendarContainer.innerHTML = "";
 
       calendarCards.forEach((card) => {
         const cardContent = card.querySelector(".DOW").innerText;
+        const cardParent = card.parentElement;
 
         if (cardContent.includes(selectedDay)) {
-          card.parentElement.style.display = "block"; // Show card
-          const cardParent = card.parentElement;
+          const clonedCard = cardParent.cloneNode(true); // Clone the card element
+          calendarContainer.appendChild(clonedCard); // Append cloned card to the calendar container
 
-          // Move the card to the top of the container
-          calendarContainer.insertBefore(
-            cardParent,
-            calendarContainer.firstChild
-          );
-
-          const bookButton = cardParent.querySelector(".book-btn");
+          const bookButton = clonedCard.querySelector(".book-btn");
           if (bookButton) {
-            bookButton.removeEventListener("click", handleBookingClick); // Remove any existing listener to avoid duplication
             bookButton.addEventListener("click", handleBookingClick); // Add the event listener
           }
-        } else {
-          card.parentElement.style.display = "none"; // Hide card
         }
       });
     });
 });
 
-function handleBookingClick() {
-  const card = this.closest(".card");
+function handleBookingClick(event) {
+  // Check if the user is signed in
+  if (!firebase.auth().currentUser) {
+    // If not signed in, prevent default action (modal opening)
+    event.preventDefault();
+    // Prompt the user to sign in
+    alert("You must be signed in first to book an appointment.");
+    return;
+  }
+
+  // If the user is signed in, continue with the booking action
+  const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
 }
@@ -700,31 +1130,47 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   show_reviews();
 });
 
+r_e("bookingpage").addEventListener("click", async () => {
+  addBookedAppointment();
+});
 auth.onAuthStateChanged((user) => {
   if (user) {
     // show reviews
     show_reviews();
+    addBookedAppointment();
   } else {
     r_e(
       "leaveareview_reviews-container"
     ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to read reviews!</p>`;
+    r_e(
+      "booked-appointments"
+    ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to view bookings!</p>`;
   }
 });
+
+let currentPage = 1;
+const reviewsPerPage = 5;
+
 function show_reviews() {
   db.collection("reviews")
     .get()
     .then((data) => {
       let docs = data.docs;
+      const totalPages = Math.ceil(docs.length / reviewsPerPage);
 
-      let html = ""; // loop through the docs array
-      docs.forEach((doc) => {
+      let startIndex = (currentPage - 1) * reviewsPerPage;
+      let endIndex = startIndex + reviewsPerPage;
+      let currentPageReviews = docs.slice(startIndex, endIndex);
+
+      let html = "";
+      currentPageReviews.forEach((doc) => {
         let stars = doc.data().rating;
-        let ids = doc.id; // console.log(doc.id);
+        let ids = doc.id;
         let num = "";
         for (i = 0; i < stars; i++) {
           num += `<a href="">
-      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
-    </a>`;
+      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+    </a>`;
         }
 
         if (
@@ -734,21 +1180,42 @@ function show_reviews() {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; <div><button id="${
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; <div><button id="${
             doc.id
           }" class="is-white">Delete</button></div>
-          </div>`;
+          </div>`;
         } else {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; </div>`;
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; </div>`;
         }
-        r_e("leaveareview_reviews-container").innerHTML = html;
       });
+
+      // Add pagination controls
+      html += `<div class="pagination">`;
+      if (currentPage > 1) {
+        html += `<button onclick="prevPage()">Previous</button>`;
+      }
+      if (currentPage < totalPages) {
+        html += `<button onclick="nextPage()">Next</button>`;
+      }
+      html += `</div>`;
+
+      r_e("leaveareview_reviews-container").innerHTML = html;
     });
+}
+
+function nextPage() {
+  currentPage++;
+  show_reviews();
+}
+
+function prevPage() {
+  currentPage--;
+  show_reviews();
 }
 
 document.addEventListener("click", (event) => {
