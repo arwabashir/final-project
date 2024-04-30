@@ -864,10 +864,6 @@ function addRecentAppointment(date, time) {
   recentAppointmentsContainer.appendChild(appointmentContainer);
 }
 
-
-
-
-
 // Function to load recent appointments from Firebase Firestore
 function loadRecentAppointmentsFromFirestore() {
   const recentAppointmentsContainer =
