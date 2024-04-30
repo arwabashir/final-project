@@ -297,6 +297,7 @@ function renderCalendar(year, month) {
     }
   }
 
+
   // Close the calendar HTML
   calendarHTML += `
       </div>
