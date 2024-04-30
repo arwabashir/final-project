@@ -822,6 +822,7 @@ function addRecentAppointment(date, time) {
     deleteAppointment(date, time)
       .then(() => {
         appointmentContainer.remove();
+        window.location.href = window.location.href;
       })
       .catch((error) => {
         console.error("Error deleting appointment:", error);
