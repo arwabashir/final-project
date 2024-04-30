@@ -677,10 +677,40 @@ document
     }
   });
 // Function to delete the specified time from Firebase
-function deleteAppointment(date, time) {
-  const bookingRef = firebase.firestore().collection("bookings").doc(date);
+// function deleteAppointment(date, time) {
+//   const bookingRef = firebase.firestore().collection("bookings").doc(date);
 
-  // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
+//   // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
+//   return firebase.firestore().runTransaction((transaction) => {
+//     // Get the document snapshot within the transaction
+//     return transaction.get(bookingRef).then((doc) => {
+//       if (!doc.exists) {
+//         throw new Error("Document does not exist!");
+//       }
+//       const times = doc.data().times;
+//       const index = times.indexOf(time);
+
+//       if (index !== -1) {
+//         // If the time is found in the array, remove it
+//         times.splice(index, 1);
+//         transaction.update(bookingRef, { times: times });
+//       } else {
+//         console.log("Time not found in the array.");
+//       }
+//     });
+//   });
+// }
+
+function deleteAppointment(date, time) {
+  // Convert the text date back to its original format
+  const originalDate = reverseFormatDateText(date);
+
+  const bookingRef = firebase
+    .firestore()
+    .collection("bookings")
+    .doc(originalDate);
+
+  // Use a transaction to ensure atomicity and consistency
   return firebase.firestore().runTransaction((transaction) => {
     // Get the document snapshot within the transaction
     return transaction.get(bookingRef).then((doc) => {
@@ -699,6 +729,36 @@ function deleteAppointment(date, time) {
       }
     });
   });
+}
+
+function reverseFormatDateText(formattedDate) {
+  // Split the formatted date into month, day, and year parts
+  const parts = formattedDate.split(" ");
+  const monthName = parts[0];
+  const day = parts[1].replace(",", ""); // Remove the comma
+  const year = parts[2];
+
+  // Convert the month name to its numerical equivalent
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames.indexOf(monthName) + 1; // Months are zero-indexed, so add 1
+
+  // Construct the original date in YYYY-MM-DD format
+  const originalDate = `${year}-${month}-${day}`;
+
+  return originalDate;
 }
 
 // function addRecentAppointment(date, time) {
