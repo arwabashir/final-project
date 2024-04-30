@@ -379,7 +379,7 @@ function showModal(date) {
           const time = doc.data();
           const times = time.times;
           for (i = 0; i < times.length; i++) {
-            html += `<option value=${i}>${times[i]}</option>`;
+            html += `<option value=${times[i]}>${times[i]}</option>`;
           }
           r_e("time").innerHTML = html;
         } else {
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ? "lookingForCaretaker"
           : "lookingToBeCaretaker";
         const comments = bookingCommentsInput.value;
-
+        const time = document.getElementById("time").value;
         // Call addBookedAppointment function
         addBookedAppointment();
 
@@ -569,6 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .add({
               date: date,
               inquiryReason: inquiryReason,
+              time: time,
               comments: comments,
             })
             .then(function () {
