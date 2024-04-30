@@ -725,7 +725,7 @@ function addBookedAppointment() {
           console.log(doc.id);
           html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
             doc.data().date
-          }</p><p>Reason: ${
+          }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
             doc.data().inquiryReason
           }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
             doc.data().comments
