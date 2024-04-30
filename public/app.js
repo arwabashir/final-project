@@ -454,53 +454,17 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("daySelector").value = currentDayOfWeek.toString(); // Set the value of the dropdown to the current day of the week or Monday if it's a weekend
 });
 
-// // Function to show the booking modal and add the booked appointment to the "Booked Appointments" column
-// function showModal(date) {
-//   const bookingModal = document.getElementById("bookingModal");
-//   if (bookingModal) {
-//     bookingModal.classList.add("is-active"); // Show the modal
-//     const bookingDateInput = document.getElementById("bookingDate");
-//     if (bookingDateInput) {
-//       bookingDateInput.value = date; // Set the selected date in the modal
-//       bookingDateInput.setAttribute("readonly", "readonly");
-//       // Add the booked appointment to the "Booked Appointments" column
-//       addBookedAppointment(date);
-//     } else {
-//       console.error("Input field with ID 'bookingDate' not found.");
-//     }
-//   } else {
-//     console.error("Booking modal with ID 'bookingModal' not found.");
-//   }
-// }
-
-// Function to show the booking modal
-function showModal(date) {
-  const bookingModal = document.getElementById("bookingModal");
-  if (bookingModal) {
-    bookingModal.classList.add("is-active"); // Show the modal
-    const bookingDateInput = document.getElementById("bookingDate");
-    if (bookingDateInput) {
-      bookingDateInput.value = date; // Set the selected date in the modal
-      bookingDateInput.setAttribute("readonly", "readonly");
-    } else {
-      console.error("Input field with ID 'bookingDate' not found.");
+function showAddModal(date) {
+  const addingModal = document.getElementById("addingModal");
+  if (addingModal) {
+    addingModal.classList.add("is-active");
+    const addingDateInput = document.getElementById("appointmentDate");
+    if (addingDateInput) {
+      addingDateInput.value = date;
+      addingDateInput.setAttribute("readonly", "readonly");
     }
-  } else {
-    console.error("Booking modal with ID 'bookingModal' not found.");
   }
 }
-
-// function showAddModal(date) {
-//   const addingModal = document.getElementById("addingModal");
-//   if (addingModal) {
-//     addingModal.classList.add("is-active");
-//     const addingDateInput = document.getElementById("appointmentDate");
-//     if (addingDateInput) {
-//       addingDateInput.value = date;
-//       addingDateInput.setAttribute("readonly", "readonly");
-//     }
-//   }
-// }
 
 // Function to show the booking modal
 function showModal(date) {
@@ -550,6 +514,7 @@ document.addEventListener("DOMContentLoaded", function () {
   );
   const errorReason = document.getElementById("errorReason");
 
+  // Function to toggle error message visibility
   function toggleErrorMessage() {
     if (lookingForCaretakerRadio.checked || lookingToBeCaretakerRadio.checked) {
       errorReason.style.display = "none";
@@ -626,74 +591,6 @@ document.addEventListener("DOMContentLoaded", function () {
     lookingToBeCaretakerRadio.addEventListener("change", toggleErrorMessage);
   }
 });
-
-// ADDS DETAILS FROM BOOKING FORM TO USERS SUBCOLLECTION, AND TRIGGERS ADDBOOKEDAPPOINTMENT FUNCTION
-// document.addEventListener("DOMContentLoaded", function () {
-//   const bookAppointmentButton = document.getElementById(
-//     "bookAppointmentButton"
-//   );
-
-//   if (bookAppointmentButton) {
-//     bookAppointmentButton.addEventListener("click", function () {
-//       // Get input fields
-//       const bookingDateInput = document.getElementById("bookingDate");
-//       const lookingForCaretakerRadio = document.getElementById(
-//         "lookingForCaretaker"
-//       );
-//       const lookingToBeCaretakerRadio = document.getElementById(
-//         "lookingToBeCaretaker"
-//       );
-//       const bookingCommentsInput = document.getElementById("bookingComments");
-
-//       if (
-//         bookingDateInput &&
-//         (lookingForCaretakerRadio || lookingToBeCaretakerRadio)
-//       ) {
-//         const date = bookingDateInput.value;
-//         const inquiryReason = lookingForCaretakerRadio.checked
-//           ? "lookingForCaretaker"
-//           : "lookingToBeCaretaker";
-//         const comments = bookingCommentsInput.value;
-
-//         // Call addBookedAppointment function
-//         addBookedAppointment();
-
-//         // Check if user is signed in
-//         const user = firebase.auth().currentUser;
-//         if (user) {
-//           const userEmail = user.email;
-
-//           // Reference to the user's document
-//           const userDocRef = db.collection("users").doc(userEmail);
-
-//           // Add appointment to user's subcollection
-//           userDocRef
-//             .collection("appointments")
-//             .add({
-//               date: date,
-//               inquiryReason: inquiryReason,
-//               comments: comments,
-//             })
-//             .then(function () {
-//               // Appointment added successfully
-//               console.log("Appointment added successfully");
-//               // You can add further actions here if needed
-//             })
-//             .catch(function (error) {
-//               console.error("Error adding appointment: ", error);
-//             });
-//         } else {
-//           // User is not signed in, show a message
-//           alert("Please sign in before booking an appointment");
-//         }
-//       } else {
-//         console.error("One or more input fields not found.");
-//       }
-//     });
-//   } else {
-//     console.error("Button with ID 'bookAppointmentButton' not found.");
-//   }
-// });
 
 // Function to handle booking appointment button click
 document
