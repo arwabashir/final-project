@@ -305,7 +305,7 @@
 <div class="section is-hidden" id="booking">
   <section>
     <h1 class="title is-1 has-text-centered">Book an Appointment</h1>
-    <p>If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
+    <p id="bookingDescription">If you have further inquiries about our services or are interested in job opportunities, we invite you to schedule an appointment by selecting an available time slot below. Upon selection, you'll be prompted to complete a form tailored to your preference, whether you're seeking employment as a caretaker or looking to hire one.</p>
   </section>
 <br>
   <div class="columns">
@@ -337,7 +337,13 @@
         <option value="Friday">Friday</option>
       </select>
       <br><br>
-
+      <h2 id="recent" class='title is-hidden'>Recently Added Appointments</h2>
+    <div id="recentappointments"class="is-hidden">
+    </div>
+    <div id="appbtns" class="is-hidden">
+      <button id="prevButton">Previous</button>
+      <button id="nextButton">Next</button>
+    </div>
     </div>
 
     <!-- Center Column: Calendar -->
@@ -361,7 +367,7 @@
       <div class="box">
         <h1 class="title">Book an Appointment</h1>
         <!-- Example input fields -->
-        <p class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
+        <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
         <div class="field">
           <label class="label">Date</label>
           <div class="control">
@@ -378,15 +384,7 @@
         </div>
         <h1><b>Time: </b></h1>
         <select name="Time" id="time">
-          <option value="9:00">9:00 am</option>
-          <option value="10:00">10:00 am</option>
-          <option value="11:00">11:00 am</option>
-          <option value="12:00">12:00 pm</option>
-          <option value="1:00">1:00 pm</option>
-          <option value="2:00">2:00 pm</option>
-          <option value="3:00">3:00 pm</option>
-          <option value="4:00">4:00 pm</option>
-          <option value="5:00">5:00 pm</option>
+          <option value="0">No Available Times Today</option>
         </select>
         <br><br>
         <!-- Comments Box -->
