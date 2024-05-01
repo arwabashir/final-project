@@ -343,11 +343,11 @@
     <br><br>
   </div>
 
- <!-- Recently Added Appointments (Scrollable) -->
- <h2 id="recentappointmentstitle" class='title is-hidden'>Recently Added Appointments</h2>
- <div id="recentappointments" class=" is-hidden recent-appointments-scrollable">
-   <!-- Dynamically added appointments will appear here -->
- </div>
+  <!-- Recently Added Appointments (Scrollable) -->
+  <h2 id="recent" class='title'>Recently Added Appointments</h2>
+  <div id="recentappointments" class="recent-appointments-scrollable">
+    <!-- Dynamically added appointments will appear here -->
+  </div>
 </div>
 
 
@@ -357,12 +357,13 @@
       <div id="calendar-container" class="has-text-centered"></div>
     </div>
 
-    <!-- Right Column: Booked Appointments -->
-    <div class="column is-narrow">
-      <h2 class="title">Booked Appointments</h2>
-      <div id="booked-appointments" class="has-text-centered"></div>
-    </div>
+<!-- Right Column: Booked Appointments -->
+<div class="column is-narrow">
+  <h2 class="title">Booked Appointments</h2>
+  <div id="booked-appointments" class="has-text-centered scrollable-appointments">
+    <!-- Booked appointments will be dynamically added here -->
   </div>
+</div>
 
   <!-- Appointment Booking Form -->
   <div id="bookingModal" class="modal">
@@ -389,7 +390,7 @@
         </div>
         <h1><b>Time: </b></h1>
         <select name="Time" id="time">
-          <option value="0">No Available Times Today</option>
+          <option value="no time available">No Available Times Today</option>
         </select>
         <p><i>If there are no available appointment times for the date you wish, feel free to add a comment with your desired time</i></p>
         <!-- Comments Box -->
