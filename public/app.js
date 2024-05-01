@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const aboutUsPage = document.getElementById("aboutus");
   const ourServicesPage = document.getElementById("ourservices");
 
-  // Function to show the main page and hide other sections
-  function showMainPage() {
-    mainPage.classList.remove("is-hidden");
-    aboutUsPage.classList.add("is-hidden");
-    ourServicesPage.classList.add("is-hidden");
-  }
-
   // Function to show the about us page and hide other sections
   function showAboutUsPage() {
     mainPage.classList.add("is-hidden");
@@ -54,7 +47,7 @@ signout.addEventListener("click", () => {
     document.querySelector("#signoutbtn").classList.add("is-hidden");
     document.querySelector("#signinbtn").classList.remove("is-hidden");
     alert("You are now signed out!");
-    // location.reload();
+    location.reload();
   });
 });
 
@@ -66,6 +59,27 @@ function showSignOutButton() {
 function hideSignOutButton() {
   document.getElementById("signoutDiv").style.display = "none";
 }
+
+// Function to update the navigation bar based on authentication state
+function updateNavbar(user) {
+  const emailElement = document.getElementById("userEmail");
+  if (user) {
+    // User is signed in
+    emailElement.textContent = user.email;
+    emailElement.style.display = "block"; // Show the email element
+    document.querySelector("#signoutbtn").classList.remove("is-hidden");
+    document.querySelector("#signinbtn").classList.add("is-hidden");
+  } else {
+    // No user is signed in
+    emailElement.textContent = ""; // Clear the email element
+    emailElement.style.display = "none"; // Hide the email element
+    document.querySelector("#signoutbtn").classList.add("is-hidden");
+    document.querySelector("#signinbtn").classList.remove("is-hidden");
+  }
+}
+
+// Update the navigation bar when authentication state changes
+firebase.auth().onAuthStateChanged(updateNavbar);
 
 // Check if a user is signed in or signed out
 firebase.auth().onAuthStateChanged(function (user) {
@@ -133,25 +147,36 @@ r_e("submit").addEventListener("click", () => {
 //SIGN IN MODAL INFO
 r_e("submit2").addEventListener("click", () => {
   // 1. Collect the email/password combination from the input fields
-
   let email2 = r_e("email2").value;
   let pass2 = r_e("pass2").value;
 
-  // 2. send the email/passwrod to firestore
+  // 2. send the email/password to Firebase for sign-in
+  auth
+    .signInWithEmailAndPassword(email2, pass2)
+    .then(() => {
+      // Clear the input fields
+      r_e("email2").value = "";
+      r_e("pass2").value = "";
 
-  auth.signInWithEmailAndPassword(email2, pass2).then(() => {
-    // clear the input fields
-    r_e("email2").value = "";
-    r_e("pass2").value = "";
+      // Hide the sign-in button and show the sign-out button
+      document.querySelector("#signoutbtn").classList.remove("is-hidden");
 
-    document.querySelector("#signoutbtn").classList.remove("is-hidden");
+      // Close the modal
+      document.getElementById("myModal2").classList.remove("is-active");
 
-    // close the modal
-    document.getElementById("myModal2").classList.remove("is-active");
-    alert("You are now signed in: " + email2);
-    // location.reload();
-    document.querySelector("#signinbtn").classList.add("is-hidden");
-  });
+      // Alert the user that they are signed in
+      alert("You are now signed in: " + email2);
+
+      // Reload the page to reflect the signed-in state
+      window.location.href = window.location.href;
+
+      // Hide the sign-in button
+      document.querySelector("#signinbtn").classList.add("is-hidden");
+    })
+    .catch((error) => {
+      // Handle errors here
+      alert("Email or password incorrect");
+    });
 });
 
 //about us page click event
@@ -225,6 +250,26 @@ function isAdminUser() {
   return currentUser && currentUser.email === "peace0mind15@yahoo.com";
 }
 
+// Function to update UI based on user's admin status
+function updateUIBasedOnAdminStatus() {
+  const isAdmin = isAdminUser();
+  const bookingDescription = document.getElementById("bookingDescription");
+  if (bookingDescription) {
+    bookingDescription.style.display = isAdmin ? "none" : "block";
+  }
+}
+
+// Add an auth state listener to update UI when auth state changes
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in.
+    updateUIBasedOnAdminStatus();
+  } else {
+    // No user is signed in.
+    // may want to handle this case as well
+  }
+});
+
 // updated renderCalendar function with checking for admin user
 function renderCalendar(year, month) {
   const calendarContainer = document.getElementById("calendar-container");
@@ -279,74 +324,6 @@ function renderCalendar(year, month) {
   }
 }
 
-// async function renderCalendar(year, month) {
-//   const calendarContainer = document.getElementById("calendar-container");
-//   const daysInMonth = new Date(year, month + 1, 0).getDate();
-//   const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get the day of the week for the first day of the month
-
-//   let calendarHTML = `
-//   <h2 class="title is-3 has-text-left">${monthNames[month]} ${year}</h2>
-//   <div id="calendar" class="box">
-//   <div class="columns is-multiline">
-// `;
-
-//   for (let day = 1; day <= daysInMonth; day++) {
-//     const currentDate = new Date(year, month, day);
-//     const dayOfWeek = currentDate.getDay(); // Get the numeric representation of the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-
-//     // Check if the current day is a weekday (Monday to Friday)
-//     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-//       const dateId = `${year}-${month + 1}-${day}`;
-//       const isAdmin = isAdminUser();
-
-//       // Determine button text and class based on user role
-//       const buttonText = isAdmin ? "Add" : "Book";
-//       const buttonClass = isAdmin ? "add-btn" : "book-btn";
-
-//       // Fetch appointment times from Firestore
-//       const appointmentRef = db.collection("bookings").doc(dateId);
-//       const doc = await appointmentRef.get();
-
-//       let timesHTML = "";
-//       if (doc.exists) {
-//         const appointmentData = doc.data();
-//         if (appointmentData.times) {
-//           timesHTML = appointmentData.times
-//             .map((time) => `<p>${time}</p>`)
-//             .join("");
-//         }
-//       }
-
-//       calendarHTML += `
-//       <div class="column is-one-third">
-//         <div class="card" id="${dateId}">
-//           <div class="card-content">
-//             <p class="title is-4">${monthNames[month]} ${day}</p>
-//             <p class="DOW" class="title is-7">${dayNames[dayOfWeek]}</p>
-//             <div class="appointment-times">${timesHTML}</div>
-//             <button class="button is-primary is-fullwidth ${buttonClass}">${buttonText}</button>
-//           </div>
-//         </div>
-//       </div>
-//     `;
-//     }
-//   }
-
-//   // Close the calendar HTML
-//   calendarHTML += `
-//       </div>
-//     </div>
-//   `;
-
-//   // Render the calendar HTML
-//   calendarContainer.innerHTML = calendarHTML;
-//   if (isAdminUser()) {
-//     attachAddListeners();
-//   } else {
-//     attachBookingListeners();
-//   }
-// }
-
 document
   .getElementById("monthSelector")
   .addEventListener("change", function () {
@@ -360,18 +337,14 @@ function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
   bookButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      // Check if the user is signed in
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in, show the booking modal
-          const card = button.closest(".card");
-          const date = card.id;
-          showModal(date);
-        } else {
-          // User is not signed in, show a message
-          alert("Please sign in before booking an appointment");
-        }
-      });
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const card = button.closest(".card");
+        const date = card.id;
+        showModal(date);
+      } else {
+        alert("Please sign in before booking an appointment");
+      }
     });
   });
 }
@@ -380,15 +353,14 @@ function attachAddListeners() {
   const addButtons = document.querySelectorAll(".add-btn");
   addButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          const card = button.closest(".card");
-          const date = card.id;
-          showAddModal(date);
-        } else {
-          alert("Please sign in before adding an appointment");
-        }
-      });
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const card = button.closest(".card");
+        const date = card.id;
+        showAddModal(date);
+      } else {
+        alert("Please sign in before adding an appointment");
+      }
     });
   });
 }
@@ -434,10 +406,9 @@ r_e("bookingpage").addEventListener("click", () => {
   renderCalendar(currentYear, currentMonth);
   if (isAdminUser()) {
     // Hide the left column if the user is an admin
-    document.getElementById("leftColumn").innerHTML = `
-    <h2 class='title'>Recently Added Appointments</h2>
-    <div id="recentappointments"></div>
-  `;
+    document.getElementById("recent").classList.remove("is-hidden");
+    document.getElementById("recentappointments").classList.remove("is-hidden");
+    document.getElementById("appbtns").classList.remove("is-hidden");
   }
 });
 
@@ -670,11 +641,45 @@ function deleteAppointment(date, time) {
     });
   });
 }
+
+function reverseFormatDateText(formattedDate) {
+  // Split the formatted date into month, day, and year parts
+  const parts = formattedDate.split(" ");
+  const monthName = parts[0];
+  const day = parts[1].replace(",", ""); // Remove the comma
+  const year = parts[2];
+
+  // Convert the month name to its numerical equivalent
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames.indexOf(monthName) + 1; // Months are zero-indexed, so add 1
+
+  // Construct the original date in YYYY-MM-DD format
+  const originalDate = `${year}-${month}-${day}`;
+
+  return originalDate;
+}
+
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
   const appointmentContainer = document.createElement("div");
-  appointmentContainer.classList.add("field", "has-addons");
+  appointmentContainer.classList.add("field", "has-addons", "mb-3"); // Add margin-bottom for spacing
+
+  // Convert the date to its text equivalent using the formatDateText function
+  const formattedDate = formatDateText(date);
 
   const inputControl = document.createElement("div");
   inputControl.classList.add("control");
@@ -682,7 +687,7 @@ function addRecentAppointment(date, time) {
   const inputField = document.createElement("input");
   inputField.classList.add("input");
   inputField.type = "text";
-  inputField.value = `${date} ${time}`;
+  inputField.value = `${formattedDate} ${time}`;
   inputField.readOnly = true; // Make the input field read-only
 
   inputControl.appendChild(inputField);
@@ -699,6 +704,7 @@ function addRecentAppointment(date, time) {
     deleteAppointment(date, time)
       .then(() => {
         appointmentContainer.remove();
+        window.location.href = window.location.href;
       })
       .catch((error) => {
         console.error("Error deleting appointment:", error);
@@ -712,6 +718,73 @@ function addRecentAppointment(date, time) {
 
   recentAppointmentsContainer.appendChild(appointmentContainer);
 }
+
+// Function to load recent appointments from Firebase Firestore
+function loadRecentAppointmentsFromFirestore() {
+  const recentAppointmentsContainer =
+    document.getElementById("recentappointments");
+
+  // Clear the container before populating it with new appointments
+  recentAppointmentsContainer.innerHTML = "";
+
+  // Query the Firestore collection "bookings" to get all appointments
+  firebase
+    .firestore()
+    .collection("bookings")
+    .get()
+    .then((querySnapshot) => {
+      // Create an array to store all appointments
+      const appointments = [];
+
+      // Iterate over each document in the collection
+      querySnapshot.forEach((doc) => {
+        const date = doc.id; // Get the date from the document ID
+        const times = doc.data().times; // Get the times array from the document data
+
+        // Iterate over each time in the times array
+        times.forEach((time) => {
+          // Push each appointment date and time combination to the appointments array
+          appointments.push({ date, time });
+        });
+      });
+
+      // Sort the appointments array chronologically by date and time
+      appointments.sort((a, b) => {
+        // Convert date and time strings to Date objects for comparison
+        const dateA = new Date(`${a.date} ${a.time}`);
+        const dateB = new Date(`${b.date} ${b.time}`);
+        return dateA - dateB;
+      });
+
+      // Populate the recent appointments container with the sorted appointments
+      appointments.forEach((appointment) => {
+        // Convert the date to its text equivalent (e.g., "April 1, 2024")
+        const dateText = formatDateText(appointment.date);
+        // Call the addRecentAppointment function with the formatted date text
+        addRecentAppointment(dateText, appointment.time);
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading recent appointments:", error);
+    });
+}
+
+// Function to format the date text (e.g., "2024-4-1" to "April 1, 2024")
+function formatDateText(date) {
+  // Parse the date string into a Date object
+  const parsedDate = new Date(date);
+  // Get the month, day, and year components
+  const month = parsedDate.toLocaleString("en-us", { month: "long" });
+  const day = parsedDate.getDate();
+  const year = parsedDate.getFullYear();
+  // Format the date text (e.g., "April 1, 2024")
+  return `${month} ${day}, ${year}`;
+}
+
+// Call loadRecentAppointmentsFromFirestore when the "booking page" tab is clicked
+document
+  .getElementById("bookingpage")
+  .addEventListener("click", loadRecentAppointmentsFromFirestore);
 
 // Function to handle adding appointment time click
 document.getElementById("submitAdd").addEventListener("click", function () {
@@ -728,30 +801,6 @@ function addBookedAppointment() {
     "booked-appointments"
   );
   user = auth.currentUser.email;
-  // if (isAdminUser()) {
-  //   let html = "";
-  //   db.collection("users")
-  //     .doc()
-  //     .collection("appointments")
-  //     .get()
-  //     .then((data) => {
-  //       let docs = data.docs;
-  //       console.log(docs);
-  //       docs.forEach((doc) => {
-  //         console.log(doc.id);
-  //         html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-  //           doc.data().date
-  //         }</p><p>Reason: ${
-  //           doc.data().inquiryReason
-  //         }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-  //           doc.data().comments
-  //         }</p><br><button id="${
-  //           doc.id
-  //         }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-  //       });
-  //       bookedAppointmentsContainer.innerHTML = html;
-  //     });
-  // } else {
   if (user) {
     db.collection("users")
       .doc(user)
@@ -762,44 +811,33 @@ function addBookedAppointment() {
 
         let html = ""; // loop through the docs array
         docs.forEach((doc) => {
-          console.log(doc.id);
-          html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-            doc.data().date
-            // }</p><p>Time: ${
-            //   doc.data().time // Include the time here
-          }</p><p>Reason: ${
-            doc.data().inquiryReason
-          }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-            doc.data().comments
-          }</p><br><button id="${
-            doc.id
-          }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          if (isAdminUser()) {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p> <p>User: ${doc.data().user}</p><p>Time: ${
+              doc.data().time
+            }</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          } else {
+            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+              doc.data().date
+            }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
+              doc.data().inquiryReason
+            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+              doc.data().comments
+            }</p><br><button id="${
+              doc.id
+            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+          }
         });
         bookedAppointmentsContainer.innerHTML = html;
-        // })
-        // .catch((error) => {
-        //   console.error("Error getting appointments: ", error);
       });
   }
-
-  //     if (auth.currentUser.email == doc.data().email_review) {
-  // user = auth.currentUser.email;
-  // if (user) {
-  //   // db.collection("users");
-  //   const userDocRef = db.collection("users").doc(user);
-  //   console.log(userDocRef.collection("appointments").doc(date));
-  // }
-  // Add appointment to user's subcollection
-  // userDocRef
-  //   .collection("appointments")
-  //   .add({
-  //     date: date,
-  //     inquiryReason: inquiryReason,
-  //     comments: comments,
-  //   })
-  // const appointmentElement = document.createElement("div");
-  // appointmentElement.textContent = date;
-  // bookedAppointmentsContainer.appendChild(appointmentElement);
 }
 
 document.addEventListener("click", (event) => {
@@ -807,14 +845,39 @@ document.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     // Get the ID of the clicked button
     let buttonId = event.target.id;
-    db.collection("users")
-      .doc(auth.currentUser.email)
-      .collection("appointments")
-      .doc(buttonId)
-      .delete()
-      .then(() => {
-        addBookedAppointment();
-      });
+    if (isAdminUser()) {
+      db.collection("users")
+        .doc("peace0mind15@yahoo.com")
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc(auth.currentUser.email)
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    } else {
+      db.collection("users")
+        .doc(auth.currentUser.email)
+        .collection("appointments")
+        .doc(buttonId)
+        .delete()
+        .then(() => {
+          db.collection("users")
+            .doc("peace0mind15@yahoo.com")
+            .collection("appointments")
+            .doc(buttonId)
+            .delete()
+            .then(() => {
+              addBookedAppointment();
+            });
+        });
+    }
   }
 });
 
@@ -1082,21 +1145,30 @@ auth.onAuthStateChanged((user) => {
     ).innerHTML = `<p class="is-size-5 has-text-centered has-text-danger">Please sign in to view bookings!</p>`;
   }
 });
+
+let currentPage = 1;
+const reviewsPerPage = 5;
+
 function show_reviews() {
   db.collection("reviews")
     .get()
     .then((data) => {
       let docs = data.docs;
+      const totalPages = Math.ceil(docs.length / reviewsPerPage);
 
-      let html = ""; // loop through the docs array
-      docs.forEach((doc) => {
+      let startIndex = (currentPage - 1) * reviewsPerPage;
+      let endIndex = startIndex + reviewsPerPage;
+      let currentPageReviews = docs.slice(startIndex, endIndex);
+
+      let html = "";
+      currentPageReviews.forEach((doc) => {
         let stars = doc.data().rating;
-        let ids = doc.id; // console.log(doc.id);
+        let ids = doc.id;
         let num = "";
         for (i = 0; i < stars; i++) {
           num += `<a href="">
-      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
-    </a>`;
+      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+    </a>`;
         }
 
         if (
@@ -1106,21 +1178,42 @@ function show_reviews() {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; <div><button id="${
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; <div><button id="${
             doc.id
           }" class="is-white">Delete</button></div>
-          </div>`;
+          </div>`;
         } else {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; </div>`;
+            <p>${doc.data().name}</p> &nbsp;
+            <div>${num}</div> &nbsp; </div>`;
         }
-        r_e("leaveareview_reviews-container").innerHTML = html;
       });
+
+      // Add pagination controls
+      html += `<div class="pagination">`;
+      if (currentPage > 1) {
+        html += `<button onclick="prevPage()">Previous</button>`;
+      }
+      if (currentPage < totalPages) {
+        html += `<button onclick="nextPage()">Next</button>`;
+      }
+      html += `</div>`;
+
+      r_e("leaveareview_reviews-container").innerHTML = html;
     });
+}
+
+function nextPage() {
+  currentPage++;
+  show_reviews();
+}
+
+function prevPage() {
+  currentPage--;
+  show_reviews();
 }
 
 document.addEventListener("click", (event) => {
