@@ -356,15 +356,14 @@ function attachAddListeners() {
   const addButtons = document.querySelectorAll(".add-btn");
   addButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          const card = button.closest(".card");
-          const date = card.id;
-          showAddModal(date);
-        } else {
-          alert("Please sign in before adding an appointment");
-        }
-      });
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const card = button.closest(".card");
+        const date = card.id;
+        showAddModal(date);
+      } else {
+        alert("Please sign in before adding an appointment");
+      }
     });
   });
 }
