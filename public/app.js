@@ -337,18 +337,17 @@ function attachBookingListeners() {
   const bookButtons = document.querySelectorAll(".book-btn");
   bookButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      // Check if the user is signed in
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in, show the booking modal
-          const card = button.closest(".card");
-          const date = card.id;
-          showModal(date);
-        } else {
-          // User is not signed in, show a message
-          alert("Please sign in before booking an appointment");
-        }
-      });
+      // Check if the user is signed in at the moment of clicking the button
+      const user = firebase.auth().currentUser;
+      if (user) {
+        // User is signed in, show the booking modal
+        const card = button.closest(".card");
+        const date = card.id;
+        showModal(date);
+      } else {
+        // User is not signed in, show the alert message
+        alert("Please sign in before booking an appointment");
+      }
     });
   });
 }
