@@ -130,9 +130,16 @@
 
 
 .recent-appointments-scrollable {
-  max-height: 300px; /* Set a max height for the scrollable area */
+  max-height: 700px; /* Set a max height for the scrollable area */
   overflow-y: auto; /* Enable vertical scrolling */
   padding: 10px;
   border-top: 1px solid #ececec; /* Adds a separator line if desired */
+}
+
+.scrollable-appointments {
+  max-height: 700px; /* Adjust this value based on your design needs */
+  overflow-y: auto; /* Enables vertical scrolling when content overflows */
+  padding: 10px;
+  border-top: 1px solid #ececec; /* Optional: Adds a visual separator */
 }
 
