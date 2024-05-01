@@ -639,7 +639,7 @@ function reverseFormatDateText(formattedDate) {
   // Split the formatted date into month, day, and year parts
   const parts = formattedDate.split(" ");
   const monthName = parts[0];
-  const day = parts[1].replace(",", ""); // Remove the comma
+  const day = parts[1] ? parts[1].replace(",", "") : ""; // Add a check for existence before calling replace
   const year = parts[2];
 
   // Convert the month name to its numerical equivalent
