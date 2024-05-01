@@ -312,41 +312,44 @@
 <br>
   <div class="columns">
     <!-- Left Column: Filtering Dropdown Months Option -->
-    <div class="column is-one-quarter" id="leftColumn">
-      <h2 class="title">Filter Appointments</h2>
-      <h3>By Month:</h3>
-      <select id="monthSelector">
-        <option value="0">January</option>
-        <option value="1">February</option>
-        <option value="2">March</option>
-        <option value="3">April</option>
-        <option value="4">May</option>
-        <option value="5">June</option>
-        <option value="6">July</option>
-        <option value="7">August</option>
-        <option value="8">September</option>
-        <option value="9">October</option>
-        <option value="10">November</option>
-        <option value="11">December</option>
-      </select>
-      <br><br>
-      <h3>By Day:</h3>
-      <select id="daySelector">
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-      </select>
-      <br><br>
-      <h2 id="recent" class='title is-hidden'>Recently Added Appointments</h2>
-    <div id="recentappointments"class="is-hidden">
-    </div>
-    <div id="appbtns" class="is-hidden">
-      <button id="prevButton">Previous</button>
-      <button id="nextButton">Next</button>
-    </div>
-    </div>
+<div class="column is-one-quarter" id="leftColumn">
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <h2 class="title">Filter Appointments</h2>
+    <h3>By Month:</h3>
+    <select id="monthSelector">
+      <option value="0">January</option>
+      <option value="1">February</option>
+      <option value="2">March</option>
+      <option value="3">April</option>
+      <option value="4">May</option>
+      <option value="5">June</option>
+      <option value="6">July</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">October</option>
+      <option value="10">November</option>
+      <option value="11">December</option>
+    </select>
+    <br><br>
+    <h3>By Day:</h3>
+    <select id="daySelector">
+      <option value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednesday">Wednesday</option>
+      <option value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+    </select>
+    <br><br>
+  </div>
+
+  <!-- Recently Added Appointments (Scrollable) -->
+  <h2 id="recent" class='title'>Recently Added Appointments</h2>
+  <div id="recentappointments" class="recent-appointments-scrollable">
+    <!-- Dynamically added appointments will appear here -->
+  </div>
+</div>
+
 
     <!-- Center Column: Calendar -->
     <div class="column">
