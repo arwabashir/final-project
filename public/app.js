@@ -615,24 +615,33 @@ function deleteAppointment(date, time) {
     .doc(originalDate);
 
   // Use a transaction to ensure atomicity and consistency
-  return firebase.firestore().runTransaction((transaction) => {
-    // Get the document snapshot within the transaction
-    return transaction.get(bookingRef).then((doc) => {
-      if (!doc.exists) {
-        throw new Error("Document does not exist!");
-      }
-      const times = doc.data().times;
-      const index = times.indexOf(time);
+  return firebase
+    .firestore()
+    .runTransaction((transaction) => {
+      // Get the document snapshot within the transaction
+      return transaction.get(bookingRef).then((doc) => {
+        if (!doc.exists) {
+          throw new Error("Document does not exist!");
+        }
+        const times = doc.data().times;
+        const index = times.indexOf(time);
 
-      if (index !== -1) {
-        // If the time is found in the array, remove it
-        times.splice(index, 1);
-        transaction.update(bookingRef, { times: times });
-      } else {
-        console.log("Time not found in the array.");
-      }
+        if (index !== -1) {
+          // If the time is found in the array, remove it
+          times.splice(index, 1);
+          transaction.update(bookingRef, { times: times });
+        } else {
+          console.log("Time not found in the array.");
+        }
+      });
+    })
+    .then(() => {
+      // Refresh the tab without reloading the entire page
+      window.location.href = window.location.href;
+    })
+    .catch((error) => {
+      console.error("Error deleting appointment:", error);
     });
-  });
 }
 
 function reverseFormatDateText(formattedDate) {
@@ -717,7 +726,6 @@ function createAppointmentElement(date, time) {
     deleteAppointment(date, time).then(() => appointmentContainer.remove());
   });
   buttonControl.appendChild(deleteButton);
-
   appointmentContainer.appendChild(inputControl);
   appointmentContainer.appendChild(buttonControl);
 
@@ -980,9 +988,9 @@ function addAppointmentTime() {
     .then(() => {
       console.log("Appointment added successfully");
       // Show success message
-      const successMessage = document.getElementById("successMessage");
-      successMessage.textContent = "Appointment added successfully!";
-      successMessage.style.display = "block";
+      // const successMessage = document.getElementById("successMessage");
+      // successMessage.textContent = "Appointment added successfully!";
+      // successMessage.style.display = "block";
       // Optionally, you can close the modal here
       // closeModal(); // Example function to close the modal
     })
