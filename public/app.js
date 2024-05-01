@@ -408,7 +408,9 @@ r_e("bookingpage").addEventListener("click", () => {
     // Hide the left column if the user is an admin
     document.getElementById("recent").classList.remove("is-hidden");
     document.getElementById("recentappointments").classList.remove("is-hidden");
-    document.getElementById("appbtns").classList.remove("is-hidden");
+    document
+      .getElementById("recentappointmentstitle")
+      .classList.remove("is-hidden");
   }
 });
 
@@ -793,12 +795,6 @@ document.getElementById("submitAdd").addEventListener("click", function () {
   addRecentAppointment(appointmentDate, appointmentTime);
 });
 
-// Assuming your existing setup is already loaded
-document.addEventListener("DOMContentLoaded", function () {
-  // Additional setup for booking pagination
-  setupBookingPagination();
-});
-
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
@@ -979,10 +975,10 @@ function addAppointmentTime() {
     })
     .then(() => {
       console.log("Appointment added successfully");
-      // // Show success message
-      // const successMessage = document.getElementById("successMessage");
-      // successMessage.textContent = "Appointment added successfully!";
-      // successMessage.style.display = "block";
+      // Show success message
+      const successMessage = document.getElementById("successMessage");
+      successMessage.textContent = "Appointment added successfully!";
+      successMessage.style.display = "block";
       // Optionally, you can close the modal here
       // closeModal(); // Example function to close the modal
     })
