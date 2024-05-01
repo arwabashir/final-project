@@ -399,6 +399,8 @@ r_e("bookingpage").addEventListener("click", () => {
     // Hide the left column if the user is an admin
     document.getElementById("recent").classList.remove("is-hidden");
     document.getElementById("recentappointments").classList.remove("is-hidden");
+    document.getElementById("day").classList.add("is-hidden");
+    document.getElementById("daySelector").classList.add("is-hidden");
   }
 });
 
