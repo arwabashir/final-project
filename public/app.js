@@ -668,48 +668,60 @@ function reverseFormatDateText(formattedDate) {
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
-  const appointmentContainer = document.createElement("div");
-  appointmentContainer.classList.add("field", "has-addons", "mb-3"); // Add margin-bottom for spacing
+  const newAppointmentElement = createAppointmentElement(date, time);
 
-  // Convert the date to its text equivalent using the formatDateText function
-  const formattedDate = formatDateText(date);
+  // Convert date and time into a Date object for comparison
+  const newAppointmentDate = new Date(`${date} ${time}`);
+
+  // Assume appointments are already in the container in chronological order
+  let inserted = false;
+  Array.from(recentAppointmentsContainer.children).forEach((child) => {
+    if (!inserted) {
+      const existingAppointmentDate = new Date(
+        child.querySelector("input").value
+      );
+      if (newAppointmentDate < existingAppointmentDate) {
+        recentAppointmentsContainer.insertBefore(newAppointmentElement, child);
+        inserted = true;
+      }
+    }
+  });
+
+  // If the new appointment is later than all existing ones, or if there are no appointments
+  if (!inserted) {
+    recentAppointmentsContainer.appendChild(newAppointmentElement);
+  }
+}
+
+function createAppointmentElement(date, time) {
+  const appointmentContainer = document.createElement("div");
+  appointmentContainer.classList.add("field", "has-addons", "mb-3");
+
+  const formattedDate = formatDateText(date); // Ensure this formats as 'April 28, 2024', etc.
 
   const inputControl = document.createElement("div");
   inputControl.classList.add("control");
-
   const inputField = document.createElement("input");
   inputField.classList.add("input");
   inputField.type = "text";
   inputField.value = `${formattedDate} ${time}`;
-  inputField.readOnly = true; // Make the input field read-only
-
+  inputField.readOnly = true;
   inputControl.appendChild(inputField);
 
   const buttonControl = document.createElement("div");
   buttonControl.classList.add("control");
-
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("button", "is-danger");
   deleteButton.textContent = "Delete";
-
-  // Add an event listener to delete the appointment on click
   deleteButton.addEventListener("click", function () {
-    deleteAppointment(date, time)
-      .then(() => {
-        appointmentContainer.remove();
-        window.location.href = window.location.href;
-      })
-      .catch((error) => {
-        console.error("Error deleting appointment:", error);
-      });
+    deleteAppointment(date, time).then(() => appointmentContainer.remove());
   });
-
   buttonControl.appendChild(deleteButton);
 
   appointmentContainer.appendChild(inputControl);
   appointmentContainer.appendChild(buttonControl);
 
-  recentAppointmentsContainer.appendChild(appointmentContainer);
+  return appointmentContainer;
 }
 
 // Function to load recent appointments from Firebase Firestore
