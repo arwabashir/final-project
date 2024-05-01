@@ -497,6 +497,30 @@ function showModal(date) {
     }
 
     bookingModal.classList.add("is-active"); // Show the modal
+
+    db.collection("bookings")
+      .doc(date)
+      .get()
+      .then((doc) => {
+        html = "";
+        if (doc.exists) {
+          const time = doc.data();
+          const times = time.times;
+          if (times.length == 0) {
+            html = "No Appointment Times Today";
+          } else {
+            for (i = 0; i < times.length; i++) {
+              html += `<option value=${times[i]}>${times[i]}</option>`;
+            }
+            r_e("time").innerHTML = html;
+          }
+        } else {
+          console.log("No document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error finding document:", error);
+      });
   } else {
     console.error("Booking modal with ID 'bookingModal' not found.");
   }
@@ -542,6 +566,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ? "lookingForCaretaker"
           : "lookingToBeCaretaker";
         const comments = bookingCommentsInput.value;
+        const time = document.getElementById("time").value;
 
         // Call addBookedAppointment function
         addBookedAppointment();
@@ -554,18 +579,28 @@ document.addEventListener("DOMContentLoaded", function () {
           // Reference to the user's document
           const userDocRef = db.collection("users").doc(userEmail);
 
-          // Add appointment to user's subcollection
-          userDocRef
+          const admindoc = db.collection("users").doc("peace0mind15@yahoo.com");
+
+          admindoc
             .collection("appointments")
             .add({
+              user: userEmail,
               date: date,
-              // time: time,
               inquiryReason: inquiryReason,
+              time: time,
               comments: comments,
             })
-            .then(function () {
+            .then((docid) => {
               // Appointment added successfully
+              const adminid = docid.id;
               console.log("Appointment added successfully");
+
+              return userDocRef.collection("appointments").doc(adminid).set({
+                date: date,
+                time: time,
+                inquiryReason: inquiryReason,
+                comments: comments,
+              });
               // You can add further actions here if needed
             })
             .catch(function (error) {
@@ -597,20 +632,25 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .getElementById("bookAppointmentButton")
   .addEventListener("click", function () {
-    // const bookingDate = document.getElementById("bookingDate").value;
     // Add the booked appointment to the "Booked Appointments" column
-    // addBookedAppointment(bookingDate);
     // Close the modal
     const bookingModal = document.getElementById("bookingModal");
     if (bookingModal) {
       bookingModal.classList.remove("is-active");
     }
   });
+
 // Function to delete the specified time from Firebase
 function deleteAppointment(date, time) {
-  const bookingRef = firebase.firestore().collection("bookings").doc(date);
+  // Convert the text date back to its original format
+  const originalDate = reverseFormatDateText(date);
 
-  // Use a transaction to ensure atomicity and consistency - do I need to keep this in here????
+  const bookingRef = firebase
+    .firestore()
+    .collection("bookings")
+    .doc(originalDate);
+
+  // Use a transaction to ensure atomicity and consistency
   return firebase.firestore().runTransaction((transaction) => {
     // Get the document snapshot within the transaction
     return transaction.get(bookingRef).then((doc) => {
