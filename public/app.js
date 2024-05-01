@@ -1,80 +1,71 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const learnMoreBtn = document.getElementById("learnMoreBtn");
-  const ourServicesBtn = document.getElementById("ourServicesBtn");
-  const mainPage = document.getElementById("mainpage");
-  const aboutUsPage = document.getElementById("aboutus");
-  const ourServicesPage = document.getElementById("ourservices");
+// Simplified DOMContentLoaded event listener
+document.addEventListener("DOMContentLoaded", () => {
+  const learnMoreBtn = r_e("learnMoreBtn");
+  const ourServicesBtn = r_e("ourServicesBtn");
 
-  // Function to show the about us page and hide other sections
-  function showAboutUsPage() {
-    mainPage.classList.add("is-hidden");
-    aboutUsPage.classList.remove("is-hidden");
-    ourServicesPage.classList.add("is-hidden");
-  }
-
-  // Function to show the our services page and hide other sections
-  function showOurServicesPage() {
-    mainPage.classList.add("is-hidden");
-    aboutUsPage.classList.add("is-hidden");
-    ourServicesPage.classList.remove("is-hidden");
+  // Function to show a specific page and hide other sections
+  function showPage(pageId) {
+    const pages = ["mainpage", "aboutus", "ourservices"];
+    pages.forEach((page) => {
+      const element = r_e(page);
+      if (page === pageId) {
+        element.classList.remove("is-hidden");
+      } else {
+        element.classList.add("is-hidden");
+      }
+    });
   }
 
   // Add event listeners to buttons
-  learnMoreBtn.addEventListener("click", showAboutUsPage);
-  ourServicesBtn.addEventListener("click", showOurServicesPage);
-});
+  learnMoreBtn.addEventListener("click", () => showPage("aboutus"));
+  ourServicesBtn.addEventListener("click", () => showPage("ourservices"));
 
-function r_e(id) {
-  return document.querySelector(`#${id}`);
-}
-
-let s1 = document.querySelector("#signupbtn");
-
-s1.addEventListener("click", () => {
-  document.getElementById("myModal").classList.add("is-active");
-});
-
-let s2 = document.querySelector("#signinbtn");
-
-s2.addEventListener("click", () => {
-  document.getElementById("myModal2").classList.add("is-active");
-});
-
-let signout = document.querySelector("#signoutbtn");
-
-signout.addEventListener("click", () => {
-  auth.signOut().then(() => {
-    document.querySelector("#signoutbtn").classList.add("is-hidden");
-    document.querySelector("#signinbtn").classList.remove("is-hidden");
-    alert("You are now signed out!");
-    location.reload();
+  // Event listeners for authentication
+  r_e("signupbtn").addEventListener("click", () =>
+    r_e("myModal").classList.add("is-active")
+  );
+  r_e("signinbtn").addEventListener("click", () =>
+    r_e("myModal2").classList.add("is-active")
+  );
+  r_e("signoutbtn").addEventListener("click", () => {
+    auth.signOut().then(() => {
+      hideSignOutButton();
+      alert("You are now signed out!");
+      location.reload();
+    });
   });
 });
 
+// Simplified function to get element by ID
+function r_e(id) {
+  return document.getElementById(id);
+}
+
+// Function to show the sign-out button
 function showSignOutButton() {
-  document.getElementById("signoutDiv").style.display = "block";
+  r_e("signoutDiv").style.display = "block";
 }
 
 // Function to hide the sign-out button
 function hideSignOutButton() {
-  document.getElementById("signoutDiv").style.display = "none";
+  r_e("signoutDiv").style.display = "none";
 }
 
 // Function to update the navigation bar based on authentication state
 function updateNavbar(user) {
-  const emailElement = document.getElementById("userEmail");
+  const emailElement = r_e("userEmail");
   if (user) {
     // User is signed in
     emailElement.textContent = user.email;
     emailElement.style.display = "block"; // Show the email element
-    document.querySelector("#signoutbtn").classList.remove("is-hidden");
-    document.querySelector("#signinbtn").classList.add("is-hidden");
+    r_e("signoutbtn").classList.remove("is-hidden");
+    r_e("signinbtn").classList.add("is-hidden");
   } else {
     // No user is signed in
     emailElement.textContent = ""; // Clear the email element
     emailElement.style.display = "none"; // Hide the email element
-    document.querySelector("#signoutbtn").classList.add("is-hidden");
-    document.querySelector("#signinbtn").classList.remove("is-hidden");
+    r_e("signoutbtn").classList.add("is-hidden");
+    r_e("signinbtn").classList.remove("is-hidden");
   }
 }
 
@@ -624,31 +615,40 @@ function deleteAppointment(date, time) {
     .doc(originalDate);
 
   // Use a transaction to ensure atomicity and consistency
-  return firebase.firestore().runTransaction((transaction) => {
-    // Get the document snapshot within the transaction
-    return transaction.get(bookingRef).then((doc) => {
-      if (!doc.exists) {
-        throw new Error("Document does not exist!");
-      }
-      const times = doc.data().times;
-      const index = times.indexOf(time);
+  return firebase
+    .firestore()
+    .runTransaction((transaction) => {
+      // Get the document snapshot within the transaction
+      return transaction.get(bookingRef).then((doc) => {
+        if (!doc.exists) {
+          throw new Error("Document does not exist!");
+        }
+        const times = doc.data().times;
+        const index = times.indexOf(time);
 
-      if (index !== -1) {
-        // If the time is found in the array, remove it
-        times.splice(index, 1);
-        transaction.update(bookingRef, { times: times });
-      } else {
-        console.log("Time not found in the array.");
-      }
+        if (index !== -1) {
+          // If the time is found in the array, remove it
+          times.splice(index, 1);
+          transaction.update(bookingRef, { times: times });
+        } else {
+          console.log("Time not found in the array.");
+        }
+      });
+    })
+    .then(() => {
+      // Refresh the tab without reloading the entire page
+      window.location.href = window.location.href;
+    })
+    .catch((error) => {
+      console.error("Error deleting appointment:", error);
     });
-  });
 }
 
 function reverseFormatDateText(formattedDate) {
   // Split the formatted date into month, day, and year parts
   const parts = formattedDate.split(" ");
   const monthName = parts[0];
-  const day = parts[1].replace(",", ""); // Remove the comma
+  const day = parts[1] ? parts[1].replace(",", "") : ""; // Add a check for existence before calling replace
   const year = parts[2];
 
   // Convert the month name to its numerical equivalent
@@ -677,48 +677,59 @@ function reverseFormatDateText(formattedDate) {
 function addRecentAppointment(date, time) {
   const recentAppointmentsContainer =
     document.getElementById("recentappointments");
-  const appointmentContainer = document.createElement("div");
-  appointmentContainer.classList.add("field", "has-addons", "mb-3"); // Add margin-bottom for spacing
+  const newAppointmentElement = createAppointmentElement(date, time);
 
-  // Convert the date to its text equivalent using the formatDateText function
-  const formattedDate = formatDateText(date);
+  // Convert date and time into a Date object for comparison
+  const newAppointmentDate = new Date(`${date} ${time}`);
+
+  // Assume appointments are already in the container in chronological order
+  let inserted = false;
+  Array.from(recentAppointmentsContainer.children).forEach((child) => {
+    if (!inserted) {
+      const existingAppointmentDate = new Date(
+        child.querySelector("input").value
+      );
+      if (newAppointmentDate < existingAppointmentDate) {
+        recentAppointmentsContainer.insertBefore(newAppointmentElement, child);
+        inserted = true;
+      }
+    }
+  });
+
+  // If the new appointment is later than all existing ones, or if there are no appointments
+  if (!inserted) {
+    recentAppointmentsContainer.appendChild(newAppointmentElement);
+  }
+}
+
+function createAppointmentElement(date, time) {
+  const appointmentContainer = document.createElement("div");
+  appointmentContainer.classList.add("field", "has-addons", "mb-3");
+
+  const formattedDate = formatDateText(date); // Ensure this formats as 'April 28, 2024', etc.
 
   const inputControl = document.createElement("div");
   inputControl.classList.add("control");
-
   const inputField = document.createElement("input");
   inputField.classList.add("input");
   inputField.type = "text";
   inputField.value = `${formattedDate} ${time}`;
-  inputField.readOnly = true; // Make the input field read-only
-
+  inputField.readOnly = true;
   inputControl.appendChild(inputField);
 
   const buttonControl = document.createElement("div");
   buttonControl.classList.add("control");
-
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("button", "is-danger");
   deleteButton.textContent = "Delete";
-
-  // Add an event listener to delete the appointment on click
   deleteButton.addEventListener("click", function () {
-    deleteAppointment(date, time)
-      .then(() => {
-        appointmentContainer.remove();
-        window.location.href = window.location.href;
-      })
-      .catch((error) => {
-        console.error("Error deleting appointment:", error);
-      });
+    deleteAppointment(date, time).then(() => appointmentContainer.remove());
   });
-
   buttonControl.appendChild(deleteButton);
-
   appointmentContainer.appendChild(inputControl);
   appointmentContainer.appendChild(buttonControl);
 
-  recentAppointmentsContainer.appendChild(appointmentContainer);
+  return appointmentContainer;
 }
 
 // Function to load recent appointments from Firebase Firestore
@@ -932,11 +943,12 @@ if (submitButton) {
 const submitAdd = document.querySelector("#submitAdd");
 if (submitAdd) {
   submitAdd.addEventListener("click", () => {
-    closeAddModal(); // Close the modal after submitting the form
+    closeAddModal();
   });
 } else {
   console.error("Submit button for adding form not found.");
 }
+
 // Dynamically generate options for appointment time dropdown
 var select = document.getElementById("appointmentTime");
 for (var hour = 9; hour <= 17; hour++) {
@@ -976,9 +988,9 @@ function addAppointmentTime() {
     .then(() => {
       console.log("Appointment added successfully");
       // Show success message
-      const successMessage = document.getElementById("successMessage");
-      successMessage.textContent = "Appointment added successfully!";
-      successMessage.style.display = "block";
+      // const successMessage = document.getElementById("successMessage");
+      // successMessage.textContent = "Appointment added successfully!";
+      // successMessage.style.display = "block";
       // Optionally, you can close the modal here
       // closeModal(); // Example function to close the modal
     })
