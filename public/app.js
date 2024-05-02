@@ -796,49 +796,49 @@ document.getElementById("submitAdd").addEventListener("click", function () {
 // WANT TO PUT IN AN EVENT LISTENER ON THE BOOKING MODAL SO IT WILL NOT SUBMIT IF ONE OF THE BUTTONS ARE NOT SELECTED
 
 // Function to add booked appointment to the "Booked Appointments" column
-function addBookedAppointment() {
-  const bookedAppointmentsContainer = document.getElementById(
-    "booked-appointments"
-  );
-  user = auth.currentUser.email;
-  if (user) {
-    db.collection("users")
-      .doc(user)
-      .collection("appointments")
-      .get()
-      .then((data) => {
-        let docs = data.docs;
+// function addBookedAppointment() {
+//   const bookedAppointmentsContainer = document.getElementById(
+//     "booked-appointments"
+//   );
+//   user = auth.currentUser.email;
+//   if (user) {
+//     db.collection("users")
+//       .doc(user)
+//       .collection("appointments")
+//       .get()
+//       .then((data) => {
+//         let docs = data.docs;
 
-        let html = ""; // loop through the docs array
-        docs.forEach((doc) => {
-          if (isAdminUser()) {
-            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-              doc.data().date
-            }</p> <p>User: ${doc.data().user}</p><p>Time: ${
-              doc.data().time
-            }</p><p>Reason: ${
-              doc.data().inquiryReason
-            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-              doc.data().comments
-            }</p><br><button id="${
-              doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-          } else {
-            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
-              doc.data().date
-            }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
-              doc.data().inquiryReason
-            }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
-              doc.data().comments
-            }</p><br><button id="${
-              doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
-          }
-        });
-        bookedAppointmentsContainer.innerHTML = html;
-      });
-  }
-}
+//         let html = ""; // loop through the docs array
+//         docs.forEach((doc) => {
+//           if (isAdminUser()) {
+//             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+//               doc.data().date
+//             }</p> <p>User: ${doc.data().user}</p><p>Time: ${
+//               doc.data().time
+//             }</p><p>Reason: ${
+//               doc.data().inquiryReason
+//             }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+//               doc.data().comments
+//             }</p><br><button id="${
+//               doc.id
+//             }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+//           } else {
+//             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+//               doc.data().date
+//             }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
+//               doc.data().inquiryReason
+//             }</p><p style="width:300px; word-wrap: break-word;">Comments: ${
+//               doc.data().comments
+//             }</p><br><button id="${
+//               doc.id
+//             }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+//           }
+//         });
+//         bookedAppointmentsContainer.innerHTML = html;
+//       });
+//   }
+// }
 
 document.addEventListener("click", (event) => {
   // Check if the clicked element is a button
@@ -881,7 +881,7 @@ document.addEventListener("click", (event) => {
   }
 });
 
-function addBookedAppointment(date, time) {
+function addBookedAppointment() {
   const bookedAppointmentsContainer = document.getElementById(
     "booked-appointments"
   );
@@ -897,7 +897,9 @@ function addBookedAppointment(date, time) {
         let html = ""; // loop through the docs array
         docs.forEach((doc) => {
           if (isAdminUser()) {
-            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+            html += `<div class="box" id="appointment-${
+              doc.id
+            }" style="text-align: left"><p class="is-size-5">Date: ${
               doc.data().date
             }</p> <p>User: ${doc.data().user}</p><p>Time: ${
               doc.data().time
@@ -907,11 +909,13 @@ function addBookedAppointment(date, time) {
               doc.data().comments
             }</p><br><button id="${
               doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button> <button id="edit-${
+            }"class="button is-danger is-size-6 has-text-white has-text-centered delete-btn">Delete</button> <button id="edit-${
               doc.id
-            }" class="button is-warning is-size-6 has-text-white has-text-centered">Edit</button></div>`;
+            }" class="button is-warning is-size-6 has-text-white has-text-centered edit-btn">Edit</button></div>`;
           } else {
-            html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
+            html += `<div class="box" id="appointment-${
+              doc.id
+            }" style="text-align: left"><p class="is-size-5">Date: ${
               doc.data().date
             }</p><p>Time: ${doc.data().time}</p><p>Reason: ${
               doc.data().inquiryReason
@@ -919,25 +923,54 @@ function addBookedAppointment(date, time) {
               doc.data().comments
             }</p><br><button id="${
               doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button> <button id="edit-${
+            }"class="button is-danger is-size-6 has-text-white has-text-centered delete-btn">Delete</button> <button id="edit-${
               doc.id
-            }" class="button is-warning is-size-6 has-text-white has-text-centered">Edit</button></div>`;
+            }" class="button is-warning is-size-6 has-text-white has-text-centered edit-btn">Edit</button></div>`;
           }
         });
         bookedAppointmentsContainer.innerHTML = html;
 
+        // Add event listeners to delete buttons
+        const deleteButtons = document.querySelectorAll(".delete-btn");
+        deleteButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const appointmentId = button.id;
+            deleteAppointment(appointmentId);
+          });
+        });
+
         // Add event listeners to edit buttons
-        docs.forEach((doc) => {
-          const editButton = document.getElementById(`edit-${doc.id}`);
-          if (editButton) {
-            editButton.addEventListener("click", () => {
-              // Call a function to handle the edit action, passing the appointment ID (doc.id)
-              handleEditAppointment(doc.id);
-            });
-          }
+        const editButtons = document.querySelectorAll(".edit-btn");
+        editButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const appointmentId = button.id.split("-")[1];
+            handleEditAppointment(appointmentId);
+          });
         });
       });
   }
+}
+
+// Function to delete the appointment
+function deleteAppointment(appointmentId) {
+  db.collection("users")
+    .doc(auth.currentUser.email)
+    .collection("appointments")
+    .doc(appointmentId)
+    .delete()
+    .then(() => {
+      console.log("Appointment deleted successfully");
+      // Remove the corresponding HTML element from the UI
+      const appointmentElement = document.getElementById(
+        `appointment-${appointmentId}`
+      );
+      if (appointmentElement) {
+        appointmentElement.remove();
+      }
+    })
+    .catch((error) => {
+      console.error("Error deleting appointment:", error);
+    });
 }
 
 // Function to handle editing an appointment
@@ -972,6 +1005,12 @@ function handleEditAppointment(appointmentId) {
 
           // Show the booking modal
           bookingModal.classList.add("is-active");
+
+          // Change the button text to "Update Appointment"
+          const updateButton = document.getElementById("bookAppointmentButton");
+          if (updateButton) {
+            updateButton.textContent = "Update Appointment";
+          }
         } else {
           console.error("Booking modal with ID 'bookingModal' not found.");
         }
@@ -983,67 +1022,50 @@ function handleEditAppointment(appointmentId) {
       console.error("Error getting document:", error);
     });
 }
+async function updateAppointment() {
+  try {
+    console.log("Updating appointment...");
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Event listener to handle update appointment button click
-  const updateAppointmentButton = document.getElementById(
-    "updateAppointmentButton"
-  );
-  if (updateAppointmentButton) {
-    updateAppointmentButton.addEventListener("click", function () {
-      // Update the appointment and delete the old one
-      updateAppointment();
-    });
+    // Get the appointment ID from the modal dataset
+    const appointmentId =
+      document.getElementById("bookingModal").dataset.appointmentId;
+    console.log("Appointment ID:", appointmentId);
+
+    // Retrieve updated data from the form
+    const updatedData = {
+      date: document.getElementById("bookingDate").value,
+      time: document.getElementById("time").value,
+      inquiryReason: document.querySelector('input[name="reason"]:checked')
+        .value,
+      comments: document.getElementById("bookingComments").value,
+    };
+
+    console.log("Updated Data:", updatedData);
+
+    // Delete the old appointment
+    console.log("Deleting old appointment...");
+    await db
+      .collection("users")
+      .doc(auth.currentUser.email)
+      .collection("appointments")
+      .doc(appointmentId)
+      .delete();
+    console.log("Old appointment deleted successfully");
+
+    // Add the updated appointment
+    console.log("Adding new appointment...");
+    await db
+      .collection("users")
+      .doc(auth.currentUser.email)
+      .collection("appointments")
+      .add(updatedData);
+    console.log("New appointment added successfully");
+
+    // Close the booking modal after updating
+    closeModal();
+  } catch (error) {
+    console.error("Error updating appointment:", error);
   }
-
-  // Add event listeners to edit buttons
-  document.addEventListener("click", function (event) {
-    if (event.target.classList.contains("edit-appointment-btn")) {
-      // Extract the appointment ID from the edit button's ID
-      const appointmentId = event.target.id.split("-")[1];
-      handleEditAppointment(appointmentId);
-    }
-  });
-});
-
-// Function to update the appointment in Firestore
-function updateAppointment() {
-  // Get the appointment ID from the modal dataset
-  const appointmentId =
-    document.getElementById("bookingModal").dataset.appointmentId;
-
-  // Delete the old appointment
-  db.collection("users")
-    .doc(auth.currentUser.email)
-    .collection("appointments")
-    .doc(appointmentId)
-    .delete()
-    .then(() => {
-      console.log("Old appointment deleted successfully");
-
-      // Create a new appointment with the updated data
-      return db
-        .collection("users")
-        .doc(auth.currentUser.email)
-        .collection("appointments")
-        .add({
-          date: document.getElementById("bookingDate").value,
-          time: document.getElementById("time").value,
-          inquiryReason: document.querySelector(
-            'input[name="inquiryReason"]:checked'
-          ).value,
-          comments: document.getElementById("bookingComments").value,
-        });
-    })
-    .then(() => {
-      console.log("New appointment added successfully");
-
-      // Close the booking modal after updating
-      closeModal();
-    })
-    .catch((error) => {
-      console.error("Error updating appointment:", error);
-    });
 }
 
 // Function to close the modal

@@ -360,14 +360,14 @@
   </div>
 
   <!-- Appointment Booking Form -->
-  <div id="bookingModal" class="modal">
+  <!-- <div id="bookingModal" class="modal">
     <div class="modal-background"></div>
-    <div class="modal-content">
+    <div class="modal-content"> -->
       <!-- Your modal content goes here -->
-      <div class="box">
-        <h1 class="title">Book an Appointment</h1>
+      <!-- <div class="box">
+        <h1 class="title">Book an Appointment</h1> -->
         <!-- Example input fields -->
-        <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
+        <!-- <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
         <div class="field">
           <label class="label">Date</label>
           <div class="control">
@@ -386,16 +386,16 @@
         <select name="Time" id="time">
           <option value="no time available">No Available Times Today</option>
         </select>
-        <br><br>
+        <br><br> -->
         <!-- Comments Box -->
-        <div class="field">
+        <!-- <div class="field">
           <label class="label">Comments: </label>
           <div class="control">
             <textarea id="bookingComments" class="textarea" placeholder="Enter any additional comments here"></textarea>
           </div>
-        </div>
+        </div> -->
         <!-- Example submit button -->
-        <div class="field">
+        <!-- <div class="field">
           <div class="control">
             <button id="bookAppointmentButton" class="button is-primary" >Book Appointment</button>
           </div>
@@ -403,7 +403,53 @@
       </div>
     </div>
     <button class="modal-close is-large" aria-label="close"></button>
+  </div> -->
+  <!-- TESTINGG TESTING TESITNG TESING TESING TESING TSIN GKJGNSJKSJB KSJEBFKSJNDF  -->
+
+<!-- Appointment Booking Form -->
+<div id="bookingModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <!-- Your modal content goes here -->
+    <div class="box">
+      <h1 class="title">Book an Appointment</h1>
+      <!-- Example input fields -->
+      <p id="par" class="mb-1"><i>Please note all appointments will be held in person unless specified otherwise in the comments box</i></p>
+      <div class="field">
+        <label class="label">Date</label>
+        <div class="control">
+          <input id="bookingDate" class="input" type="text" placeholder="Select date">
+        </div>
+      </div>
+      <div id="reasonForInquiry" class="mb-2">
+        <label class="label">Reason For Inquiry: </label>
+        <input type="radio" id="lookingForCaretaker" name="reason" value="lookingForCaretaker">
+        <label for="lookingForCaretaker">Looking for caretaker</label><br>
+        <input type="radio" id="lookingToBeCaretaker" name="reason" value="lookingToBeCaretaker">
+        <label for="lookingToBeCaretaker">Looking to be a caretaker</label>
+        <div id="errorReason" style="color: red; display: none;">Please select a reason for inquiry.</div>
+      </div>
+      <h1><b>Time: </b></h1>
+      <select name="Time" id="time">
+        <option value="no time available">No Available Times Today</option>
+      </select>
+      <br><br>
+      <!-- Comments Box -->
+      <div class="field">
+        <label class="label">Comments: </label>
+        <div class="control">
+          <textarea id="bookingComments" class="textarea" placeholder="Enter any additional comments here"></textarea>
+        </div>
+      </div>
+      <!-- Initially hidden Update Appointment button -->
+      <button id="updateAppointmentButton" class="button is-primary is-hidden">Update Appointment</button>
+      <!-- Book Appointment button -->
+      <button id="bookAppointmentButton" class="button is-primary">Book Appointment</button>
+    </div>
   </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
 
   <!-- Adding an Appointment Time Form (admin side) -->
   <!-- <div id="addingModal" class="modal">
