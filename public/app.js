@@ -853,6 +853,14 @@ function addBookedAppointment() {
           }
         });
         bookedAppointmentsContainer.innerHTML = html;
+
+        docs.forEach((doc) => {
+          document
+            .getElementById(`edit-${doc.id}`)
+            .addEventListener("click", () => {
+              handleEditAppointment(doc.id);
+            });
+        });
       });
   }
 }
