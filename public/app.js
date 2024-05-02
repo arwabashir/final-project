@@ -839,7 +839,9 @@ function addBookedAppointment() {
               doc.data().comments
             }</p><br><button id="${
               doc.id
-            }"class="delete-button delete-app button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+            }"class="delete-button delete-app button is-danger is-size-6 has-text-white has-text-centered">Delete</button> <button id="edit-${
+              doc.id
+            }" class="button is-warning is-size-6 has-text-white has-text-centered edit-btn">Edit</button></div>`;
           } else {
             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
               doc.data().date
