@@ -158,6 +158,16 @@ r_e("submit2").addEventListener("click", () => {
       // Alert the user that they are signed in
       alert("You are now signed in: " + email2);
 
+      if (isAdminUser()) {
+        // Hide the left column if the user is an admin
+        document.getElementById("daySelector").classList.add("is-hidden");
+        document.getElementById("recent").classList.remove("is-hidden");
+        document
+          .getElementById("recentappointments")
+          .classList.remove("is-hidden");
+        document.getElementById("day").classList.add("is-hidden");
+      }
+
       // Reload the page to reflect the signed-in state
       window.location.href = window.location.href;
 
@@ -204,6 +214,11 @@ r_e("bookingpage").addEventListener("click", () => {
   r_e("ourservices").classList.add("is-hidden");
   r_e("booking").classList.remove("is-hidden");
   r_e("leaveareview").classList.add("is-hidden");
+  if (isAdminUser()) {
+    // Hide the left column if the user is an admin
+    document.getElementById("daySelector").classList.add("is-hidden");
+    document.getElementById("day").classList.add("is-hidden");
+  }
 });
 
 //leave a review page click event
@@ -387,13 +402,6 @@ r_e("bookingpage").addEventListener("click", () => {
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
   renderCalendar(currentYear, currentMonth);
-  if (isAdminUser()) {
-    // Hide the left column if the user is an admin
-    document.getElementById("recent").classList.remove("is-hidden");
-    document.getElementById("recentappointments").classList.remove("is-hidden");
-    document.getElementById("day").classList.add("is-hidden");
-    document.getElementById("daySelector").classList.add("is-hidden");
-  }
 });
 
 // Make default drop down option on the daySelector the current day of the week
