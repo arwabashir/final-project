@@ -238,9 +238,10 @@ function showModal() {
   document.getElementById("bookingModal").classList.add("is-active"); // Show the modal
 }
 
-function closeModal() {
-  document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
-}
+// function closeModal() {
+//   document.getElementById("bookingModal").classList.remove("is-active"); // Hide the modal
+//   document.getElementById("confirmModal").classList.remove("is-active");
+// }
 
 // Array to store days of the week
 const dayNames = [
@@ -603,6 +604,7 @@ document
     const bookingModal = document.getElementById("bookingModal");
     if (bookingModal) {
       bookingModal.classList.remove("is-active");
+      document.getElementById("confirmModal").classList.add("is-active");
     }
   });
 
@@ -837,7 +839,7 @@ function addBookedAppointment() {
               doc.data().comments
             }</p><br><button id="${
               doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+            }"class="delete-button delete-app button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
           } else {
             html += `<div class="box" style="text-align: left"><p class="is-size-5">Date: ${
               doc.data().date
@@ -847,7 +849,7 @@ function addBookedAppointment() {
               doc.data().comments
             }</p><br><button id="${
               doc.id
-            }"class="button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
+            }"class="delete-button delete-app button is-danger is-size-6 has-text-white has-text-centered">Delete</button></div>`;
           }
         });
         bookedAppointmentsContainer.innerHTML = html;
@@ -857,41 +859,69 @@ function addBookedAppointment() {
 
 document.addEventListener("click", (event) => {
   // Check if the clicked element is a button
-  if (event.target.tagName === "BUTTON") {
-    // Get the ID of the clicked button
+  if (
+    event.target.tagName === "BUTTON" &&
+    event.target.classList.contains("delete-button")
+  ) {
     let buttonId = event.target.id;
-    if (isAdminUser()) {
-      db.collection("users")
-        .doc("peace0mind15@yahoo.com")
-        .collection("appointments")
+    if (event.target.classList.contains("delete-review")) {
+      db.collection("reviews")
         .doc(buttonId)
         .delete()
         .then(() => {
-          db.collection("users")
-            .doc(auth.currentUser.email)
-            .collection("appointments")
-            .doc(buttonId)
-            .delete()
-            .then(() => {
-              addBookedAppointment();
-            });
+          show_reviews();
         });
-    } else {
-      db.collection("users")
-        .doc(auth.currentUser.email)
-        .collection("appointments")
-        .doc(buttonId)
-        .delete()
-        .then(() => {
-          db.collection("users")
-            .doc("peace0mind15@yahoo.com")
-            .collection("appointments")
-            .doc(buttonId)
-            .delete()
-            .then(() => {
-              addBookedAppointment();
-            });
-        });
+    }
+    if (event.target.classList.contains("delete-app")) {
+      // Get the ID of the clicked button
+
+      if (isAdminUser()) {
+        db.collection("users")
+          .doc("peace0mind15@yahoo.com")
+          .collection("appointments")
+          .doc(buttonId)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              let useremailadmin = doc.data().user;
+              db.collection("users")
+                .doc("peace0mind15@yahoo.com")
+                .collection("appointments")
+                .doc(buttonId)
+                .delete()
+                .then(() => {
+                  addBookedAppointment();
+                  db.collection("users")
+                    .doc(useremailadmin)
+                    .collection("appointments")
+                    .doc(buttonId)
+                    .delete()
+                    .then(() => {
+                      addBookedAppointment();
+                    });
+                });
+            } else {
+              console.log("error: no document");
+            }
+          });
+      } else {
+        db.collection("users")
+          .doc(auth.currentUser.email)
+          .collection("appointments")
+          .doc(buttonId)
+          .delete()
+          .then(() => {
+            addBookedAppointment();
+            db.collection("users")
+              .doc("peace0mind15@yahoo.com")
+              .collection("appointments")
+              .doc(buttonId)
+              .delete()
+              .then(() => {
+                addBookedAppointment();
+              });
+          });
+      }
     }
   }
 });
@@ -1144,8 +1174,9 @@ r_e("leaveareviewpage").addEventListener("click", async () => {
   show_reviews();
 });
 
-r_e("bookingpage").addEventListener("click", async () => {
+r_e("confirmButton").addEventListener("click", async () => {
   addBookedAppointment();
+  r_e("confirmModal").classList.remove("is-active");
 });
 auth.onAuthStateChanged((user) => {
   if (user) {
@@ -1197,7 +1228,7 @@ function show_reviews() {
             <p>${doc.data().name}</p> &nbsp;
             <div>${num}</div> &nbsp; <div><button id="${
             doc.id
-          }" class="is-white">Delete</button></div>
+          }" class="delete-button delete-review is-white">Delete</button></div>
           </div>`;
         } else {
           html += `<div class="box"><h1 class="is-size-5">${
@@ -1231,17 +1262,3 @@ function prevPage() {
   currentPage--;
   show_reviews();
 }
-
-document.addEventListener("click", (event) => {
-  // Check if the clicked element is a button
-  if (event.target.tagName === "BUTTON") {
-    // Get the ID of the clicked button
-    let buttonId = event.target.id;
-    db.collection("reviews")
-      .doc(buttonId)
-      .delete()
-      .then(() => {
-        show_reviews();
-      });
-  }
-});
