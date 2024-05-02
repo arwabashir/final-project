@@ -928,18 +928,16 @@ function addBookedAppointment() {
             }" class="button is-warning is-size-6 has-text-white has-text-centered edit-btn">Edit</button></div>`;
           }
         });
-        bookedAppointmentsContainer.innerHTML = html;
+        bookedAppointmentsContainer.innerHTML = html; // Add event listeners to delete buttons
 
-        // Add event listeners to delete buttons
         const deleteButtons = document.querySelectorAll(".delete-btn");
         deleteButtons.forEach((button) => {
           button.addEventListener("click", () => {
             const appointmentId = button.id;
             deleteAppointment(appointmentId);
           });
-        });
+        }); // Add event listeners to edit buttons
 
-        // Add event listeners to edit buttons
         const editButtons = document.querySelectorAll(".edit-btn");
         editButtons.forEach((button) => {
           button.addEventListener("click", () => {
@@ -959,8 +957,7 @@ function deleteAppointment(appointmentId) {
     .doc(appointmentId)
     .delete()
     .then(() => {
-      console.log("Appointment deleted successfully");
-      // Remove the corresponding HTML element from the UI
+      console.log("Appointment deleted successfully"); // Remove the corresponding HTML element from the UI
       const appointmentElement = document.getElementById(
         `appointment-${appointmentId}`
       );
@@ -983,9 +980,8 @@ function handleEditAppointment(appointmentId) {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        const appointmentData = doc.data();
+        const appointmentData = doc.data(); // Populate the booking modal form with the appointment details for editing
 
-        // Populate the booking modal form with the appointment details for editing
         const bookingModal = document.getElementById("bookingModal");
         if (bookingModal) {
           // Populate form fields with appointment data
@@ -998,18 +994,16 @@ function handleEditAppointment(appointmentId) {
             document.getElementById("lookingToBeCaretaker").checked = true;
           }
           document.getElementById("bookingComments").value =
-            appointmentData.comments;
+            appointmentData.comments; // Set the appointment ID in the modal dataset for future reference
 
-          // Set the appointment ID in the modal dataset for future reference
-          bookingModal.dataset.appointmentId = appointmentId;
+          bookingModal.dataset.appointmentId = appointmentId; // Show the booking modal
 
-          // Show the booking modal
-          bookingModal.classList.add("is-active");
+          bookingModal.classList.add("is-active"); // Change the button text to "Update Appointment"
 
-          // Change the button text to "Update Appointment"
           const updateButton = document.getElementById("bookAppointmentButton");
           if (updateButton) {
             updateButton.textContent = "Update Appointment";
+            updateButton.id = "updateAppointmentButton"; // Set the ID
           }
         } else {
           console.error("Booking modal with ID 'bookingModal' not found.");
@@ -1024,14 +1018,12 @@ function handleEditAppointment(appointmentId) {
 }
 async function updateAppointment() {
   try {
-    console.log("Updating appointment...");
+    console.log("Updating appointment..."); // Get the appointment ID from the modal dataset
 
-    // Get the appointment ID from the modal dataset
     const appointmentId =
       document.getElementById("bookingModal").dataset.appointmentId;
-    console.log("Appointment ID:", appointmentId);
+    console.log("Appointment ID:", appointmentId); // Retrieve updated data from the form
 
-    // Retrieve updated data from the form
     const updatedData = {
       date: document.getElementById("bookingDate").value,
       time: document.getElementById("time").value,
@@ -1040,9 +1032,8 @@ async function updateAppointment() {
       comments: document.getElementById("bookingComments").value,
     };
 
-    console.log("Updated Data:", updatedData);
+    console.log("Updated Data:", updatedData); // Delete the old appointment
 
-    // Delete the old appointment
     console.log("Deleting old appointment...");
     await db
       .collection("users")
@@ -1050,18 +1041,16 @@ async function updateAppointment() {
       .collection("appointments")
       .doc(appointmentId)
       .delete();
-    console.log("Old appointment deleted successfully");
+    console.log("Old appointment deleted successfully"); // Add the updated appointment
 
-    // Add the updated appointment
     console.log("Adding new appointment...");
     await db
       .collection("users")
       .doc(auth.currentUser.email)
       .collection("appointments")
       .add(updatedData);
-    console.log("New appointment added successfully");
+    console.log("New appointment added successfully"); // Close the booking modal after updating
 
-    // Close the booking modal after updating
     closeModal();
   } catch (error) {
     console.error("Error updating appointment:", error);
@@ -1135,12 +1124,10 @@ for (var hour = 9; hour <= 17; hour++) {
 // sending appointment time to firebase
 function addAppointmentTime() {
   const appointmentDate = document.getElementById("appointmentDate").value;
-  const appointmentTime = document.getElementById("appointmentTime").value;
+  const appointmentTime = document.getElementById("appointmentTime").value; // Create a document reference with the appointment date as its ID
 
-  // Create a document reference with the appointment date as its ID
-  const appointmentRef = db.collection("bookings").doc(appointmentDate);
+  const appointmentRef = db.collection("bookings").doc(appointmentDate); // Add the new appointment time to the existing array of times (or create a new array)
 
-  // Add the new appointment time to the existing array of times (or create a new array)
   appointmentRef
     .get()
     .then((doc) => {
@@ -1159,13 +1146,10 @@ function addAppointmentTime() {
       }
     })
     .then(() => {
-      console.log("Appointment added successfully");
-      // Show success message
+      console.log("Appointment added successfully"); // Show success message
       const successMessage = document.getElementById("successMessage");
       successMessage.textContent = "Appointment added successfully!";
-      successMessage.style.display = "block";
-      // Optionally, you can close the modal here
-      // closeModal(); // Example function to close the modal
+      successMessage.style.display = "block"; // Optionally, you can close the modal here // closeModal(); // Example function to close the modal
     })
     .catch((error) => {
       console.error("Error adding appointment: ", error);
@@ -1185,9 +1169,8 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("daySelector")
     .addEventListener("change", function () {
-      const selectedDay = this.value;
+      const selectedDay = this.value; // Clear the calendar container before rendering filtered content
 
-      // Clear the calendar container before rendering filtered content
       calendarContainer.innerHTML = "";
 
       calendarCards.forEach((card) => {
@@ -1211,13 +1194,11 @@ function handleBookingClick(event) {
   // Check if the user is signed in
   if (!firebase.auth().currentUser) {
     // If not signed in, prevent default action (modal opening)
-    event.preventDefault();
-    // Prompt the user to sign in
+    event.preventDefault(); // Prompt the user to sign in
     alert("You must be signed in first to book an appointment.");
     return;
-  }
+  } // If the user is signed in, continue with the booking action
 
-  // If the user is signed in, continue with the booking action
   const card = event.target.closest(".card");
   const date = card.id;
   showModal(date);
@@ -1354,8 +1335,8 @@ function show_reviews() {
         let num = "";
         for (i = 0; i < stars; i++) {
           num += `<a href="">
-      <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
-    </a>`;
+        <i class="fa-solid fa-star fa-2xl" style="color: #f3d512"></i>
+      </a>`;
         }
 
         if (
@@ -1365,21 +1346,20 @@ function show_reviews() {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; <div><button id="${
+              <p>${doc.data().name}</p> &nbsp;
+              <div>${num}</div> &nbsp; <div><button id="${
             doc.id
           }" class="is-white">Delete</button></div>
-          </div>`;
+            </div>`;
         } else {
           html += `<div class="box"><h1 class="is-size-5">${
             doc.data().review
           }</h1>
-            <p>${doc.data().name}</p> &nbsp;
-            <div>${num}</div> &nbsp; </div>`;
+              <p>${doc.data().name}</p> &nbsp;
+              <div>${num}</div> &nbsp; </div>`;
         }
-      });
+      }); // Add pagination controls
 
-      // Add pagination controls
       html += `<div class="pagination">`;
       if (currentPage > 1) {
         html += `<button onclick="prevPage()">Previous</button>`;
