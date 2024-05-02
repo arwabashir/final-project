@@ -166,6 +166,7 @@ r_e("submit2").addEventListener("click", () => {
           .getElementById("recentappointments")
           .classList.remove("is-hidden");
         document.getElementById("day").classList.add("is-hidden");
+        loadRecentAppointmentsFromFirestore();
       }
       // Reload the page to reflect the signed-in state
       window.location.href = window.location.href;
@@ -793,9 +794,9 @@ function formatDateText(date) {
 }
 
 // Call loadRecentAppointmentsFromFirestore when the "booking page" tab is clicked
-document
-  .getElementById("bookingpage")
-  .addEventListener("click", loadRecentAppointmentsFromFirestore);
+// document
+//   .getElementById("bookingpage")
+//   .addEventListener("click", loadRecentAppointmentsFromFirestore);
 
 // Function to handle adding appointment time click
 document.getElementById("submitAdd").addEventListener("click", function () {
