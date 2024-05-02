@@ -167,7 +167,6 @@ r_e("submit2").addEventListener("click", () => {
           .classList.remove("is-hidden");
         document.getElementById("day").classList.add("is-hidden");
       }
-
       // Reload the page to reflect the signed-in state
       window.location.href = window.location.href;
 

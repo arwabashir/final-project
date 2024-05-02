@@ -128,9 +128,8 @@
   font-size: 1.2em; /* Adjust the font size as needed */
 }
 
-
 .recent-appointments-scrollable {
-  max-height: 700px; /* Set a max height for the scrollable area */
+  max-height: 300px; /* Set a max height for the scrollable area */
   overflow-y: auto; /* Enable vertical scrolling */
   padding: 10px;
   border-top: 1px solid #ececec; /* Adds a separator line if desired */
@@ -142,4 +141,3 @@
   padding: 10px;
   border-top: 1px solid #ececec; /* Optional: Adds a visual separator */
 }
-
